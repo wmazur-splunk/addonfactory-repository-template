@@ -1,4 +1,8 @@
 #!/bin/bash
+# echo all the commands 
+set -x 
+
+
 BRANCH=$(git rev-parse --abbrev-ref HEAD -- | head -n 1)
 INPUTFILE=repositories_$BRANCH.csv
 echo Working branch $BRANCH - $INPUTFILE
@@ -79,6 +83,9 @@ do
         hub create -p $REPOORG/$REPO
         hub api orgs/$REPOORG/teams/products-shared-services-all/repos/$REPOORG/$REPO --raw-field 'permission=maintain' -X PUT
         hub api orgs/$REPOORG/teams/productsecurity/repos/$REPOORG/$REPO --raw-field 'permission=read' -X PUT
+        hub api orgs/$REPOORG/teams/products-gdi-addons/repos/$REPOORG/$REPO --raw-field 'permission=maintain' -X PUT
+        hub api orgs/$REPOORG/teams/products-gdi-addons-adminrepo/repos/$REPOORG/$REPO --raw-field 'permission=admin' -X PUT
+        hub api orgs/$REPOORG/$REPO -X PATCH --field default_branch=main
         hub api /repos/$REPOORG/$REPO --raw-field 'visibility=${REPOVISIBILITY}' -X PATCH
         hub api /repos/$REPOORG/$REPO  -H 'Accept: application/vnd.github.nebula-preview+json' -X PATCH -F visibility=$REPOVISIBILITY
 
@@ -98,6 +105,10 @@ do
         echo Repository is existing
         
         hub api repos/$REPOORG/$REPO --raw-field 'visibility=${REPOVISIBILITY}' -X PATCH || true
+        
+        echo "adding permission for teams"
+        hub api orgs/$REPOORG/teams/products-gdi-addons/repos/$REPOORG/$REPO --raw-field 'permission=maintain' -X PUT
+        hub api orgs/$REPOORG/teams/products-gdi-addons-adminrepo/repos/$REPOORG/$REPO --raw-field 'permission=admin' -X PUT
 
         if [ ! -d "$REPO" ]; then
             #hub clone $REPOORG/$REPO work/$REPO
@@ -110,15 +121,26 @@ do
         fi
         git config  user.email "addonfactory@splunk.com"
         git config  user.name "Addon Factory template"
-        
+
+        echo "changing the default branch"
+        git fetch --all
+        git checkout $BRANCH
+        git checkout master || echo "master branch is deleted."
+        git checkout -b main || echo "main branch already exists."
+        git push origin main 
+        hub api repos/$REPOORG/$REPO -X PATCH -f name=$REPO -f default_branch=main
+
         # Update any files in enforce
         #if [ "$BRANCH" != "master" ]; then 
-        ( git checkout test/templateupdate  && git checkout develop && git branch -D test/templateupdate ) || true
-        git checkout -B "test/templateupdate" $BRANCH
+        ( git checkout test/common-template-rollout-changes  && git checkout develop && git branch -D test/common-template-rollout-changes ) || true
+        git checkout -B "test/common-template-rollout-changes" $BRANCH
         git submodule update --init --recursive
         #fi
         rsync -avh --include ".*" --ignore-existing ../../seed/ .
         rsync -avh --include ".*" ../../enforce/ .
+
+
+
 
         #Cleanup of bad module
         # Remove the submodule entry from .git/config
@@ -214,17 +236,20 @@ do
         if [[ -f "requirements.txt" ]]; then
             git rm requirements.txt || true
         fi
+        if [[ -f ".python-version" ]]; then
+            git rm .python-version || true
+        fi
         if [[ -d "tests/ui" ]]; then
             rsync -avh --include ".*" ../../conditional/ .
         fi
         git add . || true
-        git commit -am "sync for policy" || true
+        git commit -am "test: common template rollout changes" || true
         # if [ "$BRANCH" != "master" ]; then
-        #     git push -f --set-upstream origin test/templateupdate
+        #     git push -f --set-upstream origin test/common-template-rollout-changes
         # else
         #     git push
         # fi
-        git push -f --set-upstream origin test/templateupdate
+        git push -f --set-upstream origin test/common-template-rollout-changes
         hub pull-request -b $BRANCH "Bump repository configuration from template" --no-edit
         hub api /repos/$REPOORG/$REPO  -H 'Accept: application/vnd.github.nebula-preview+json' -X PATCH -F visibility=$REPOVISIBILITY
 
