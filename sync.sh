@@ -36,7 +36,7 @@ command -v crudini >/dev/null 2>&1 || { echo >&2 "I require crudini but it's not
 command -v jq >/dev/null 2>&1 || { echo >&2 "I require jq but it's not installed.  Aborting."; exit 1; }
 command -v rsync >/dev/null 2>&1 || { echo >&2 "I require rsync but it's not installed.  Aborting."; exit 1; }
 
-while IFS=, read -r REPO TAID REPOVISIBILITY TITLE BRANCH OTHER
+while IFS=, read -r REPO TAID REPOVISIBILITY TITLE BRANCH OTHER || [ -n "$REPO" ]
 do
     echo "Working on:$REPO|$TAID|$REPOVISIBILITY|$TITLE|$BRANCH|$OTHER"
     #Things we want to do no matter what
@@ -95,7 +95,7 @@ do
         curl -X POST --header "Content-Type: application/json" -d "{\"name\":\"GITHUB_TOKEN\", \"value\":\"${GITHUB_TOKEN}\"}" https://circleci.com/api/v1.1/project/github/$REPOORG/$REPO/envvar?circle-token=${CIRCLECI_TOKEN}
 
         git remote set-url origin https://$GITHUB_USER:$GITHUB_TOKEN@github.com/$REPOORG/$REPO.git
-        git push --set-upstream origin master
+        git push --set-upstream origin main
         git tag -a v$(crudini --get package/default/app.conf launcher version) -m "Release"
         git push --follow-tags
         git checkout -b develop
@@ -122,16 +122,6 @@ do
         git config  user.email "addonfactory@splunk.com"
         git config  user.name "Addon Factory template"
 
-        echo "changing the default branch"
-        git fetch --all
-        git checkout $BRANCH
-        git checkout master || echo "master branch is deleted."
-        git checkout -b main || echo "main branch already exists."
-        git push origin main 
-        hub api repos/$REPOORG/$REPO -X PATCH -f name=$REPO -f default_branch=main
-
-        # Update any files in enforce
-        #if [ "$BRANCH" != "master" ]; then 
         ( git checkout test/common-template-rollout-changes  && git checkout develop && git branch -D test/common-template-rollout-changes ) || true
         git checkout -B "test/common-template-rollout-changes" $BRANCH
         git submodule update --init --recursive
@@ -244,11 +234,7 @@ do
         fi
         git add . || true
         git commit -am "test: common template rollout changes" || true
-        # if [ "$BRANCH" != "master" ]; then
-        #     git push -f --set-upstream origin test/common-template-rollout-changes
-        # else
-        #     git push
-        # fi
+
         git push -f --set-upstream origin test/common-template-rollout-changes
         hub pull-request -b $BRANCH "Bump repository configuration from template" --no-edit
         hub api /repos/$REPOORG/$REPO  -H 'Accept: application/vnd.github.nebula-preview+json' -X PATCH -F visibility=$REPOVISIBILITY
