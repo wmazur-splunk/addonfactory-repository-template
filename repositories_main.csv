@@ -76,3 +76,4 @@ splunk-add-on-for-dynatrace,Splunk_TA_Dynatrace,public,"Splunk Add-on for DynaTr
 splunk-add-on-for-okta-identity-cloud,TA-Okta_Identity_Cloud_for_Splunk,internal,"Okta Identity Cloud Add-on for Splunk",main
 splunk-add-on-for-gws-ta,Splunk_TA_Google_Workspace,internal,"Google Workspace Add-on for Splunk",main
 splunk-add-on-for-cisco-umbrella,Splunk_TA_cisco-umbrella,internal,"Splunk Add-on for Cisco Umbrella",main
+splunk-add-on-for-new-relic,Splunk_TA_New_Relic,internal,"Splunk Add-on for New Relic",main
