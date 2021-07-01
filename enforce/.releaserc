@@ -23,9 +23,7 @@
   "plugins": [
     "@semantic-release/commit-analyzer",
     "@semantic-release/release-notes-generator",
-    ["@semantic-release/exec", {
-      "prepareCmd": "echo ${nextRelease.version} | sed "s/-\(develop\)./\1/g" >/tmp/nextRelease.txt"
-    }],
+    ["@semantic-release/exec", {}],
     [
         "@semantic-release/git",
         {
@@ -33,10 +31,6 @@
           "message": "chore(release): ${nextRelease.version}\n\n${nextRelease.notes}",
         },
     ],      
-    ["@semantic-release/github", {
-      "assets": [
-        {"path": "/tmp/splunk-ucc-ui.tgz", "label": "splunk-ucc-ui"},
-      ]
-    }],
+    ["@semantic-release/github", {}],
   ]
 }
