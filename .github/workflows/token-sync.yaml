@@ -32,7 +32,7 @@ jobs:
             splunk/dropbox-app-for-splunk
             splunk/seckit_sa_geolocation
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN_ADMIN }}
-          CONCURRENCY: 10
+          CONCURRENCY: 2
           REPOSITORIES_LIST_REGEX: true
         env:
           CIRCLECI_TOKEN: ${{secrets.CIRCLECI_TOKEN}}
