@@ -26,11 +26,13 @@ orbs:
                 pip install -r requirements_dev.txt --use-deprecated=legacy-resolver || true
                 pip install semantic_version==2.6.0
                 sudo apt install npm
+                sudo npm install --global yarn
+                yarn                
           - run:
               name: Generate Addon
               command: |
                 touch nextRelease.txt
-                npx -p @semantic-release/exec -p semantic-release semantic-release --dry-run --plugins "@semantic-release/commit-analyzer,@semantic-release/exec" --analyzeCommits @semantic-release/commit-analyzer --verifyRelease @semantic-release/exec --verifyReleaseCmd 'echo ${nextRelease.version} > nextRelease.txt'
+                npx -p @semantic-release/exec -p semantic-release@16.0.0 semantic-release --dry-run --plugins "@semantic-release/commit-analyzer,@semantic-release/exec" --analyzeCommits @semantic-release/commit-analyzer --verifyRelease @semantic-release/exec --verifyReleaseCmd 'echo ${nextRelease.version} > nextRelease.txt'
                 sed -i "s/-develop./develop/g" nextRelease.txt
                 VERSION=$(cat nextRelease.txt)
                 echo VERSION="$VERSION"
@@ -44,6 +46,7 @@ orbs:
                   echo CIRCLE_TAG=$CIRCLE_TAG
                   ucc-gen --ta-version="$CIRCLE_TAG"
                 fi
+                [ -f package.json ] ;yarn run build
           - run:
               name: Generating package
               command: |
