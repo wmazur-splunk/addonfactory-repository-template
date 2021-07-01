@@ -18,6 +18,14 @@ jobs:
         with:
           SECRETS: |
             SNYK_TOKEN
+            CIRCLECI_TOKEN
+            GH_TOKEN_ADMIN
+            GH_USER_ADMIN
+            PAT_CLATOOL
+            RP_ENDPOINT
+            RP_UUID
+            SNYK_TOKEN
+            VT_API_KEY
           REPOSITORIES: |
             splunk/splunk-add-on-for-*
             splunk/dropbox-add-on-for-splunk
