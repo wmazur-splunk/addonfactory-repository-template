@@ -76,14 +76,10 @@ do
         poetry add --dev pytest
         poetry add --dev splunk-packaging-toolkit
         poetry add --dev pytest-xdist
-        poetry add --dev pytest-ordering
         poetry add --dev pytest-splunk-addon
         poetry add --dev pytest-expect
         poetry add --dev pytest-splunk-addon-ui-smartx
         poetry add --dev pytest-rerunfailures
-        poetry add --dev mock
-        poetry add --dev requests
-        poetry add --dev u-msgpack-python
         poetry add --dev coverage
         poetry add --dev pytest-cov
         
