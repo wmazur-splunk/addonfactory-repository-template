@@ -69,7 +69,7 @@ do
         jq --arg TAID "${TAID}" '.info.id.name = $TAID' package/app.manifest >$tmpf
         mv -f $tmpf package/app.manifest
 
-        poetry init -n --author "Splunk Inc, <sales@splunk.com>" --python "^3.7" -l "Splunk-1-2020" ;fi
+        poetry init -n --author "Splunk Inc, <sales@splunk.com>" --python "^3.7" -l "Splunk-1-2020"
         poetry add --dev splunk-add-on-ucc-framework
         poetry add --dev lovely-pytest-docker
         poetry add --dev reuse
