@@ -12,7 +12,7 @@ orbs:
       package:
         docker:
           - image: circleci/buildpack-deps:stable
-        resource_class: large
+        resource_class: small
         steps:
           - checkout
           - run:
@@ -138,6 +138,8 @@ jobs:
         default: test
     docker:
       - image: circleci/python:3.7
+    resource_class: small
+    
     steps:
       - checkout
       - attach_workspace:
@@ -226,9 +228,13 @@ jobs:
         description: sc4s version
         type: string
         default: latest
+      resource_class:
+        description: Docker CicreCi machine size
+        type: string
+        default: large
     docker:
       - image: circleci/python:3.7
-    resource_class: xlarge
+    resource_class: <<parameters.resource_class>>
     steps:
       - checkout
       - run: git submodule sync
@@ -287,10 +293,15 @@ jobs:
 
             # Build
             docker-compose -f docker-compose-ci.yml build
-
+            
             # Saucelab connection
             [ -z $BROWSER ] || [ "$UI_TEST_HEADLESS" = "true" ] || docker-compose -f docker-compose-ci.yml up -d sauceconnect
+            
+            # Start selenium grid if needed.
+             if [[ "<<parameters.test_set>>" == *"firefox_grid"* ]]; then docker-compose -f docker-compose-ci.yml up -d firefox-grid; fi
+             if [[ "<<parameters.test_set>>" == *"chrome_grid"* ]]; then docker-compose -f docker-compose-ci.yml up -d chrome-grid; fi
 
+            
             # Start Splunk
             docker-compose -f docker-compose-ci.yml up -d splunk
             until docker-compose -f docker-compose-ci.yml logs splunk | grep "Ansible playbook complete" ; do sleep 1; done
@@ -304,7 +315,7 @@ jobs:
             docker-compose -f docker-compose-ci.yml up -d splunk uf
             until docker-compose -f docker-compose-ci.yml logs splunk | grep "Ansible playbook complete" ; do sleep 1; done
             until docker-compose -f docker-compose-ci.yml logs uf | grep "Ansible playbook complete" ; do sleep 1; done
-
+            
             # Normal Inspecting
             [ -z $BROWSER ] || [ "$UI_TEST_HEADLESS" = "true" ] || docker-compose -f docker-compose-ci.yml logs sauceconnect
             docker-compose -f docker-compose-ci.yml logs sc4s
@@ -341,7 +352,7 @@ jobs:
         default: py3-3.7.8
     docker:
       - image: circleci/python:3.7
-    resource_class: xlarge
+    resource_class: small
     steps:
       - checkout
       - run: git submodule sync
@@ -413,6 +424,7 @@ jobs:
     docker:
       - image: returntocorp/semgrep-agent:v1
         user: root
+    resource_class: medium
     steps:
       - checkout
       - run:
@@ -501,6 +513,7 @@ jobs:
   reuse:
     docker:
       - image: circleci/python:3.7
+    resource_class: small
     steps:
       - setup_remote_docker:
           docker_layer_caching: true
@@ -559,6 +572,7 @@ workflows:
               splunk_version: ["8.0", "8.2"]
               sc4s_version: ["1"]
               test_set: ["knowledge"]
+              resource_class: ["medium"]
           filters:
             branches:
               only: /.*/
@@ -573,7 +587,8 @@ workflows:
             parameters:
               splunk_version: ["8.0", "8.2"]
               sc4s_version: ["1"]
-              test_set: ["ui-chrome"]
+              test_set: ["ui-chrome_grid","ui-firefox_grid"]
+              resource_class: ["medium"]
           filters:
             branches:
               only: /.*/
@@ -588,6 +603,7 @@ workflows:
               splunk_version: ["8.0", "8.2"]
               sc4s_version: ["1"]
               test_set: ["modinput_functional", "modinput_others"]
+              resource_class: ["large"]
           filters:
             branches:
               only: /.*/

@@ -33,16 +33,16 @@ echo "Executing Tests..."
 RERUN_COUNT=${RERUN_COUNT:-1}
 if [ -z ${TEST_BROWSER} ] 
 then
-    echo Test Args $@ --reportportal -o "rp_endpoint=${RP_ENDPOINT}" -o "rp_launch_attributes=${RP_LAUNCH_ATTRIBUTES}" \
+    echo Test Args $@ ${TEST_DEBUG}  --reportportal -o "rp_endpoint=${RP_ENDPOINT}" -o "rp_launch_attributes=${RP_LAUNCH_ATTRIBUTES}" \
     -o "rp_project=${RP_PROJECT}" -o "rp_launch=${RP_LAUNCH}" -o "rp_launch_description='${RP_LAUNCH_DESC}'" -o "rp_ignore_attributes='xfail' 'usefixture'" \
     ${TEST_SET}     
     if [ "${IMAGE_TAG}" = "2.7.17" ]
     then
-        pytest $@ \
+        pytest $@ ${TEST_DEBUG} \
         ${TEST_SET} 
         test_exit_code=$?
     else
-        pytest $@ \
+        pytest $@ ${TEST_DEBUG} \
         --reportportal -o "rp_endpoint=${RP_ENDPOINT}" -o "rp_launch_attributes=${RP_LAUNCH_ATTRIBUTES}" \
         -o "rp_project=${RP_PROJECT}" -o "rp_launch=${RP_LAUNCH}" -o "rp_launch_description='${RP_LAUNCH_DESC}'" -o "rp_ignore_attributes='xfail' 'usefixture'" \
         ${TEST_SET}
@@ -52,12 +52,12 @@ else
     # Execute the tests on Headless mode in local if UI_TEST_HEADLESS environment is set to "true"
     if [ "${UI_TEST_HEADLESS}" = "true" ]
     then
-        echo Test Args $@ --local --persist-browser --headless --reruns=${RERUN_COUNT} --browser=${TEST_BROWSER}\
+        echo Test Args $@ ${TEST_DEBUG}  --local --persist-browser --headless --reruns=${RERUN_COUNT} --browser=${TEST_BROWSER}\
         --reportportal -o "rp_endpoint=${RP_ENDPOINT}" -o "rp_launch_attributes=${RP_LAUNCH_ATTRIBUTES}" \
         -o "rp_project=${RP_PROJECT}" -o "rp_launch=${RP_LAUNCH}" -o "rp_launch_description='${RP_LAUNCH_DESC}'" -o "rp_ignore_attributes='xfail' 'usefixture'" \
         ${TEST_SET} 
         
-        pytest $@ --local --persist-browser --headless --reruns=${RERUN_COUNT} --browser=${TEST_BROWSER} \
+        pytest $@ ${TEST_DEBUG}  --local --persist-browser --headless --reruns=${RERUN_COUNT} --browser=${TEST_BROWSER} \
         --reportportal -o "rp_endpoint=${RP_ENDPOINT}" -o "rp_launch_attributes=${RP_LAUNCH_ATTRIBUTES}" \
         -o "rp_project=${RP_PROJECT}" -o "rp_launch=${RP_LAUNCH}" -o "rp_launch_description='${RP_LAUNCH_DESC}'" -o "rp_ignore_attributes='xfail' 'usefixture'" \
         ${TEST_SET}
@@ -68,8 +68,8 @@ else
         sauce_connect_connection=$?
         echo "Sauce Connect Status:$sauce_connect_connection"
         [ "$sauce_connect_connection" -eq "4" ] && echo "SauceConnect is not running. Exiting the tests...." && exit 1
-        echo Test Args $@ --reruns=${RERUN_COUNT} --browser=${TEST_BROWSER} ${TEST_SET}
-        pytest $@ --reruns=${RERUN_COUNT} --browser=${TEST_BROWSER} \
+        echo Test Args $@  ${TEST_DEBUG}  --reruns=${RERUN_COUNT} --browser=${TEST_BROWSER} ${TEST_SET}
+        pytest $@ ${TEST_DEBUG} --reruns=${RERUN_COUNT} --browser=${TEST_BROWSER} \
         --reportportal -o "rp_endpoint=${RP_ENDPOINT}" -o "rp_launch_attributes=${RP_LAUNCH_ATTRIBUTES}" \
         -o "rp_project=${RP_PROJECT}" -o "rp_launch=${RP_LAUNCH}" -o "rp_launch_description='${RP_LAUNCH_DESC}'" -o "rp_ignore_attributes='xfail' 'usefixture'" \
         ${TEST_SET}

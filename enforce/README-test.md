@@ -123,6 +123,29 @@ https://github.com/SeleniumHQ/selenium/wiki/InternetExplorerDriver#required-conf
  ```script
 pytest -vv --browser=<browser> --local --splunk-host=<web_url> --splunk-port=<mgmt_url> --splunk-user=<username> --splunk-password=<password>
  ```
+- Debug UI tests with selenium inside docker-compose stack.
+>prerequisite: 
+> 1. Setup all env variables mentioned above. As BROWSER variable pickup one "chrome_grid" or "firefox_grid". TEST_TYPE=ui etc.
+> 2. Install [VNC Viewer](https://www.realvnc.com/en/connect/download/viewer/)
+1. To select which test should be run we can use DEBUG_TEST variable and setup it to ingest -k parameter 
+```bash
+export DEBUG_TEST="-k test_name_to_run"
+```
+2. Build images and execute the test
+```bash
+docker-compose -f docker-compose.yml build
+docker-compose -f docker-compose.yml up
+```
+To watch the logs form docker container which run the test We can use command 
+```bash
+docker logs -f containter_test_name [ eg. docker logs -f splunk-add-on-for-servicenow_test_1]
+```
+during the test execution when container with selenium standandalone hub is up and running We can connect to it using VNC Viewer.
+```bash
+localhost:6000  # chrome grid adress
+localhost:6001 # firefox grid adress 
+```
+Password is "secret" 
 
 - Modinput:
 

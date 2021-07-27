@@ -132,6 +132,7 @@ services:
     hostname: sauceconnect
     ports:
       - "4445"
+      
   http_proxy:
     build:
       context: .
@@ -163,6 +164,21 @@ services:
       - SPLUNK_START_ARGS=--accept-license
     volumes:
       - results:/home/circleci/work
+
+  chrome-grid:
+    image: selenium/standalone-chrome
+    shm_size: 2gb
+    ports:
+      - "6900:5900"
+      - "4444"
+
+  firefox-grid:
+    image: selenium/standalone-firefox
+    shm_size: 2gb
+    ports:
+      - "6901:5900"
+      - "4444"
+
 
 volumes:
   results:
