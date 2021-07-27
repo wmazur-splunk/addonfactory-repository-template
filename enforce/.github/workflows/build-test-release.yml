@@ -288,7 +288,7 @@ jobs:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
       - name: Upload coverage to Codecov
         if: ${{ steps.checkcodecov.outputs.ENABLED == 'true' }}
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@v2.0.2
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ./coverage.xml
