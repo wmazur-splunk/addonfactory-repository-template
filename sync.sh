@@ -262,6 +262,9 @@ do
         if [[ -f ".releaserc.yaml" ]]; then
             git rm .releaserc.yaml || true
         fi        
+        if [[ -f "NOTICE" ]]; then
+            git rm NOTICE || true
+        fi 
         if [[ -f "package/lib/py2/requirements.txt" ]]; then
             git rm package/lib/py2/requirements.txt || true
         fi  

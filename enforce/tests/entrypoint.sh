@@ -4,7 +4,7 @@
 ## SPDX-License-Identifier: LicenseRef-Splunk-1-2020
 ##
 ##
-
+# shellcheck disable=SC2164,SC2086,SC2068
 cd /home/circleci/work
 pip install pip==20.2
 if [ -f "${TEST_SET}/pytest-ci.ini" ]; then

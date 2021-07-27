@@ -77,6 +77,7 @@ jobs:
           VALIDATE_ALL_CODEBASE: false
           DEFAULT_BRANCH: main
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          FILTER_REGEX_EXCLUDE: README.md
   review_secrets:
     name: security-detect-secrets
     runs-on: ubuntu-latest
@@ -198,8 +199,8 @@ jobs:
           path: /tmp/analysis-reports
       - name: Update Notices
         run: |
-          cp -f /tmp/analysis-reports/NOTICE_default NOTICE || true
-          cp -f /tmp/analysis-reports/NOTICE_default package/NOTICE || true
+          cp -f /tmp/analysis-reports/NOTICE_default THIRDPARTY || true
+          cp -f /tmp/analysis-reports/NOTICE_default package/THIRDPARTY || true
       - name: Build Package
         id: uccgen
         uses: splunk/addonfactory-ucc-generator-action@v1
