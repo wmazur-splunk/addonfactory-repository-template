@@ -69,6 +69,24 @@ do
         jq --arg TAID "${TAID}" '.info.id.name = $TAID' package/app.manifest >$tmpf
         mv -f $tmpf package/app.manifest
 
+        poetry init -n --author "Splunk Inc, <sales@splunk.com>" --python "^3.7" -l "Splunk-1-2020" ;fi
+        poetry add --dev splunk-add-on-ucc-framework
+        poetry add --dev lovely-pytest-docker
+        poetry add --dev reuse
+        poetry add --dev pytest
+        poetry add --dev splunk-packaging-toolkit
+        poetry add --dev pytest-xdist
+        poetry add --dev pytest-ordering
+        poetry add --dev pytest-splunk-addon
+        poetry add --dev pytest-expect
+        poetry add --dev pytest-splunk-addon-ui-smartx
+        poetry add --dev pytest-rerunfailures
+        poetry add --dev mock
+        poetry add --dev requests
+        poetry add --dev u-msgpack-python
+        poetry add --dev coverage
+        poetry add --dev pytest-cov
+        
         git init
         git config  user.email "addonfactory@splunk.com"
         git config  user.name "Addon Factory template"
@@ -239,8 +257,8 @@ do
         if [[ -f ".github/workflows/reuse.yml" ]]; then
             git rm .github/workflows/reuse.yml || true
         fi        
-        if [[ -f ".github/workflows/snyk.yml" ]]; then
-            git rm .github/workflows/snyk.yml || true
+        if [[ -f ".github/workflows/snyk.yaml" ]]; then
+            git rm .github/workflows/snyk.yaml || true
         fi        
         if [[ -f ".github/workflows/rebase.yml" ]]; then
             git rm .github/workflows/rebase.yml || true
@@ -256,8 +274,55 @@ do
         fi  
         if [[ -f "requirements_py2_dev.txt" ]]; then
             git rm requirements_py2_dev.txt || true
-        fi        
+        fi
         
+        if [[ ! -f "pyproject.toml" ]]; then poetry init -n --author "Splunk Inc, <sales@splunk.com>" --python "^3.7" -l "Splunk-1-2020" ;fi
+        if [[ -f "package/lib/requirements.txt" ]]; then
+            cat package/lib/requirements.txt | grep -v '^#' | grep -v '^\s*$' | grep -v '^six' | grep -v 'future' | xargs poetry add
+            cat package/lib/requirements.txt | grep -v '^#' | grep -v '^\s*$' | grep '^six\|^future' | cut -d= -f1 | xargs poetry add  
+            git rm package/lib/requirements.txt || true
+        fi
+        if [[ -f "package/lib/py3/requirements.txt" ]]; then
+            cat package/lib/py3/requirements.txt | grep -v '^#' | grep -v '^\s*$' | grep -v '^six' | grep -v 'future' | xargs poetry add
+            cat package/lib/py3/requirements.txt | grep -v '^#' | grep -v '^\s*$' | grep '^six\|^future' | cut -d= -f1 | xargs poetry add  
+            git rm package/lib/py3/requirements.txt || true
+        fi
+        if [[ -f "requirements_addon_specific.txt" ]]; then
+            current=$(poetry show -t | grep '^[a-z]' | sed 's| .*||g' | paste -s -d\| - | sed 's/\|/\\\|/g')
+            new=($(cat requirements_addon_specific.txt \
+                | grep -v '^#' | grep -v '^\s*$' | grep -v '^six' | grep -v 'future' \
+                | grep -v ${current}))
+            for i in "${new[@]}"
+            do
+            : 
+                poetry add $i --dev || echo \# $i>>requirements_broken.txt
+            done
+        fi
+        if [[ -f "requirements_dev.txt" ]]; then
+            current=$(poetry show -t | grep '^[a-z]' | sed 's| .*||g' | paste -s -d\| - | sed 's/\|/\\\|/g')
+            new=($(cat requirements_dev.txt \
+                | grep -v 'splunk-packaging-toolkit' \
+                | grep -v '^#' | grep -v '^\s*$' | grep -v '^six' | grep -v 'future' | grep -v '^-r' \
+                | grep -v "^\(${current}\)\(==\| *$\)"))
+            for i in "${new[@]}"
+            do
+            : 
+                poetry add $i --dev || echo \# $i>>requirements_broken.txt
+            done
+            cat requirements_dev.txt | grep -v '^#' | grep -v '^\s*$' | grep '^six\|^future' | cut -d= -f1 | xargs -I{} poetry add -I{}==* --dev
+            git rm requirements_dev.txt || true
+        fi
+        current=$(poetry show -t | grep '^[a-z]' | sed 's| .*||g' | paste -s -d\| - | sed 's/\|/\\\|/g')
+        echo 'splunk-appinspect' | grep -v "^\(${current}\)\(==\| *$\)" | xargs poetry add --dev
+        echo 'pytest-splunk-addon' | grep -v "^\(${current}\)\(==\| *$\)" | xargs poetry add --dev
+        echo 'pytest-splunk-addon-ui-smartx' | grep -v "^\(${current}\)\(==\| *$\)" | xargs poetry add --dev
+        echo 'pytest-cov' | grep -v "^\(${current}\)\(==\| *$\)" | xargs poetry add --dev
+        echo 'coverage' | grep -v "^\(${current}\)\(==\| *$\)" | xargs poetry add --dev
+
+        if [[ -f "requirements_addon_specific.txt" ]]; then
+            cat requirements_addon_specific.txt | grep -v '^#' | grep -v '^\s*$' | grep '^six\|^future' | cut -d= -f1 | xargs poetry add --dev
+            git rm requirements_addon_specific.txt || true
+        fi
 
         git add . || true
         git commit -am "test: common template rollout changes" || true

@@ -45,7 +45,6 @@ tests/functional
 .DS_Store
 .env
 src
-*.lock
 *_event
 *_wait
 !deps/build
@@ -53,6 +52,5 @@ src
 *.log
 
 # ucc ui extensions
-!yarn.lock
 yarn-error.log
 node_modules/

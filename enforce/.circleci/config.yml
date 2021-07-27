@@ -3,7 +3,7 @@
 ## SPDX-License-Identifier: LicenseRef-Splunk-1-2020
 ##
 ##
-
+# jscpd:ignore-start
 version: 2.1
 orbs:
   go: circleci/go@0.2.0
@@ -23,6 +23,13 @@ orbs:
                 python3.7 -m virtualenv ~/.venv -p python3
                 source ~/.venv/bin/activate
                 pip install pip --upgrade
+                if [ -f "poetry.lock" ]
+                then
+                  mkdir -p package/lib || true
+                  pip install poetry
+                  poetry export --without-hashes -o package/lib/requirements.txt
+                  poetry export --without-hashes --dev -o requirements_dev.txt
+                fi
                 pip install -r requirements_dev.txt --use-deprecated=legacy-resolver || true
                 pip install semantic_version==2.6.0
                 sudo apt install npm
@@ -149,7 +156,7 @@ jobs:
           command: |
             python -m venv ~/.venv
             source ~/.venv/bin/activate
-            pip install https://download.splunk.com/misc/appinspect/splunk-appinspect-latest.tar.gz
+            pip install splunk-appinspect
       - run:
           name: inspect
           command: |
@@ -257,6 +264,16 @@ jobs:
             ls
             rm *.tar.gz
             ls
+      - run:
+          name: generate requirements
+          command: |
+            if [ -f "poetry.lock" ]
+            then
+              mkdir -p package/lib || true
+              pip install poetry
+              poetry export --without-hashes -o package/lib/requirements.txt
+              poetry export --without-hashes --dev -o requirements_dev.txt
+            fi
       - run:
           name: Splunk Testing
           no_output_timeout: 2h
@@ -375,6 +392,16 @@ jobs:
             ls
             rm *.tar.gz
             ls
+      - run:
+          name: generate requirements
+          command: |
+            if [ -f "poetry.lock" ]
+            then
+              mkdir -p package/lib || true
+              pip install poetry
+              poetry export --without-hashes -o package/lib/requirements.txt
+              poetry export --without-hashes --dev -o requirements_dev.txt
+            fi
       - run:
           name: Splunk Testing
           no_output_timeout: 2h
@@ -669,3 +696,4 @@ workflows:
               ignore: /.*/
             tags:
               only: /^v\d*\.\d*\.\d*$/
+# jscpd:ignore-end

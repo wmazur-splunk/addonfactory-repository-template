@@ -133,7 +133,7 @@ jobs:
         with:
           go-version: "1.13"
       - name: Snyk monitor
-        run: snyk test --sarif-file-output=snyk.sarif --file=package/lib/requirements.txt
+        run: snyk test --sarif-file-output=snyk.sarif
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
   build:
@@ -245,38 +245,50 @@ jobs:
           vt_api_key: ${{ secrets.VT_API_KEY }}
           files: |
             build/package/*
+  test-inventory:
+    runs-on: ubuntu-latest
+    # Map a step output to a job output
+    outputs:
+      unit: ${{ steps.testset.outputs.outputs }}
+      knowledge: ${{ steps.testset.outputs.knowledge }}
+    steps:
+      - uses: actions/checkout@v2
+      - id: testset
+        name: testsets
+        run: |
+          find tests -type d -maxdepth 1 -mindepth 1 | sed 's|^tests/||g' |  while read -r TESTSET; do echo "::set-output name=$TESTSET::true"; echo "$TESTSET::true"; done
   test-unit:
     name: test-unit-python3-${{ matrix.python-version }}
+    if: ${{ needs.test-inventory.outputs.unit == 'true' }}
     runs-on: ubuntu-latest
-    needs: build
+    needs:
+      - build
+      - test-inventory
     strategy:
       matrix:
         python-version:
           - "3.7"
     steps:
       - uses: actions/checkout@v2
-      - name: Setup python
+      - if: failure()
+        name: Setup python
         uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Get pip cache dir
-        id: pip-cache
-        run: |
-          echo "::set-output name=dir::$(pip cache dir)"
 
-      - name: pip cache
-        uses: actions/cache@v2
-        with:
-          path: ${{ steps.pip-cache.outputs.dir }}
-          key: ${{ runner.os }}-pip-${{ hashFiles('*requirements*.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
       - uses: actions/download-artifact@v2
         with:
           name: package-raw
           path: output
       - name: Setup addon
         run: |
+          if [ -f "poetry.lock" ]
+           then
+             mkdir -p package/lib || true
+             pip install poetry
+             poetry export --without-hashes -o package/lib/requirements.txt
+             poetry export --without-hashes --dev -o requirements_dev.txt
+           fi
           if [ ! -f requirements_dev.txt ]; then echo no requirements;exit 0 ;fi
           pip install -r requirements_dev.txt
       - name: Run Pytest with coverage
@@ -324,7 +336,7 @@ jobs:
           path: build/package/
 
       - name: Scan
-        uses: rfaircloth-splunk/appinspect-cli-action@v1
+        uses: splunk/appinspect-cli-action@v1
         with:
           app_path: build/package/
           included_tags: ${{ matrix.tags }}
