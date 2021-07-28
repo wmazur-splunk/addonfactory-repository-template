@@ -7,6 +7,10 @@ BRANCH=$(git rev-parse --abbrev-ref HEAD -- | head -n 1)
 INPUTFILE=repositories_$BRANCH.csv
 echo Working branch $BRANCH - $INPUTFILE
 REPOORG=splunk
+
+pip install reuse || true
+
+
 if [[  $GITHUB_USER && ${GITHUB_USER-x} ]]
 then
     echo "GITHUB_USER Found"
@@ -70,6 +74,7 @@ do
         mv -f $tmpf package/app.manifest
 
         poetry init -n --author "Splunk Inc, <sales@splunk.com>" --python "^3.7" -l "Splunk-1-2020"
+        reuse add pyproject.toml
         poetry add --dev splunk-add-on-ucc-framework
         poetry add --dev lovely-pytest-docker
         poetry add --dev reuse
@@ -275,7 +280,11 @@ do
             git rm requirements_py2_dev.txt || true
         fi
         
-        if [[ ! -f "pyproject.toml" ]]; then poetry init -n --author "Splunk Inc, <sales@splunk.com>" --python "^3.7" -l "Splunk-1-2020" ;fi
+        if [[ ! -f "pyproject.toml" ]]; 
+        then 
+            poetry init -n --author "Splunk Inc, <sales@splunk.com>" --python "^3.7" -l "Splunk-1-2020"
+            reuse add pyproject.toml
+        fi
         if [[ -f "package/lib/requirements.txt" ]]; then
             cat package/lib/requirements.txt | grep -v '^#' | grep -v '^\s*$' | grep -v '^six' | grep -v 'future' | xargs poetry add
             cat package/lib/requirements.txt | grep -v '^#' | grep -v '^\s*$' | grep '^six\|^future' | cut -d= -f1 | xargs poetry add  
@@ -322,6 +331,7 @@ do
             cat requirements_addon_specific.txt | grep -v '^#' | grep -v '^\s*$' | grep '^six\|^future' | cut -d= -f1 | xargs poetry add --dev
             git rm requirements_addon_specific.txt || true
         fi
+        sed 's|yarn.lock|*.lock|'  .reuse/dep5
 
         git add . || true
         git commit -am "test: common template rollout changes" || true
