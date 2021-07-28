@@ -321,23 +321,23 @@ do
             git rm requirements_dev.txt || true
         fi
         current=$(poetry show -t | grep '^[a-z]' | sed 's| .*||g' | paste -s -d\| - | sed 's/\|/\\\|/g')
-        echo 'splunk-packaging-toolkit' | grep -v "^\(${current}\)\(==\| *$\)" | xargs poetry add --dev
-        echo 'pytest-splunk-addon' | grep -v "^\(${current}\)\(==\| *$\)" | xargs poetry add --dev
+        sudo poetry add splunk-packaging-toolkit --dev  || true
+        poetry add pytest-splunk-addon --dev  || true
         if [[ -d tests/ui ]]; then
-            echo 'pytest-splunk-addon-ui-smartx' | grep -v "^\(${current}\)\(==\| *$\)" | xargs poetry add --dev        
+            poetry add pytest-splunk-addon-ui-smartx --dev  || true
         else 
             poetry remove pytest-splunk-addon-ui-smartx  --dev || true
         fi
         if [[ -d tests/unit ]]; then
-            echo 'pytest-cov' | grep -v "^\(${current}\)\(==\| *$\)" | xargs poetry add --dev
-            echo 'coverage' | grep -v "^\(${current}\)\(==\| *$\)" | xargs poetry add --dev
+            poetry add pytest-cov --dev  || true
+            poetry add coverage --dev  || true
         else 
             poetry remove coverage  --dev || true
             poetry remove pytest-cov  --dev || true
         fi
 
         if [[ -f "requirements_addon_specific.txt" ]]; then
-            cat requirements_addon_specific.txt | grep -v '^#' | grep -v '^\s*$' | grep '^six\|^future' | cut -d= -f1 | xargs poetry add --dev
+            cat requirements_addon_specific.txt | grep -v '^#' | grep -v '^\s*$' | grep '^six\|^future' | cut -d= -f1 | xargs poetry add --dev 
             git rm requirements_addon_specific.txt || true
         fi
         sed 's|yarn.lock|*.lock|'  .reuse/dep5
