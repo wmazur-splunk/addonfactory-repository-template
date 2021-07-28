@@ -323,9 +323,18 @@ do
         current=$(poetry show -t | grep '^[a-z]' | sed 's| .*||g' | paste -s -d\| - | sed 's/\|/\\\|/g')
         echo 'splunk-packaging-toolkit' | grep -v "^\(${current}\)\(==\| *$\)" | xargs poetry add --dev
         echo 'pytest-splunk-addon' | grep -v "^\(${current}\)\(==\| *$\)" | xargs poetry add --dev
-        echo 'pytest-splunk-addon-ui-smartx' | grep -v "^\(${current}\)\(==\| *$\)" | xargs poetry add --dev
-        echo 'pytest-cov' | grep -v "^\(${current}\)\(==\| *$\)" | xargs poetry add --dev
-        echo 'coverage' | grep -v "^\(${current}\)\(==\| *$\)" | xargs poetry add --dev
+        if [[ -d tests/ui ]]; then
+            echo 'pytest-splunk-addon-ui-smartx' | grep -v "^\(${current}\)\(==\| *$\)" | xargs poetry add --dev        
+        else 
+            poetry remove pytest-splunk-addon-ui-smartx  --dev || true
+        fi
+        if [[ -d tests/unit ]]; then
+            echo 'pytest-cov' | grep -v "^\(${current}\)\(==\| *$\)" | xargs poetry add --dev
+            echo 'coverage' | grep -v "^\(${current}\)\(==\| *$\)" | xargs poetry add --dev
+        else 
+            poetry remove coverage  --dev || true
+            poetry remove pytest-cov  --dev || true
+        fi
 
         if [[ -f "requirements_addon_specific.txt" ]]; then
             cat requirements_addon_specific.txt | grep -v '^#' | grep -v '^\s*$' | grep '^six\|^future' | cut -d= -f1 | xargs poetry add --dev
