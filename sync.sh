@@ -321,7 +321,7 @@ do
             git rm requirements_dev.txt || true
         fi
         current=$(poetry show -t | grep '^[a-z]' | sed 's| .*||g' | paste -s -d\| - | sed 's/\|/\\\|/g')
-        poetry add splunk-packaging-toolkit --dev
+        sudo poetry add splunk-packaging-toolkit --dev
         poetry add pytest-splunk-addon --dev
         if [[ -d tests/ui ]]; then
             poetry add pytest-splunk-addon-ui-smartx --dev
