@@ -321,7 +321,7 @@ do
             git rm requirements_dev.txt || true
         fi
         current=$(poetry show -t | grep '^[a-z]' | sed 's| .*||g' | paste -s -d\| - | sed 's/\|/\\\|/g')
-        sudo poetry add --lock splunk-packaging-toolkit --dev  || true
+        poetry add --lock splunk-packaging-toolkit --dev  || true
         poetry add --lock pytest-splunk-addon --dev  || true
         if [[ -d tests/ui ]]; then
             poetry add --lock pytest-splunk-addon-ui-smartx --dev  || true
