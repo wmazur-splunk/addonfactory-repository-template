@@ -332,6 +332,11 @@ do
             git rm requirements_addon_specific.txt || true
         fi
         sed 's|yarn.lock|*.lock|'  .reuse/dep5
+        if [[ -f "package.json" ]]; then
+            if [[ ! -f "yarn.lock" ]]; then
+                npx yarn build || true
+            fi
+        fi
 
         git add . || true
         git commit -am "test: common template rollout changes" || true

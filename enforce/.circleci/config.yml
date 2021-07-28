@@ -53,7 +53,7 @@ orbs:
                   echo CIRCLE_TAG=$CIRCLE_TAG
                   ucc-gen --ta-version="$CIRCLE_TAG"
                 fi
-                [ -f package.json ] ;yarn run build
+                [ -f "yarn.lock" ] && yarn run build
           - run:
               name: Generating package
               command: |
