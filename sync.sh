@@ -308,7 +308,7 @@ do
             : 
                 poetry add $i --dev || echo \# $i>>requirements_broken.txt
             done
-            cat requirements_dev.txt | grep -v '^#' | grep -v '^\s*$' | grep '^six\|^future' | cut -d= -f1 | xargs -I{} poetry add -I{}==* --dev
+            cat requirements_dev.txt | grep -v '^#' | grep -v '^\s*$' | grep '^six\|^future' | cut -d= -f1 | xargs -I{} poetry add {}==* --dev
             git rm requirements_dev.txt || true
         fi
         current=$(poetry show -t | grep '^[a-z]' | sed 's| .*||g' | paste -s -d\| - | sed 's/\|/\\\|/g')
