@@ -13,6 +13,3 @@ excludes:
     - pattern: "devDependencies"
       reason: "DEV_DEPENDENCY_OF"
       comment: "Packages for development only. Not part of released artifacts"
-    - pattern: "requirements*txt"
-      reason: "DEV_DEPENDENCY_OF"
-      comment: "Dev components"
