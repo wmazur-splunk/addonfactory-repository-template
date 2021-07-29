@@ -49,6 +49,7 @@ orbs:
                   --analyzeCommits @semantic-release/commit-analyzer \
                   --verifyRelease @semantic-release/exec \
                   --verifyReleaseCmd 'echo ${nextRelease.version} > nextRelease.txt'
+                sed -i "s/-develop./develop/g" nextRelease.txt
                 VERSION=$(cat nextRelease.txt)
                 echo VERSION="$VERSION"
                 echo CIRCLE_TAG=$CIRCLE_TAG
