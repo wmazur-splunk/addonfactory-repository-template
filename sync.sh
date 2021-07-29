@@ -284,61 +284,64 @@ do
         then 
             poetry init -n --author "Splunk Inc, <sales@splunk.com>" --python "^3.7" -l "Splunk-1-2020"
             reuse add pyproject.toml
-        fi
-        if [[ -f "package/lib/requirements.txt" ]]; then
-            cat package/lib/requirements.txt | grep -v '^#' | grep -v '^\s*$' | grep -v '^six' | grep -v 'future' | xargs poetry add
-            cat package/lib/requirements.txt | grep -v '^#' | grep -v '^\s*$' | grep '^six\|^future' | cut -d= -f1 | xargs poetry add --lock  
-            git rm package/lib/requirements.txt || true
-        fi
-        if [[ -f "package/lib/py3/requirements.txt" ]]; then
-            cat package/lib/py3/requirements.txt | grep -v '^#' | grep -v '^\s*$' | grep -v '^six' | grep -v 'future' | xargs poetry add
-            cat package/lib/py3/requirements.txt | grep -v '^#' | grep -v '^\s*$' | grep '^six\|^future' | cut -d= -f1 | xargs poetry add --lock  
-            git rm package/lib/py3/requirements.txt || true
-        fi
-        if [[ -f "requirements_addon_specific.txt" ]]; then
+            if [[ -f "package/lib/requirements.txt" ]]; then
+                cat package/lib/requirements.txt | grep -v '^#' | grep -v '^\s*$' | grep -v '^six' | grep -v 'future' | xargs poetry add
+                cat package/lib/requirements.txt | grep -v '^#' | grep -v '^\s*$' | grep '^six\|^future' | cut -d= -f1 | xargs poetry add --lock  
+                git rm package/lib/requirements.txt || true
+            fi
+            if [[ -f "package/lib/py3/requirements.txt" ]]; then
+                cat package/lib/py3/requirements.txt | grep -v '^#' | grep -v '^\s*$' | grep -v '^six' | grep -v 'future' | xargs poetry add
+                cat package/lib/py3/requirements.txt | grep -v '^#' | grep -v '^\s*$' | grep '^six\|^future' | cut -d= -f1 | xargs poetry add --lock  
+                git rm package/lib/py3/requirements.txt || true
+            fi
+            if [[ -f "requirements_addon_specific.txt" ]]; then
+                current=$(poetry show -t | grep '^[a-z]' | sed 's| .*||g' | paste -s -d\| - | sed 's/\|/\\\|/g')
+                new=($(cat requirements_addon_specific.txt \
+                    | grep -v '^#' | grep -v '^\s*$' | grep -v '^six' | grep -v 'future' \
+                    | grep -v ${current}))
+                for i in "${new[@]}"
+                do
+                : 
+                    poetry add --lock $i --dev || echo \# $i>>requirements_broken.txt
+                done
+            fi
+            if [[ -f "requirements_dev.txt" ]]; then
+                current=$(poetry show -t | grep '^[a-z]' | sed 's| .*||g' | paste -s -d\| - | sed 's/\|/\\\|/g')
+                new=($(cat requirements_dev.txt \
+                    | grep -v 'splunk-packaging-toolkit' \
+                    | grep -v '^#' | grep -v '^\s*$' | grep -v '^six' | grep -v 'future' | grep -v '^-r' \
+                    | grep -v "^\(${current}\)\(==\| *$\)"))
+                for i in "${new[@]}"
+                do
+                : 
+                    poetry add --lock $i --dev || echo \# $i>>requirements_broken.txt
+                done
+                cat requirements_dev.txt | grep -v '^#' | grep -v '^\s*$' | grep '^six\|^future' | cut -d= -f1 | xargs -I{} poetry add --lock {}==* --dev
+                git rm requirements_dev.txt || true
+            fi
             current=$(poetry show -t | grep '^[a-z]' | sed 's| .*||g' | paste -s -d\| - | sed 's/\|/\\\|/g')
-            new=($(cat requirements_addon_specific.txt \
-                | grep -v '^#' | grep -v '^\s*$' | grep -v '^six' | grep -v 'future' \
-                | grep -v ${current}))
-            for i in "${new[@]}"
-            do
-            : 
-                poetry add --lock $i --dev || echo \# $i>>requirements_broken.txt
-            done
-        fi
-        if [[ -f "requirements_dev.txt" ]]; then
-            current=$(poetry show -t | grep '^[a-z]' | sed 's| .*||g' | paste -s -d\| - | sed 's/\|/\\\|/g')
-            new=($(cat requirements_dev.txt \
-                | grep -v 'splunk-packaging-toolkit' \
-                | grep -v '^#' | grep -v '^\s*$' | grep -v '^six' | grep -v 'future' | grep -v '^-r' \
-                | grep -v "^\(${current}\)\(==\| *$\)"))
-            for i in "${new[@]}"
-            do
-            : 
-                poetry add --lock $i --dev || echo \# $i>>requirements_broken.txt
-            done
-            cat requirements_dev.txt | grep -v '^#' | grep -v '^\s*$' | grep '^six\|^future' | cut -d= -f1 | xargs -I{} poetry add --lock {}==* --dev
-            git rm requirements_dev.txt || true
-        fi
-        current=$(poetry show -t | grep '^[a-z]' | sed 's| .*||g' | paste -s -d\| - | sed 's/\|/\\\|/g')
-        poetry add --lock splunk-packaging-toolkit --dev  || true
-        poetry add --lock pytest-splunk-addon --dev  || true
-        if [[ -d tests/ui ]]; then
-            poetry add --lock pytest-splunk-addon-ui-smartx --dev  || true
-        else 
-            poetry remove pytest-splunk-addon-ui-smartx  --dev || true
-        fi
-        if [[ -d tests/unit ]]; then
-            poetry add --lock pytest-cov --dev  || true
-            poetry add --lock coverage --dev  || true
-        else 
-            poetry remove coverage  --dev || true
-            poetry remove pytest-cov  --dev || true
-        fi
+            poetry add --lock splunk-packaging-toolkit --dev  || true
+            poetry add --lock pytest-splunk-addon --dev  || true
+            
+            if [[ -d tests/ui ]]; then
+                poetry add --lock -D pytest-splunk-addon-ui-smartx pytest-splunk-addon splunk-add-on-ucc-framework || true
+            else
+                poetry remove pytest-splunk-addon-ui-smartx  --dev || true
+                poetry add --lock -D pytest-splunk-addon splunk-add-on-ucc-framework || true
+            fi
+            if [[ -d tests/unit ]]; then
+                poetry add --lock pytest-cov --dev  || true
+                poetry add --lock coverage --dev  || true
+            else 
+                poetry remove coverage  --dev || true
+                poetry remove pytest-cov  --dev || true
+            fi
+            poetry remove configparser || true
 
-        if [[ -f "requirements_addon_specific.txt" ]]; then
-            cat requirements_addon_specific.txt | grep -v '^#' | grep -v '^\s*$' | grep '^six\|^future' | cut -d= -f1 | xargs poetry add --lock --dev 
-            git rm requirements_addon_specific.txt || true
+            if [[ -f "requirements_addon_specific.txt" ]]; then
+                cat requirements_addon_specific.txt | grep -v '^#' | grep -v '^\s*$' | grep '^six\|^future' | cut -d= -f1 | xargs poetry add --lock --dev 
+                git rm requirements_addon_specific.txt || true
+            fi
         fi
         sed 's|yarn.lock|*.lock|'  .reuse/dep5
         if [[ -f "package.json" ]]; then
