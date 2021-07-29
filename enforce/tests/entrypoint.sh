@@ -24,8 +24,8 @@ then
 fi
 
 pip install -r requirements_dev.txt --user
-pip install six>=1.15 --user
-pip install git+https://github.com/rfaircloth-splunk/agent-python-pytest.git --user
+#pip install six>=1.15 --user
+#pip install git+https://github.com/rfaircloth-splunk/agent-python-pytest.git --user
 
 cp -f .pytest.expect ${TEST_SET}
 
