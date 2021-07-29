@@ -43,8 +43,12 @@ orbs:
               name: Generate Addon
               command: |
                 touch nextRelease.txt
-                npx -p @semantic-release/exec -p semantic-release@17.0.0 semantic-release --dry-run --plugins "@semantic-release/commit-analyzer,@semantic-release/exec" --analyzeCommits @semantic-release/commit-analyzer --verifyRelease @semantic-release/exec --verifyReleaseCmd 'echo ${nextRelease.version} > nextRelease.txt'
-                sed -i "s/-develop./develop/g" nextRelease.txt
+                npx -p @semantic-release/exec -p semantic-release@17.0.0 -p semantic-release/git -p semantic-release/github \
+                  semantic-release --dry-run \
+                  --plugins "@semantic-release/commit-analyzer,@semantic-release/exec,@semantic-release/git,@semantic-release/github" \
+                  --analyzeCommits @semantic-release/commit-analyzer \
+                  --verifyRelease @semantic-release/exec \
+                  --verifyReleaseCmd 'echo ${nextRelease.version} > nextRelease.txt'
                 VERSION=$(cat nextRelease.txt)
                 echo VERSION="$VERSION"
                 echo CIRCLE_TAG=$CIRCLE_TAG
@@ -502,8 +506,8 @@ jobs:
       - run:
           name: "Apply Release Tag"
           command: |
-            npx semantic-release -p @semantic-release/exec -p @semantic-release/git
-
+            npx -p @semantic-release/exec -p semantic-release@17.0.0 -p semantic-release/git -p semantic-release/github \
+                semantic-release
   publish-gh:
     docker:
       - image: circleci/python:3.7
