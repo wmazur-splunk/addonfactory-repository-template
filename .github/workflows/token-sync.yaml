@@ -27,6 +27,7 @@ jobs:
             SNYK_TOKEN
             VT_API_KEY
           REPOSITORIES: |
+            splunk-dbx-add-on-for-*
             splunk/splunk-add-on-for-*
             splunk/dropbox-add-on-for-splunk
             splunk/dropbox-app-for-splunk
