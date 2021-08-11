@@ -3,14 +3,14 @@
 ## SPDX-License-Identifier: LicenseRef-Splunk-1-2020
 ##
 ##
-name: Github Actions Token Sync
+name: sync-main
 
 on:
   push:
     branches: [main]
 
 jobs:
-  test:
+  secrets:
     runs-on: ubuntu-latest
     steps:
       - name: Sync Secrets
