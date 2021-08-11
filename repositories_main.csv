@@ -85,7 +85,7 @@ google-chrome-add-on-for-splunk,TA_google_chrome,internal,"Google Chrome Add-on 
 splunk-add-on-for-microsoft-azure,TA-MS-AAD,internal,"Microsoft Azure Add-on for Splunk",main
 splunk-dbx-add-on-for-microsoft-sql-server,Splunk_DBX_mssql,"Splunk DBX Add-on for Microsoft SQL Server",main
 splunk-dbx-add-on-for-mysql,Splunk_DBX_mysql,"Splunk DBX Add-on for MySQL",main
-splunk-dbx-add-on-for-postgress,Splunk_DBX_postgress,"Splunk DBX Add-on for Postgress",main
+splunk-dbx-add-on-for-postgres,Splunk_DBX_postgres,"Splunk DBX Add-on for Postgres",main
 splunk-dbx-add-on-for-Redshift,Splunk_DBX_redshift,"Splunk DBX Add-on for redshift",main
 splunk-dbx-add-on-for-presto,Splunk_DBX_presto,"Splunk DBX Add-on for Presto",main
 splunk-dbx-add-on-for-athena,Splunk_DBX_athena,"Splunk DBX Add-on for Athena",main
