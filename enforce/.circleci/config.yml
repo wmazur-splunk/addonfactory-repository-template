@@ -626,7 +626,7 @@ workflows:
             parameters:
               splunk_version: ["8.0", "8.2"]
               sc4s_version: ["1"]
-              test_set: ["ui-chrome"]
+              test_set: ["ui-chrome_grid"] # requires smartx >= 2.0.8 please check before merge
               resource_class: ["medium"]
           filters:
             branches:
