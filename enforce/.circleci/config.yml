@@ -38,6 +38,11 @@ orbs:
                   sudo npm install --global yarn
                   yarn
                 fi
+                if [ -f "build.gradle" ]
+                then
+                  sudo apt-get install -y gradle
+                  gradle -v
+                fi
 
           - run:
               name: Generate Addon
