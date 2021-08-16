@@ -90,3 +90,4 @@ splunk-dbx-add-on-for-Redshift,Splunk_DBX_redshift,"Splunk DBX Add-on for redshi
 splunk-dbx-add-on-for-presto,Splunk_DBX_presto,"Splunk DBX Add-on for Presto",main
 splunk-dbx-add-on-for-athena,Splunk_DBX_athena,"Splunk DBX Add-on for Athena",main
 splunk-dbx-add-on-for-snowflake,Splunk_DBX_snowflake,"Splunk DBX Add-on for Snowflake",main
+splunk-dbx-add-on-for-oracle,Splunk_DBX_oracle,"Splunk DBX Add-on for Oracle",main
