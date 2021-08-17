@@ -114,8 +114,8 @@ do
         curl -X POST --header "Content-Type: application/json" -d "{\"name\":\"GITHUB_TOKEN\", \"value\":\"${GITHUB_TOKEN}\"}" https://circleci.com/api/v1.1/project/github/$REPOORG/$REPO/envvar?circle-token=${CIRCLECI_TOKEN}
 
         git remote set-url origin https://$GITHUB_USER:$GITHUB_TOKEN@github.com/$REPOORG/$REPO.git
-        git checkout -b main
-        git push --set-upstream origin main
+        git checkout -b $BRANCH
+        git push --set-upstream origin $BRANCH
         git tag -a v$(crudini --get package/default/app.conf launcher version) -m "Release"
         git push --follow-tags
 
@@ -132,7 +132,7 @@ do
             #hub clone $REPOORG/$REPO work/$REPO
             git clone https://$GITHUB_USER:$GITHUB_TOKEN@github.com/$REPOORG/$REPO.git work/$REPO
             pushd work/$REPO
-            git checkout develop
+            git checkout $BRANCH 
         else
             pushd work/$REPO
             git pull
@@ -140,7 +140,7 @@ do
         git config  user.email "addonfactory@splunk.com"
         git config  user.name "Addon Factory template"
 
-        ( git checkout test/common-template-rollout-changes  && git checkout develop && git branch -D test/common-template-rollout-changes ) || true
+        ( git checkout test/common-template-rollout-changes  && git checkout $BRANCH && git branch -D test/common-template-rollout-changes ) || true
         git checkout -B "test/common-template-rollout-changes" $BRANCH
         git submodule update --init --recursive
         #fi
