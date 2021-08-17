@@ -119,6 +119,7 @@ do
         git tag -a v$(crudini --get package/default/app.conf launcher version) -m "Release"
         git push --follow-tags
 
+        hub api repos/$REPOORG/$REPO --raw-field 'delete_branch_on_merge=true' -X PATCH || true
     else
         echo Repository is existing
         
@@ -356,6 +357,7 @@ do
         git push -f --set-upstream origin test/common-template-rollout-changes
         hub pull-request -b $BRANCH "Bump repository configuration from template" --no-edit
         hub api /repos/$REPOORG/$REPO  -H 'Accept: application/vnd.github.nebula-preview+json' -X PATCH -F visibility=$REPOVISIBILITY
+        hub api repos/$REPOORG/$REPO --raw-field 'delete_branch_on_merge=true' -X PATCH || true
 
     fi
     popd
