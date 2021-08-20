@@ -31,8 +31,8 @@ jobs:
             AWS_SECRET_ACCESS_KEY
           REPOSITORIES: |
             splunk/splunk-add-on-for-isc-bind
-            splunk/splunk-add-on-for-box,Splunk_TA_Box
-            splunk/splunk-add-on-for-infoblox,Splunk_TA_infoblox
+            splunk/splunk-add-on-for-box
+            splunk/splunk-add-on-for-infoblox
             splunk/splunk-add-on-for-cyberark-epm
             splunk/splunk-add-on-for-rsa-securid-cas
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN_ADMIN }}
