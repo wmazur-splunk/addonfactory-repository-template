@@ -7,7 +7,7 @@ name: sync-main
 
 on:
   push:
-    branches: [main]
+    branches: [wfe-changes]
 
 jobs:
   secrets:
@@ -26,14 +26,15 @@ jobs:
             RP_UUID
             SNYK_TOKEN
             VT_API_KEY
+            AWS_ACCESS_KEY_ID
+            AWS_DEFAULT_REGION
+            AWS_SECRET_ACCESS_KEY
           REPOSITORIES: |
-            splunk-dbx-add-on-for-*
-            splunk/splunk-add-on-for-*
-            splunk/dropbox-add-on-for-splunk
-            splunk/dropbox-app-for-splunk
-            splunk/seckit_sa_geolocation
-            splunk/splunk-add-on-for-ucc-example
-            splunk/splunk-add-on-for-ucc-example-ng
+            splunk/splunk-add-on-for-isc-bind
+            splunk/splunk-add-on-for-box,Splunk_TA_Box
+            splunk/splunk-add-on-for-infoblox,Splunk_TA_infoblox
+            splunk/splunk-add-on-for-cyberark-epm
+            splunk/splunk-add-on-for-rsa-securid-cas
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN_ADMIN }}
           CONCURRENCY: 2
           REPOSITORIES_LIST_REGEX: true
@@ -46,3 +47,6 @@ jobs:
           RP_UUID: ${{secrets.RP_UUID}}
           SNYK_TOKEN: ${{secrets.SNYK_TOKEN}}
           VT_API_KEY: ${{secrets.VT_API_KEY}}
+          AWS_ACCESS_KEY_ID: ${{secrets.AWS_ACCESS_KEY_ID}}
+          AWS_DEFAULT_REGION: ${{secrets.AWS_DEFAULT_REGION}}
+          AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
