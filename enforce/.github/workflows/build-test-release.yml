@@ -9,7 +9,7 @@ on:
     branches:
       - "main"
       - "develop"
-      - "test/workflow-integration"
+      - "test/test-do-not-delete-or-merge"
     tags:
       - "v[0-9]+.[0-9]+.[0-9]+"
   pull_request:
@@ -441,6 +441,7 @@ jobs:
         id: artifactid
         run: |
           echo "::set-output name=result::$(echo ${{ fromJSON(steps.meta.outputs.json).tags[0] }})"
+
   setup:
     needs:
       - build
@@ -488,23 +489,29 @@ jobs:
           # echo "ARGO_SECURE=true" >> $GITHUB_ENV
           # echo "ARGO_BASE_HREF=''" >> $GITHUB_ENV
           # echo "ARGO_NAMESPACE=workflows" >> $GITHUB_ENV
+
           echo "::set-output name=argo-server::argo.dev.wfe.splgdi.com:443"
           echo "::set-output name=argo-http1::true"
           echo "::set-output name=argo-secure::true"
           echo "::set-output name=argo-base-href::\'\'"
           echo "::set-output name=argo-namespace::workflows"
           echo "::set-output name=argo-workflow-tmpl-name::ta-workflow"
+
           ARGO_TOKEN="Bearer ${TA_DEV_GITHUB_WORKFLOW_AUTOMATION_TOKEN}"
           echo "::set-output name=argo-token::$(echo $ARGO_TOKEN)"
+
           ADDON_NAME=$(crudini --get package/default/app.conf id name)
           ADDON_NAME=`echo ${ADDON_NAME} | awk -F 'Splunk_TA_' '{print $2}'`
-          echo "::set-output name=addon-name::$(echo "$ADDON_NAME" | tr '[:lower:]' '[:upper::]')"
+          echo "::set-output name=addon-name::$(echo "$ADDON_NAME" | tr '[:lower:]' '[:upper:]')"
+
           JOB_NAME=${GITHUB_RUN_NUMBER}-${GITHUB_RUN_ID}
           JOB_NAME=`echo $JOB_NAME | sed "s/[_.]/-/g"`
           echo "::set-output name=job-name::$(echo $JOB_NAME)"
+
           LABELS="addon-name=${ADDON_NAME}"
           echo "::set-output name=labels::$(echo $LABELS)"
-          ADDON_UPLOAD_PATH="s3://ta-dev-artifacts/ta-apps${{ needs.build.outputs.buildname }}"
+
+          ADDON_UPLOAD_PATH="s3://ta-dev-artifacts/ta-apps/${{ needs.build.outputs.buildname }}"
           echo "::set-output name=addon-upload-path::$(echo $ADDON_UPLOAD_PATH)"
           echo "::set-output name=directory-path::/tmp"
           echo "::set-output name=s3-bucket::ta-dev-artifacts"
@@ -518,6 +525,7 @@ jobs:
           echo "job-name:" ${{ steps.test-setup.outputs.job-name }}
           echo "labels:" ${{ steps.test-setup.outputs.labels }}
           echo "addon-upload-path:" ${{ steps.test-setup.outputs.addon-upload-path }}
+
   run-knowledge-tests:
     if: ${{ needs.test-inventory.outputs.knowledge == 'true' }}
     needs:
@@ -734,7 +742,7 @@ jobs:
       ARGO_TOKEN: ${{ needs.setup.outputs.argo-token }}
       DEMO: 'bearer ${{ needs.setup.outputs.argo-server }}'
       SPLUNK_VERSION_BASE: ${{ matrix.splunk-version }}
-      TEST_TYPE: "modinput"
+      TEST_TYPE: "modinput_functional"
       TEST_ARGS: ""
     steps:
       - uses: actions/checkout@v2
