@@ -159,8 +159,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          #Very Important semantic-release won't trigger a tagged
-          #build if this is not set false
+          # Very Important semantic-release won't trigger a tagged
+          # build if this is not set false
           persist-credentials: false
       - name: Setup python
         uses: actions/setup-python@v2
