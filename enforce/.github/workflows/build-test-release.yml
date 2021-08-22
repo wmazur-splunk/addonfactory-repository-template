@@ -597,6 +597,7 @@ jobs:
         if: always()
         run: until argo wait ${{ steps.run-tests.outputs.workflow-name }} -n workflows; do echo "Argo wait ended with failure $?. Trying again"; sleep 1; done
       - name: pull artifacts from s3 bucket
+        if: always()
         run: |
           echo "pulling artifacts"
           aws s3 cp s3://${{ needs.setup.outputs.s3-bucket }}/artifacts-${{ steps.create-job-name.outputs.job-name }}/${{ steps.create-job-name.outputs.job-name }}.tgz ${{ needs.setup.outputs.directory-path }}/
@@ -604,16 +605,19 @@ jobs:
           ls -al ${{ needs.setup.outputs.directory-path }}
           ls -al ${{ needs.setup.outputs.directory-path }}/test-results
       - name: pull logs from s3 bucket
+        if: always()
         run: |
           echo "pulling logs"
           mkdir -p ${{ needs.setup.outputs.directory-path }}/argo-logs
           aws s3 cp s3://${{ needs.setup.outputs.s3-bucket }}/${{ steps.run-tests.outputs.workflow-name }}/ ${{ needs.setup.outputs.directory-path }}/argo-logs/ --recursive
       - uses: actions/upload-artifact@v2.2.4
+        if: always()
         with:
           name: archive splunk ${{ steps.get-version.outputs.splunk-version }} ${{ env.TEST_TYPE }} tests artifacts
           path: |
             ${{ needs.setup.outputs.directory-path }}/test-results
       - uses: actions/upload-artifact@v2.2.4
+        if: always()
         with:
           name: archive splunk ${{ steps.get-version.outputs.splunk-version }} ${{ env.TEST_TYPE }} tests logs
           path: |
@@ -621,7 +625,7 @@ jobs:
       - name: Test Report
         uses: dorny/test-reporter@v1
         continue-on-error: true
-        if: success() || failure()    # run this step even if previous step failed
+        if: always()
         with:
           name: splunk ${{ steps.get-version.outputs.splunk-version }} ${{ env.TEST_TYPE }} test report
           path: '${{ needs.setup.outputs.directory-path }}/test-results/*.xml'
@@ -694,6 +698,7 @@ jobs:
         if: always()
         run: until argo wait ${{ steps.run-tests.outputs.workflow-name }} -n workflows; do echo "Argo wait ended with failure $?. Trying again"; sleep 1; done
       - name: pull artifacts from s3 bucket
+        if: always()
         run: |
           echo "pulling artifacts"
           aws s3 cp s3://${{ needs.setup.outputs.s3-bucket }}/artifacts-${{ steps.create-job-name.outputs.job-name }}/${{ steps.create-job-name.outputs.job-name }}.tgz ${{ needs.setup.outputs.directory-path }}/
@@ -701,16 +706,19 @@ jobs:
           ls -al ${{ needs.setup.outputs.directory-path }}
           ls -al ${{ needs.setup.outputs.directory-path }}/test-results
       - name: pull logs from s3 bucket
+        if: always()
         run: |
           echo "pulling logs"
           mkdir -p ${{ needs.setup.outputs.directory-path }}/argo-logs
           aws s3 cp s3://${{ needs.setup.outputs.s3-bucket }}/${{ steps.run-tests.outputs.workflow-name }}/ ${{ needs.setup.outputs.directory-path }}/argo-logs/ --recursive
       - uses: actions/upload-artifact@v2.2.4
+        if: always()
         with:
           name: archive splunk ${{ steps.get-version.outputs.splunk-version }} ${{ env.TEST_TYPE }} tests artifacts
           path: |
             ${{ needs.setup.outputs.directory-path }}/test-results
       - uses: actions/upload-artifact@v2.2.4
+        if: always()
         with:
           name: archive splunk ${{ steps.get-version.outputs.splunk-version }} ${{ env.TEST_TYPE }} tests logs
           path: |
@@ -718,7 +726,7 @@ jobs:
       - name: Test Report
         uses: dorny/test-reporter@v1
         continue-on-error: true
-        if: success() || failure()    # run this step even if previous step failed
+        if: always()
         with:
           name: splunk ${{ steps.get-version.outputs.splunk-version }} ${{ env.TEST_TYPE }} test report
           path: '${{ needs.setup.outputs.directory-path }}/test-results/*.xml'
@@ -791,6 +799,7 @@ jobs:
         if: always()
         run: until argo wait ${{ steps.run-tests.outputs.workflow-name }} -n workflows; do echo "Argo wait ended with failure $?. Trying again"; sleep 1; done
       - name: pull artifacts from s3 bucket
+        if: always()
         run: |
           echo "pulling artifacts"
           aws s3 cp s3://${{ needs.setup.outputs.s3-bucket }}/artifacts-${{ steps.create-job-name.outputs.job-name }}/${{ steps.create-job-name.outputs.job-name }}.tgz ${{ needs.setup.outputs.directory-path }}/
@@ -798,16 +807,19 @@ jobs:
           ls -al ${{ needs.setup.outputs.directory-path }}
           ls -al ${{ needs.setup.outputs.directory-path }}/test-results
       - name: pull logs from s3 bucket
+        if: always()
         run: |
           echo "pulling logs"
           mkdir -p ${{ needs.setup.outputs.directory-path }}/argo-logs
           aws s3 cp s3://${{ needs.setup.outputs.s3-bucket }}/${{ steps.run-tests.outputs.workflow-name }}/ ${{ needs.setup.outputs.directory-path }}/argo-logs/ --recursive
       - uses: actions/upload-artifact@v2.2.4
+        if: always()
         with:
           name: archive splunk ${{ steps.get-version.outputs.splunk-version }} ${{ env.TEST_TYPE }} tests artifacts
           path: |
             ${{ needs.setup.outputs.directory-path }}/test-results
       - uses: actions/upload-artifact@v2.2.4
+        if: always()
         with:
           name: archive splunk ${{ steps.get-version.outputs.splunk-version }} ${{ env.TEST_TYPE }} tests logs
           path: |
@@ -815,7 +827,7 @@ jobs:
       - name: Test Report
         uses: dorny/test-reporter@v1
         continue-on-error: true
-        if: success() || failure()    # run this step even if previous step failed
+        if: always()
         with:
           name: splunk ${{ steps.get-version.outputs.splunk-version }} ${{ env.TEST_TYPE }} test report
           path: '${{ needs.setup.outputs.directory-path }}/test-results/*.xml'
