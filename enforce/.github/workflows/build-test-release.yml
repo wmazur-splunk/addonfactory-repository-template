@@ -489,12 +489,6 @@ jobs:
       - name: setup for test
         id: test-setup
         run: |
-          # echo "ARGO_SERVER=argo.dev.wfe.splgdi.com:443" >> $GITHUB_ENV
-          # echo "ARGO_HTTP1=true" >> $GITHUB_ENV
-          # echo "ARGO_SECURE=true" >> $GITHUB_ENV
-          # echo "ARGO_BASE_HREF=''" >> $GITHUB_ENV
-          # echo "ARGO_NAMESPACE=workflows" >> $GITHUB_ENV
-
           echo "::set-output name=argo-server::argo.dev.wfe.splgdi.com:443"
           echo "::set-output name=argo-http1::true"
           echo "::set-output name=argo-secure::true"
@@ -551,7 +545,6 @@ jobs:
       ARGO_BASE_HREF: ${{ needs.setup.outputs.argo-href }}
       ARGO_NAMESPACE: ${{ needs.setup.outputs.argo-namespace }}
       ARGO_TOKEN: ${{ needs.setup.outputs.argo-token }}
-      DEMO: 'bearer ${{ needs.setup.outputs.argo-server }}'
       SPLUNK_VERSION_BASE: ${{ matrix.splunk-version }}
       TEST_TYPE: "knowledge"
       TEST_ARGS: ""
@@ -570,7 +563,7 @@ jobs:
         run: |
           RANDOM_STRING=`head -3 /dev/urandom | tr -cd '[:lower:]' | cut -c -4`
           echo 'RANDOM_STRING: ${RANDOM_STRING}'
-          JOB_NAME=${{ needs.setup.outputs.job-name }}-${RANDOM_STRING}
+          JOB_NAME=${{ needs.setup.outputs.job-name }}
           JOB_NAME=`echo $JOB_NAME | sed "s/[_.]/-/g"`
           echo "::set-output name=job-name::$(echo $JOB_NAME)"
       - name: get version
@@ -642,7 +635,7 @@ jobs:
     strategy:
       matrix:
         splunk-version: ['8.0', '8.1', '8.2']
-        browser: ['chrome']
+        browser: ['chrome', 'firefox', 'safari']
     container:
       image: ghcr.io/splunk/workflow-engine-base:2.0.3
     env:
@@ -652,7 +645,6 @@ jobs:
       ARGO_BASE_HREF: ${{ needs.setup.outputs.argo-href }}
       ARGO_NAMESPACE: ${{ needs.setup.outputs.argo-namespace }}
       ARGO_TOKEN: ${{ needs.setup.outputs.argo-token }}
-      DEMO: 'bearer ${{ needs.setup.outputs.argo-server }}'
       SPLUNK_VERSION_BASE: ${{ matrix.splunk-version }}
       TEST_TYPE: "ui"
       TEST_ARGS: "--browser ${{ matrix.browser }}"
@@ -671,7 +663,7 @@ jobs:
         run: |
           RANDOM_STRING=`head -3 /dev/urandom | tr -cd '[:lower:]' | cut -c -4`
           echo 'RANDOM_STRING: ${RANDOM_STRING}'
-          JOB_NAME=${{ needs.setup.outputs.job-name }}-${RANDOM_STRING}
+          JOB_NAME=${{ needs.setup.outputs.job-name }}
           JOB_NAME=`echo $JOB_NAME | sed "s/[_.]/-/g"`
           echo "::set-output name=job-name::$(echo $JOB_NAME)"
       - name: get version
@@ -753,7 +745,6 @@ jobs:
       ARGO_BASE_HREF: ${{ needs.setup.outputs.argo-href }}
       ARGO_NAMESPACE: ${{ needs.setup.outputs.argo-namespace }}
       ARGO_TOKEN: ${{ needs.setup.outputs.argo-token }}
-      DEMO: 'bearer ${{ needs.setup.outputs.argo-server }}'
       SPLUNK_VERSION_BASE: ${{ matrix.splunk-version }}
       TEST_TYPE: "modinput_functional"
       TEST_ARGS: ""
@@ -772,7 +763,7 @@ jobs:
         run: |
           RANDOM_STRING=`head -3 /dev/urandom | tr -cd '[:lower:]' | cut -c -4`
           echo 'RANDOM_STRING: ${RANDOM_STRING}'
-          JOB_NAME=${{ needs.setup.outputs.job-name }}-${RANDOM_STRING}
+          JOB_NAME=${{ needs.setup.outputs.job-name }}
           JOB_NAME=`echo $JOB_NAME | sed "s/[_.]/-/g"`
           echo "::set-output name=job-name::$(echo $JOB_NAME)"
       - name: get version
