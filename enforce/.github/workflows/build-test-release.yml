@@ -562,7 +562,6 @@ jobs:
         id: create-job-name
         run: |
           RANDOM_STRING=`head -3 /dev/urandom | tr -cd '[:lower:]' | cut -c -4`
-          echo 'RANDOM_STRING: ${RANDOM_STRING}'
           JOB_NAME=${{ needs.setup.outputs.job-name }}-${RANDOM_STRING}
           JOB_NAME=`echo $JOB_NAME | sed "s/[_.]/-/g"`
           echo "::set-output name=job-name::$(echo $JOB_NAME)"
@@ -662,7 +661,6 @@ jobs:
         id: create-job-name
         run: |
           RANDOM_STRING=`head -3 /dev/urandom | tr -cd '[:lower:]' | cut -c -4`
-          echo 'RANDOM_STRING: ${RANDOM_STRING}'
           JOB_NAME=${{ needs.setup.outputs.job-name }}-${RANDOM_STRING}
           JOB_NAME=`echo $JOB_NAME | sed "s/[_.]/-/g"`
           echo "::set-output name=job-name::$(echo $JOB_NAME)"
@@ -762,7 +760,6 @@ jobs:
         id: create-job-name
         run: |
           RANDOM_STRING=`head -3 /dev/urandom | tr -cd '[:lower:]' | cut -c -4`
-          echo 'RANDOM_STRING: ${RANDOM_STRING}'
           JOB_NAME=${{ needs.setup.outputs.job-name }}-${RANDOM_STRING}
           JOB_NAME=`echo $JOB_NAME | sed "s/[_.]/-/g"`
           echo "::set-output name=job-name::$(echo $JOB_NAME)"
