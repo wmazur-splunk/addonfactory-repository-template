@@ -595,7 +595,7 @@ jobs:
           addon-secret-id: ADD_ON_${{ needs.setup.outputs.addon-name }}
       - name: check if workflow completed
         if: always()
-        run: until argo wait ${{ steps.run-tests.outputs.workflow-name }} -n workflows; do echo "Argo wait ended with failure $?. Trying again"; sleep 1; done
+        run: until argo watch ${{ steps.run-tests.outputs.workflow-name }} -n workflows; do echo "argo watch ended with failure $?. Trying again"; sleep 60; done
       - name: pull artifacts from s3 bucket
         if: always()
         run: |
@@ -696,7 +696,7 @@ jobs:
           addon-secret-id: ADD_ON_${{ needs.setup.outputs.addon-name }}
       - name: check if workflow completed
         if: always()
-        run: until argo wait ${{ steps.run-tests.outputs.workflow-name }} -n workflows; do echo "Argo wait ended with failure $?. Trying again"; sleep 1; done
+        run: until argo watch ${{ steps.run-tests.outputs.workflow-name }} -n workflows; do echo "argo watch ended with failure $?. Trying again"; sleep 60; done
       - name: pull artifacts from s3 bucket
         if: always()
         run: |
@@ -797,7 +797,7 @@ jobs:
           addon-secret-id: ADD_ON_${{ needs.setup.outputs.addon-name }}
       - name: check if workflow completed
         if: always()
-        run: until argo wait ${{ steps.run-tests.outputs.workflow-name }} -n workflows; do echo "Argo wait ended with failure $?. Trying again"; sleep 1; done
+        run: until argo watch ${{ steps.run-tests.outputs.workflow-name }} -n workflows; do echo "argo watch ended with failure $?. Trying again"; sleep 60; done
       - name: pull artifacts from s3 bucket
         if: always()
         run: |
