@@ -709,7 +709,7 @@ jobs:
       - uses: actions/upload-artifact@v2.2.4
         if: always()
         with:
-          name: archive splunk ${{ steps.get-version.outputs.splunk-version }} ${{ env.TEST_TYPE }} tests logs
+          name: archive splunk ${{ steps.get-version.outputs.splunk-version }} ${{ env.TEST_TYPE }} ${{ matrix.browser }} tests logs
           path: |
             ${{ needs.setup.outputs.directory-path }}/argo-logs
       - name: Test Report
@@ -717,7 +717,7 @@ jobs:
         continue-on-error: true
         if: always()
         with:
-          name: splunk ${{ steps.get-version.outputs.splunk-version }} ${{ env.TEST_TYPE }} test report
+          name: splunk ${{ steps.get-version.outputs.splunk-version }} ${{ env.TEST_TYPE }} ${{ matrix.browser }} test report
           path: '${{ needs.setup.outputs.directory-path }}/test-results/*.xml'
           reporter: java-junit
 
