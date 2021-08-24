@@ -462,7 +462,6 @@ jobs:
       argo-base-href: ${{ steps.test-setup.outputs.argo-base-href }}
       argo-workflow-tmpl-name: ${{ steps.test-setup.outputs.argo-workflow-tmpl-name }}
       argo-namespace: ${{ steps.test-setup.outputs.argo-namespace }}
-      argo-token: ${{ steps.test-setup.outputs.argo-token }}
       addon-name: ${{ steps.test-setup.outputs.addon-name }}
       job-name: ${{ steps.test-setup.outputs.job-name }}
       labels: ${{ steps.test-setup.outputs.labels }}
@@ -470,19 +469,6 @@ jobs:
       directory-path: ${{ steps.test-setup.outputs.directory-path }}
       s3-bucket: ${{ steps.test-setup.outputs.s3-bucket }}
     steps:
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
-      - name: Read secrets from AWS Secrets Manager into environment variables
-        uses: abhilash1in/aws-secrets-manager-action@v1.1.0
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
-          secrets: ta-dev-github-workflow-automation-token
       - uses: actions/checkout@v2
         with:
           submodules: recursive
@@ -495,9 +481,6 @@ jobs:
           echo "::set-output name=argo-base-href::\'\'"
           echo "::set-output name=argo-namespace::workflows"
           echo "::set-output name=argo-workflow-tmpl-name::ta-workflow"
-
-          ARGO_TOKEN="Bearer ${TA_DEV_GITHUB_WORKFLOW_AUTOMATION_TOKEN}"
-          echo "::set-output name=argo-token::$(echo $ARGO_TOKEN)"
 
           ADDON_NAME=$(crudini --get package/default/app.conf id name)
           ADDON_NAME=`echo ${ADDON_NAME} | awk -F 'Splunk_TA_' '{print $2}'`
@@ -544,7 +527,6 @@ jobs:
       ARGO_SECURE: ${{ needs.setup.outputs.argo-secure }}
       ARGO_BASE_HREF: ${{ needs.setup.outputs.argo-href }}
       ARGO_NAMESPACE: ${{ needs.setup.outputs.argo-namespace }}
-      ARGO_TOKEN: ${{ needs.setup.outputs.argo-token }}
       SPLUNK_VERSION_BASE: ${{ matrix.splunk-version }}
       TEST_TYPE: "knowledge"
       TEST_ARGS: ""
@@ -558,6 +540,11 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+      - name: Read secrets from AWS Secrets Manager into environment variables
+        id: get-argo-token
+        run: |
+          ARGO_TOKEN=`aws secretsmanager get-secret-value --secret-id ARGO_TOKEN | jq -r '.SecretString'`
+          echo "::set-output name=argo-token::$(echo $ARGO_TOKEN)"
       - name: create job name
         id: create-job-name
         run: |
@@ -573,6 +560,8 @@ jobs:
           echo "::set-output name=splunk-version::$(echo $SPLUNK_VERSION)"
       - name: run-tests
         id: run-tests
+        env:
+          ARGO_TOKEN: ${{ steps.get-argo-token.outputs.argo-token }}
         uses: splunk/wfe-test-runner-action@test/try-lukasz
         with:
           splunk: ${{ steps.get-version.outputs.splunk-version }}
@@ -586,6 +575,8 @@ jobs:
           addon-url: ${{ needs.setup.outputs.addon-upload-path }}
           addon-secret-id: ADD_ON_${{ needs.setup.outputs.addon-name }}
       - name: check if workflow completed
+        env:
+          ARGO_TOKEN: ${{ steps.get-argo-token.outputs.argo-token }}
         if: always()
         run: until argo watch ${{ steps.run-tests.outputs.workflow-name }} -n workflows; do echo "argo watch ended with failure $?. Trying again"; sleep 60; done
       - name: pull artifacts from s3 bucket
@@ -643,7 +634,6 @@ jobs:
       ARGO_SECURE: ${{ needs.setup.outputs.argo-secure }}
       ARGO_BASE_HREF: ${{ needs.setup.outputs.argo-href }}
       ARGO_NAMESPACE: ${{ needs.setup.outputs.argo-namespace }}
-      ARGO_TOKEN: ${{ needs.setup.outputs.argo-token }}
       SPLUNK_VERSION_BASE: ${{ matrix.splunk-version }}
       TEST_TYPE: "ui"
       TEST_ARGS: "--browser ${{ matrix.browser }}"
@@ -657,6 +647,11 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+      - name: Read secrets from AWS Secrets Manager into environment variables
+        id: get-argo-token
+        run: |
+          ARGO_TOKEN=`aws secretsmanager get-secret-value --secret-id ARGO_TOKEN | jq -r '.SecretString'`
+          echo "::set-output name=argo-token::$(echo $ARGO_TOKEN)"
       - name: create job name
         id: create-job-name
         run: |
@@ -672,6 +667,8 @@ jobs:
           echo "::set-output name=splunk-version::$(echo $SPLUNK_VERSION)"
       - name: run-tests
         id: run-tests
+        env:
+          ARGO_TOKEN: ${{ steps.get-argo-token.outputs.argo-token }}
         uses: splunk/wfe-test-runner-action@test/try-lukasz
         with:
           splunk: ${{ steps.get-version.outputs.splunk-version }}
@@ -686,6 +683,8 @@ jobs:
           addon-secret-id: ADD_ON_${{ needs.setup.outputs.addon-name }}
       - name: check if workflow completed
         if: always()
+        env:
+          ARGO_TOKEN: ${{ steps.get-argo-token.outputs.argo-token }}
         run: until argo watch ${{ steps.run-tests.outputs.workflow-name }} -n workflows; do echo "argo watch ended with failure $?. Trying again"; sleep 60; done
       - name: pull artifacts from s3 bucket
         if: always()
@@ -742,7 +741,6 @@ jobs:
       ARGO_SECURE: ${{ needs.setup.outputs.argo-secure }}
       ARGO_BASE_HREF: ${{ needs.setup.outputs.argo-href }}
       ARGO_NAMESPACE: ${{ needs.setup.outputs.argo-namespace }}
-      ARGO_TOKEN: ${{ needs.setup.outputs.argo-token }}
       SPLUNK_VERSION_BASE: ${{ matrix.splunk-version }}
       TEST_TYPE: "modinput_functional"
       TEST_ARGS: ""
@@ -756,6 +754,11 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+      - name: Read secrets from AWS Secrets Manager into environment variables
+        id: get-argo-token
+        run: |
+          ARGO_TOKEN=`aws secretsmanager get-secret-value --secret-id ARGO_TOKEN | jq -r '.SecretString'`
+          echo "::set-output name=argo-token::$(echo $ARGO_TOKEN)"
       - name: create job name
         id: create-job-name
         run: |
@@ -771,6 +774,8 @@ jobs:
           echo "::set-output name=splunk-version::$(echo $SPLUNK_VERSION)"
       - name: run-tests
         id: run-tests
+        env:
+          ARGO_TOKEN: ${{ steps.get-argo-token.outputs.argo-token }}
         uses: splunk/wfe-test-runner-action@test/try-lukasz
         with:
           splunk: ${{ steps.get-version.outputs.splunk-version }}
@@ -785,6 +790,8 @@ jobs:
           addon-secret-id: ADD_ON_${{ needs.setup.outputs.addon-name }}
       - name: check if workflow completed
         if: always()
+        env:
+          ARGO_TOKEN: ${{ steps.get-argo-token.outputs.argo-token }}
         run: until argo watch ${{ steps.run-tests.outputs.workflow-name }} -n workflows; do echo "argo watch ended with failure $?. Trying again"; sleep 60; done
       - name: pull artifacts from s3 bucket
         if: always()
