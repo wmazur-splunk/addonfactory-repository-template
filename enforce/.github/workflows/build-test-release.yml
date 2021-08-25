@@ -1,5 +1,5 @@
 # jscpd:ignore-start
-name: CI
+name: build-test-release
 on:
   push:
     branches:
