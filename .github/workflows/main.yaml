@@ -30,11 +30,7 @@ jobs:
             AWS_DEFAULT_REGION
             AWS_SECRET_ACCESS_KEY
           REPOSITORIES: |
-            splunk/splunk-add-on-for-isc-bind
-            splunk/splunk-add-on-for-box
-            splunk/splunk-add-on-for-infoblox
-            splunk/splunk-add-on-for-cyberark-epm
-            splunk/splunk-add-on-for-rsa-securid-cas
+            splunk/splunk-add-on-for-*
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN_ADMIN }}
           CONCURRENCY: 2
           REPOSITORIES_LIST_REGEX: true
