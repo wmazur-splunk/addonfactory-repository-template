@@ -306,7 +306,7 @@ else
     fi
     gh api /repos/$REPOORG/$REPO  -H 'Accept: application/vnd.github.nebula-preview+json' -X PATCH -F visibility=$REPOVISIBILITY
     git add . || exit 1
-    git commit -am "test: common template rollout changes" || exit 1
+    git commit -am "test: Testing Initial WFE Workflow" || exit 1
     git push -f --set-upstream origin test/test-do-not-delete-or-merge || exit 1
     # gh pr create \
     #     --title "Bump repository configuration from template${PR_SUFFIX}" --fill  || exit 1    
