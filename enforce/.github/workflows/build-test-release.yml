@@ -579,7 +579,8 @@ jobs:
           ARGO_TOKEN: ${{ steps.get-argo-token.outputs.argo-token }}
         if: always()
         run: |
-          until argo watch ${{ steps.run-tests.outputs.workflow-name }} -n workflows > /dev/null; do echo "argo watch ended with failure $?. Trying again"; sleep 60; done
+          # until argo watch ${{ steps.run-tests.outputs.workflow-name }} -n workflows > /dev/null; do echo "argo watch ended with failure $?. Trying again"; sleep 60; done
+          argo wait ${{ steps.run-tests.outputs.workflow-name }} -n workflows
           argo watch ${{ steps.run-tests.outputs.workflow-name }} -n workflows
       - name: pull artifacts from s3 bucket
         if: always()
