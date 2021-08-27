@@ -1,0 +1,5 @@
+splunk-add-on-for-infoblox,Splunk_TA_infoblox,internal,"Splunk_TA_infoblox",main
+splunk-add-on-for-box,Splunk_TA_Box,internal,"Splunk_TA_Box",main
+splunk-add-on-for-isc-bind,Splunk_TA_isc-bind,internal,"Splunk_TA_isc-bind",main
+splunk-add-on-for-cyberark-epm,Splunk_TA_cyberark_epm,internal,"Splunk_TA_cyberark_epm",main
+splunk-add-on-for-rsa-securid-cas,Splunk_TA_rsa_securid_cas,internal,"Splunk_TA_rsa_securid_cas",main

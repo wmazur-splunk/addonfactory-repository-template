@@ -94,8 +94,8 @@ else
     fi
     git remote set-url origin https://${GH_USER_ADMIN}:${GH_TOKEN_ADMIN}@github.com/$REPOORG/$REPO.git
 
-    ( git checkout test/test-do-not-delete-or-merge  && git checkout main && git branch -D test/test-do-not-delete-or-merge ) || true
-    git checkout -B "test/test-do-not-delete-or-merge" main
+    ( git checkout test/wfe-do-not-delete-27-08  && git checkout main && git branch -D test/wfe-do-not-delete-27-08 ) || true
+    git checkout -B "test/wfe-do-not-delete-27-08" main
     git submodule update --init --recursive
 
     rsync -avh --include ".*" --ignore-existing ../../seed/ .
@@ -306,8 +306,8 @@ else
     fi
     gh api /repos/$REPOORG/$REPO  -H 'Accept: application/vnd.github.nebula-preview+json' -X PATCH -F visibility=$REPOVISIBILITY
     git add . || exit 1
-    git commit -am "test: Trying to recreate socket connection issue." || exit 1
-    git push -f --set-upstream origin test/test-do-not-delete-or-merge || exit 1
+    git commit -am "test: Testing WFE Workflow" || exit 1
+    git push -f --set-upstream origin test/wfe-do-not-delete-27-08 || exit 1
     # gh pr create \
     #     --title "Bump repository configuration from template${PR_SUFFIX}" --fill  || exit 1    
 fi
