@@ -628,6 +628,21 @@ workflows:
           requires:
             - package
           matrix:
+            alias: splunk-app-test-requirement-test
+            parameters:
+              splunk_version: ["8.1"]
+              sc4s_version: ["1"]
+              test_set: ["requirement_test"]
+          filters:
+            branches:
+              only: /.*/
+      - splunk-app-test:
+          context:
+            - gdi-saucelabs
+            - gdi-reportportal
+          requires:
+            - package
+          matrix:
             alias: splunk-app-test-ui
             parameters:
               splunk_version: ["8.0", "8.2"]
