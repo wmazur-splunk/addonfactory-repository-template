@@ -20,30 +20,12 @@ orbs:
               command: |
                 sudo apt-get update
                 sudo apt-get install -y python2 python-pip python-virtualenv python3 python3.7 python3-pip python3-virtualenv
-                sudo pip3 install poetry                  
                 python3.7 -m virtualenv ~/.venv -p python3
                 source ~/.venv/bin/activate
                 pip install pip --upgrade
-                if [ -f "poetry.lock" ]
-                then
-                  mkdir -p package/lib || true
-                  poetry export --without-hashes -o package/lib/requirements.txt
-                  poetry export --without-hashes --dev -o requirements_dev.txt
-                fi
                 pip install -r requirements_dev.txt --use-deprecated=legacy-resolver || true
                 pip install semantic_version==2.6.0
                 sudo apt install npm
-                if [ -f "yarn.lock" ]
-                then
-                  sudo npm install --global yarn
-                  yarn
-                fi
-                if [ -f "build.gradle" ]
-                then
-                  sudo apt-get install -y gradle
-                  gradle -v
-                fi
-
           - run:
               name: Generate Addon
               command: |
@@ -617,7 +599,21 @@ workflows:
               splunk_version: ["8.0", "8.2"]
               sc4s_version: ["1"]
               test_set: ["knowledge"]
-              resource_class: ["medium"]
+          filters:
+            branches:
+              only: /.*/
+      - splunk-app-test:
+          context:
+            - gdi-saucelabs
+            - gdi-reportportal
+          requires:
+            - package
+          matrix:
+            alias: splunk-app-test-requirement-test
+            parameters:
+              splunk_version: ["8.1"]
+              sc4s_version: ["1"]
+              test_set: ["requirement_test"]
           filters:
             branches:
               only: /.*/
