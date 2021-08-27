@@ -91,3 +91,4 @@ splunk-dbx-add-on-for-presto,Splunk_DBX_presto,"Splunk DBX Add-on for Presto",ma
 splunk-dbx-add-on-for-athena,Splunk_DBX_athena,"Splunk DBX Add-on for Athena",main
 splunk-dbx-add-on-for-snowflake,Splunk_DBX_snowflake,"Splunk DBX Add-on for Snowflake",main
 splunk-dbx-add-on-for-oracle,Splunk_DBX_oracle,"Splunk DBX Add-on for Oracle",main
+splunk-add-on-for-jira-cloud,Splunk_TA_jira-cloud,internal,"Splunk Add-on for Jira Cloud",main
