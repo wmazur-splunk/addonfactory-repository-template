@@ -5,6 +5,7 @@ on:
     branches:
       - "main"
       - "develop"
+      - "test/wfe-test-ko-do-not-delete-31-08"
     tags:
       - "v[0-9]+.[0-9]+.[0-9]+"
   pull_request:
@@ -607,7 +608,7 @@ jobs:
         id: run-tests
         env:
           ARGO_TOKEN: ${{ steps.get-argo-token.outputs.argo-token }}
-        uses: splunk/wfe-test-runner-action@test/try-lukasz
+        uses: splunk/wfe-test-runner-action@1.3
         with:
           splunk: ${{ matrix.splunk.version }}
           test-type: ${{ env.TEST_TYPE }}
@@ -663,8 +664,8 @@ jobs:
           reporter: java-junit
 
   run-ui-tests:
-    if: ${{ needs.test-inventory.outputs.ui == 'true' }}
-    # if: false
+    # if: ${{ needs.test-inventory.outputs.ui == 'true' }}
+    if: false
     needs:
       - build
       - artifact-registry
@@ -714,7 +715,7 @@ jobs:
         id: run-tests
         env:
           ARGO_TOKEN: ${{ steps.get-argo-token.outputs.argo-token }}
-        uses: splunk/wfe-test-runner-action@test/try-lukasz
+        uses: splunk/wfe-test-runner-action@1.3
         with:
           splunk: ${{ matrix.splunk.version }}
           test-type: ${{ env.TEST_TYPE }}
@@ -769,8 +770,8 @@ jobs:
           reporter: java-junit
 
   run-modinput-tests:
-    if: ${{ needs.test-inventory.outputs.modinput_functional == 'true' }}
-    # if: false
+    # if: ${{ needs.test-inventory.outputs.modinput_functional == 'true' }}
+    if: false
     needs:
       - build
       - artifact-registry
@@ -820,7 +821,7 @@ jobs:
         id: run-tests
         env:
           ARGO_TOKEN: ${{ steps.get-argo-token.outputs.argo-token }}
-        uses: splunk/wfe-test-runner-action@test/try-lukasz
+        uses: splunk/wfe-test-runner-action@1.3
         with:
           splunk: ${{ matrix.splunk.version }}
           test-type: ${{ env.TEST_TYPE }}
