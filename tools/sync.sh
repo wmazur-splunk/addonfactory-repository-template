@@ -3,7 +3,7 @@
 set -x 
 PRSUFFIX=develop
 REPOORG=splunk
-
+CHANGE_BRANCH="test/$(git rev-parse --abbrev-ref HEAD)"
 command -v gh >/dev/null 2>&1 || { echo >&2 "I require gh but it's not installed.  Aborting."; exit 1; }
 command -v git >/dev/null 2>&1 || { echo >&2 "I require git but it's not installed.  Aborting."; exit 1; }
 command -v crudini >/dev/null 2>&1 || { echo >&2 "I require crudini but it's not installed.  Aborting."; exit 1; }
@@ -55,10 +55,8 @@ then
     git init
     git config  user.email "addonfactory@splunk.com"
     git config  user.name "Addon Factory template"
-    git submodule add git@github.com:$REPOORG/addonfactory_test_matrix_splunk.git deps/build/addonfactory_test_matrix_splunk
     git submodule add git@github.com:$REPOORG/addonfactory-splunk_sa_cim.git deps/apps/Splunk_SA_CIM
-    git submodule add git@github.com:$REPOORG/addonfactory-splunk_env_indexer.git deps/apps/splunk_env_indexer
-
+    
     git add .
     git commit -am "base"
     git tag -a v0.2.0 -m "CI base"
@@ -94,8 +92,8 @@ else
     fi
     git remote set-url origin https://${GH_USER_ADMIN}:${GH_TOKEN_ADMIN}@github.com/$REPOORG/$REPO.git
 
-    ( git checkout test/reproduce-socket-conn-issue  && git checkout main && git branch -D test/reproduce-socket-conn-issue ) || true
-    git checkout -B "test/reproduce-socket-conn-issue" main
+    ( git checkout $CHANGE_BRANCH  && git checkout main && git branch -D $CHANGE_BRANCH ) || true
+    git checkout -B $CHANGE_BRANCH main
     git submodule update --init --recursive
 
     rsync -avh --include ".*" --ignore-existing ../../seed/ .
@@ -132,6 +130,14 @@ else
         git add deps/apps/splunk_env_indexer
         git commit -m "Deprecate splunk_env_indexer submodule"
     fi       
+    if [ -d "deps/build/addonfactory_test_matrix_splunk" ]; then
+        git submodule deinit -f deps/build/addonfactory_test_matrix_splunk
+        rm -rf .git/modules/deps/build/addonfactory_test_matrix_splunk
+        git rm -f deps/build/addonfactory_test_matrix_splunk
+        git add deps/build/addonfactory_test_matrix_splunk
+        git commit -m "Deprecate deps/build/addonfactory_test_matrix_splunk submodule"
+    fi       
+
     if [[ -f "requirements.txt" ]]; then
         mkdir -p package/lib || true
         git mv requirements.txt package/lib/
@@ -307,7 +313,7 @@ else
     gh api /repos/$REPOORG/$REPO  -H 'Accept: application/vnd.github.nebula-preview+json' -X PATCH -F visibility=$REPOVISIBILITY
     git add . || exit 1
     git commit -am "test: Testing WFE Workflow" || exit 1
-    git push -f --set-upstream origin test/reproduce-socket-conn-issue || exit 1
+    git push -f --set-upstream origin $CHANGE_BRANCH || exit 1
     # gh pr create \
     #     --title "Bump repository configuration from template${PR_SUFFIX}" --fill  || exit 1    
 fi

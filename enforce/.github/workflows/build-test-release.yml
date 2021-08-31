@@ -5,13 +5,60 @@ on:
     branches:
       - "main"
       - "develop"
-      - "test/reproduce-socket-conn-issue"
     tags:
       - "v[0-9]+.[0-9]+.[0-9]+"
   pull_request:
     branches: [main, develop]
 
 jobs:
+  meta:
+    runs-on: ubuntu-latest
+    outputs:
+      sc4s: ghcr.io/${{ github.repository }}/container:${{ fromJSON(steps.docker_action_meta.outputs.json).labels['org.opencontainers.image.version'] }}
+      container_tags: ${{ steps.docker_action_meta.outputs.tags }}
+      container_labels: ${{ steps.docker_action_meta.outputs.labels }}
+      container_buildtime: ${{ fromJSON(steps.docker_action_meta.outputs.json).labels['org.opencontainers.image.created'] }}
+      container_version: ${{ fromJSON(steps.docker_action_meta.outputs.json).labels['org.opencontainers.image.version'] }}
+      container_revision: ${{ fromJSON(steps.docker_action_meta.outputs.json).labels['org.opencontainers.image.revision'] }}
+      container_base: ${{ fromJSON(steps.docker_action_meta.outputs.json).tags[0] }}
+      matrix_supportedSplunk: ${{ steps.matrix.outputs.supportedSplunk }}
+      matrix_supportedSC4S: ${{ steps.matrix.outputs.supportedSC4S }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: false
+          persist-credentials: false
+      - name: Semantic Release
+        id: version
+        uses: cycjimmy/semantic-release-action@v2.5.4
+        with:
+          semantic_version: 17
+          extra_plugins: |
+            @semantic-release/exec
+            @semantic-release/git
+            semantic-release-helm
+            @google/semantic-release-replace-plugin
+          dry_run: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Docker meta
+        id: docker_action_meta
+        uses: docker/metadata-action@v3.4.1
+        with:
+          images: ghcr.io/${{ github.repository }}/container
+          tags: |
+            type=sha,format=long
+            type=sha
+            type=semver,pattern={{version}},value=${{ steps.version.outputs.new_release_version }}
+            type=semver,pattern={{major}},value=${{ steps.version.outputs.new_release_version }}
+            type=semver,pattern={{major}}.{{minor}},value=${{ steps.version.outputs.new_release_version }}
+            type=ref,event=branch
+            type=ref,event=pr
+      - name: matrix
+        id: matrix
+        uses: splunk/addonfactory-test-matrix-action@v1
+
   compliance-sample-scanner:
     runs-on: ubuntu-latest
     steps:
@@ -144,8 +191,8 @@ jobs:
       - review_secrets
       - snyk
       - semgrep
-      - lint
-      - compliance-copyrights
+      #- lint
+      #- compliance-copyrights
       - compliance-dependencies
     runs-on: ubuntu-latest
     outputs:
@@ -517,11 +564,12 @@ jobs:
       - artifact-registry
       - test-inventory
       - setup
+      - meta
     runs-on: ubuntu-18.04
     strategy:
       fail-fast: false
       matrix:
-        splunk-version: ['8.0', '8.1', '8.2']
+        splunk: ${{ fromJson(needs.meta.outputs.matrix_supportedSplunk) }}
     container:
       image: ghcr.io/splunk/workflow-engine-base:2.0.3
     env:
@@ -530,7 +578,7 @@ jobs:
       ARGO_SECURE: ${{ needs.setup.outputs.argo-secure }}
       ARGO_BASE_HREF: ${{ needs.setup.outputs.argo-href }}
       ARGO_NAMESPACE: ${{ needs.setup.outputs.argo-namespace }}
-      SPLUNK_VERSION_BASE: ${{ matrix.splunk-version }}
+      SPLUNK_VERSION_BASE: ${{ matrix.splunk.version }}
       TEST_TYPE: "knowledge"
       TEST_ARGS: ""
     steps:
@@ -555,26 +603,20 @@ jobs:
           JOB_NAME=${{ needs.setup.outputs.job-name }}-${RANDOM_STRING}
           JOB_NAME=`echo $JOB_NAME | sed "s/[_.]/-/g"`
           echo "::set-output name=job-name::$(echo $JOB_NAME)"
-      - name: get version
-        id: get-version
-        run: |
-          echo "Fetching Splunk Version to test"
-          SPLUNK_VERSION=$(crudini --get deps/build/addonfactory_test_matrix_splunk/splunk_matrix.conf "${SPLUNK_VERSION_BASE}" VERSION)
-          echo "::set-output name=splunk-version::$(echo $SPLUNK_VERSION)"
       - name: run-tests
         id: run-tests
         env:
           ARGO_TOKEN: ${{ steps.get-argo-token.outputs.argo-token }}
         uses: splunk/wfe-test-runner-action@test/try-lukasz
         with:
-          splunk: ${{ steps.get-version.outputs.splunk-version }}
+          splunk: ${{ matrix.splunk.version }}
           test-type: ${{ env.TEST_TYPE }}
-          test-args: ''
+          test-args: ""
           job-name: ${{ steps.create-job-name.outputs.job-name }}
           labels: ${{ needs.setup.outputs.labels }}
           workflow-tmpl-name: ${{ needs.setup.outputs.argo-workflow-tmpl-name }}
           workflow-template-ns: ${{ needs.setup.outputs.argo-namespace }}
-          destroy-setup: 'Yes'
+          destroy-setup: "Yes"
           addon-url: ${{ needs.setup.outputs.addon-upload-path }}
           addon-secret-id: ADD_ON_${{ needs.setup.outputs.addon-name }}
       - name: check if workflow completed
@@ -602,13 +644,13 @@ jobs:
       - uses: actions/upload-artifact@v2.2.4
         if: always()
         with:
-          name: archive splunk ${{ steps.get-version.outputs.splunk-version }} ${{ env.TEST_TYPE }} tests artifacts
+          name: archive splunk ${{ matrix.splunk.version }} ${{ env.TEST_TYPE }} tests artifacts
           path: |
             ${{ needs.setup.outputs.directory-path }}/test-results
       - uses: actions/upload-artifact@v2.2.4
         if: always()
         with:
-          name: archive splunk ${{ steps.get-version.outputs.splunk-version }} ${{ env.TEST_TYPE }} tests logs
+          name: archive splunk ${{ matrix.splunk.version }} ${{ env.TEST_TYPE }} tests logs
           path: |
             ${{ needs.setup.outputs.directory-path }}/argo-logs
       - name: Test Report
@@ -616,8 +658,8 @@ jobs:
         continue-on-error: true
         if: always()
         with:
-          name: splunk ${{ steps.get-version.outputs.splunk-version }} ${{ env.TEST_TYPE }} test report
-          path: '${{ needs.setup.outputs.directory-path }}/test-results/*.xml'
+          name: splunk ${{ matrix.splunk.version }} ${{ env.TEST_TYPE }} test report
+          path: "${{ needs.setup.outputs.directory-path }}/test-results/*.xml"
           reporter: java-junit
 
   run-ui-tests:
@@ -628,12 +670,13 @@ jobs:
       - artifact-registry
       - test-inventory
       - setup
+      - meta
     runs-on: ubuntu-18.04
     strategy:
       fail-fast: false
       matrix:
-        splunk-version: ['8.0', '8.1', '8.2']
-        browser: ['chrome', 'firefox', 'safari']
+        splunk: ${{ fromJson(needs.meta.outputs.matrix_supportedSplunk) }}
+        browser: ["chrome", "firefox", "safari"]
     container:
       image: ghcr.io/splunk/workflow-engine-base:2.0.3
     env:
@@ -642,7 +685,7 @@ jobs:
       ARGO_SECURE: ${{ needs.setup.outputs.argo-secure }}
       ARGO_BASE_HREF: ${{ needs.setup.outputs.argo-href }}
       ARGO_NAMESPACE: ${{ needs.setup.outputs.argo-namespace }}
-      SPLUNK_VERSION_BASE: ${{ matrix.splunk-version }}
+      SPLUNK_VERSION_BASE: ${{ matrix.splunk.version }}
       TEST_TYPE: "ui"
       TEST_ARGS: "--browser ${{ matrix.browser }}"
     steps:
@@ -667,26 +710,20 @@ jobs:
           JOB_NAME=${{ needs.setup.outputs.job-name }}-${RANDOM_STRING}
           JOB_NAME=`echo $JOB_NAME | sed "s/[_.]/-/g"`
           echo "::set-output name=job-name::$(echo $JOB_NAME)"
-      - name: get version
-        id: get-version
-        run: |
-          echo "Fetching Splunk Version to test"
-          SPLUNK_VERSION=$(crudini --get deps/build/addonfactory_test_matrix_splunk/splunk_matrix.conf "${SPLUNK_VERSION_BASE}" VERSION)
-          echo "::set-output name=splunk-version::$(echo $SPLUNK_VERSION)"
       - name: run-tests
         id: run-tests
         env:
           ARGO_TOKEN: ${{ steps.get-argo-token.outputs.argo-token }}
         uses: splunk/wfe-test-runner-action@test/try-lukasz
         with:
-          splunk: ${{ steps.get-version.outputs.splunk-version }}
+          splunk: ${{ matrix.splunk.version }}
           test-type: ${{ env.TEST_TYPE }}
           test-args: ${{ env.TEST_ARGS }}
           job-name: ${{ steps.create-job-name.outputs.job-name }}
           labels: ${{ needs.setup.outputs.labels }}
           workflow-tmpl-name: ${{ needs.setup.outputs.argo-workflow-tmpl-name }}
           workflow-template-ns: ${{ needs.setup.outputs.argo-namespace }}
-          destroy-setup: 'Yes'
+          destroy-setup: "Yes"
           addon-url: ${{ needs.setup.outputs.addon-upload-path }}
           addon-secret-id: ADD_ON_${{ needs.setup.outputs.addon-name }}
       - name: check if workflow completed
@@ -713,13 +750,13 @@ jobs:
       - uses: actions/upload-artifact@v2.2.4
         if: always()
         with:
-          name: archive splunk ${{ steps.get-version.outputs.splunk-version }} ${{ env.TEST_TYPE }} tests artifacts
+          name: archive splunk ${{ matrix.splunk.version }} ${{ env.TEST_TYPE }} tests artifacts
           path: |
             ${{ needs.setup.outputs.directory-path }}/test-results
       - uses: actions/upload-artifact@v2.2.4
         if: always()
         with:
-          name: archive splunk ${{ steps.get-version.outputs.splunk-version }} ${{ env.TEST_TYPE }} ${{ matrix.browser }} tests logs
+          name: archive splunk ${{ matrix.splunk.version }} ${{ env.TEST_TYPE }} ${{ matrix.browser }} tests logs
           path: |
             ${{ needs.setup.outputs.directory-path }}/argo-logs
       - name: Test Report
@@ -727,8 +764,8 @@ jobs:
         continue-on-error: true
         if: always()
         with:
-          name: splunk ${{ steps.get-version.outputs.splunk-version }} ${{ env.TEST_TYPE }} ${{ matrix.browser }} test report
-          path: '${{ needs.setup.outputs.directory-path }}/test-results/*.xml'
+          name: splunk ${{ matrix.splunk.version }} ${{ env.TEST_TYPE }} ${{ matrix.browser }} test report
+          path: "${{ needs.setup.outputs.directory-path }}/test-results/*.xml"
           reporter: java-junit
 
   run-modinput-tests:
@@ -739,12 +776,13 @@ jobs:
       - artifact-registry
       - test-inventory
       - setup
+      - meta
     runs-on: ubuntu-18.04
     strategy:
       fail-fast: false
       matrix:
-        splunk-version: ['8.0', '8.1', '8.2']
-        modinput-type: ['modinput_functional']
+        splunk: ${{ fromJson(needs.meta.outputs.matrix_supportedSplunk) }}
+        modinput-type: ["modinput_functional"]
     container:
       image: ghcr.io/splunk/workflow-engine-base:2.0.3
     env:
@@ -753,7 +791,7 @@ jobs:
       ARGO_SECURE: ${{ needs.setup.outputs.argo-secure }}
       ARGO_BASE_HREF: ${{ needs.setup.outputs.argo-href }}
       ARGO_NAMESPACE: ${{ needs.setup.outputs.argo-namespace }}
-      SPLUNK_VERSION_BASE: ${{ matrix.splunk-version }}
+      SPLUNK_VERSION_BASE: ${{ matrix.splunk.version }}
       TEST_TYPE: "modinput_functional"
       TEST_ARGS: ""
     steps:
@@ -778,26 +816,20 @@ jobs:
           JOB_NAME=${{ needs.setup.outputs.job-name }}-${RANDOM_STRING}
           JOB_NAME=`echo $JOB_NAME | sed "s/[_.]/-/g"`
           echo "::set-output name=job-name::$(echo $JOB_NAME)"
-      - name: get version
-        id: get-version
-        run: |
-          echo "Fetching Splunk Version to test"
-          SPLUNK_VERSION=$(crudini --get deps/build/addonfactory_test_matrix_splunk/splunk_matrix.conf "${SPLUNK_VERSION_BASE}" VERSION)
-          echo "::set-output name=splunk-version::$(echo $SPLUNK_VERSION)"
       - name: run-tests
         id: run-tests
         env:
           ARGO_TOKEN: ${{ steps.get-argo-token.outputs.argo-token }}
         uses: splunk/wfe-test-runner-action@test/try-lukasz
         with:
-          splunk: ${{ steps.get-version.outputs.splunk-version }}
+          splunk: ${{ matrix.splunk.version }}
           test-type: ${{ env.TEST_TYPE }}
           test-args: ${{ env.TEST_ARGS }}
           job-name: ${{ steps.create-job-name.outputs.job-name }}
           labels: ${{ needs.setup.outputs.labels }}
           workflow-tmpl-name: ${{ needs.setup.outputs.argo-workflow-tmpl-name }}
           workflow-template-ns: ${{ needs.setup.outputs.argo-namespace }}
-          destroy-setup: 'Yes'
+          destroy-setup: "Yes"
           addon-url: ${{ needs.setup.outputs.addon-upload-path }}
           addon-secret-id: ADD_ON_${{ needs.setup.outputs.addon-name }}
       - name: check if workflow completed
@@ -824,13 +856,13 @@ jobs:
       - uses: actions/upload-artifact@v2.2.4
         if: always()
         with:
-          name: archive splunk ${{ steps.get-version.outputs.splunk-version }} ${{ env.TEST_TYPE }} tests artifacts
+          name: archive splunk ${{ matrix.splunk.version }} ${{ env.TEST_TYPE }} tests artifacts
           path: |
             ${{ needs.setup.outputs.directory-path }}/test-results
       - uses: actions/upload-artifact@v2.2.4
         if: always()
         with:
-          name: archive splunk ${{ steps.get-version.outputs.splunk-version }} ${{ env.TEST_TYPE }} tests logs
+          name: archive splunk ${{ matrix.splunk.version }} ${{ env.TEST_TYPE }} tests logs
           path: |
             ${{ needs.setup.outputs.directory-path }}/argo-logs
       - name: Test Report
@@ -838,8 +870,8 @@ jobs:
         continue-on-error: true
         if: always()
         with:
-          name: splunk ${{ steps.get-version.outputs.splunk-version }} ${{ env.TEST_TYPE }} test report
-          path: '${{ needs.setup.outputs.directory-path }}/test-results/*.xml'
+          name: splunk ${{ matrix.splunk.version }} ${{ env.TEST_TYPE }} test report
+          path: "${{ needs.setup.outputs.directory-path }}/test-results/*.xml"
           reporter: java-junit
 
   update-semver:
