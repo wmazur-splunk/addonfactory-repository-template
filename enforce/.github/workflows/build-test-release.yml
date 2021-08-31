@@ -475,7 +475,7 @@ jobs:
       - name: setup for test
         id: test-setup
         run: |
-          echo "::set-output name=argo-server::argo.dev.wfe.splgdi.com:443"
+          echo "::set-output name=argo-server::argo.wfe.splgdi.com:443"
           echo "::set-output name=argo-http1::true"
           echo "::set-output name=argo-secure::true"
           echo "::set-output name=argo-base-href::\'\'"
@@ -543,7 +543,7 @@ jobs:
       - name: Read secrets from AWS Secrets Manager into environment variables
         id: get-argo-token
         run: |
-          ARGO_TOKEN=`aws secretsmanager get-secret-value --secret-id ta-dev-github-workflow-automation-token | jq -r '.SecretString'`
+          ARGO_TOKEN=`aws secretsmanager get-secret-value --secret-id ta-github-workflow-automation-token | jq -r '.SecretString'`
           echo "::set-output name=argo-token::$(echo $ARGO_TOKEN)"
       - name: create job name
         id: create-job-name
@@ -618,8 +618,8 @@ jobs:
           reporter: java-junit
 
   run-ui-tests:
-    # if: ${{ needs.test-inventory.outputs.ui == 'true' }}
-    if: false
+    if: ${{ needs.test-inventory.outputs.ui == 'true' }}
+    # if: false
     needs:
       - build
       - artifact-registry
@@ -654,7 +654,7 @@ jobs:
       - name: Read secrets from AWS Secrets Manager into environment variables
         id: get-argo-token
         run: |
-          ARGO_TOKEN=`aws secretsmanager get-secret-value --secret-id ta-dev-github-workflow-automation-token | jq -r '.SecretString'`
+          ARGO_TOKEN=`aws secretsmanager get-secret-value --secret-id ta-github-workflow-automation-token | jq -r '.SecretString'`
           echo "::set-output name=argo-token::$(echo $ARGO_TOKEN)"
       - name: create job name
         id: create-job-name
@@ -728,8 +728,8 @@ jobs:
           reporter: java-junit
 
   run-modinput-tests:
-    # if: ${{ needs.test-inventory.outputs.modinput_functional == 'true' }}
-    if: false
+    if: ${{ needs.test-inventory.outputs.modinput_functional == 'true' }}
+    # if: false
     needs:
       - build
       - artifact-registry
@@ -764,7 +764,7 @@ jobs:
       - name: Read secrets from AWS Secrets Manager into environment variables
         id: get-argo-token
         run: |
-          ARGO_TOKEN=`aws secretsmanager get-secret-value --secret-id ta-dev-github-workflow-automation-token | jq -r '.SecretString'`
+          ARGO_TOKEN=`aws secretsmanager get-secret-value --secret-id ta-github-workflow-automation-token | jq -r '.SecretString'`
           echo "::set-output name=argo-token::$(echo $ARGO_TOKEN)"
       - name: create job name
         id: create-job-name
