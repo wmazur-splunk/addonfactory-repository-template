@@ -295,6 +295,7 @@ jobs:
       - build
       - test-inventory
     strategy:
+      fail-fast: false
       matrix:
         python-version:
           - "3.7"
@@ -518,6 +519,7 @@ jobs:
       - setup
     runs-on: ubuntu-18.04
     strategy:
+      fail-fast: false
       matrix:
         splunk-version: ['8.0', '8.1', '8.2']
     container:
@@ -628,6 +630,7 @@ jobs:
       - setup
     runs-on: ubuntu-18.04
     strategy:
+      fail-fast: false
       matrix:
         splunk-version: ['8.0', '8.1', '8.2']
         browser: ['chrome', 'firefox', 'safari']
@@ -738,6 +741,7 @@ jobs:
       - setup
     runs-on: ubuntu-18.04
     strategy:
+      fail-fast: false
       matrix:
         splunk-version: ['8.0', '8.1', '8.2']
         modinput-type: ['modinput_functional']
