@@ -482,9 +482,10 @@ jobs:
           echo "::set-output name=argo-namespace::workflows"
           echo "::set-output name=argo-workflow-tmpl-name::ta-workflow"
 
-          ADDON_NAME=$(crudini --get package/default/app.conf id name)
-          ADDON_NAME=`echo ${ADDON_NAME} | awk -F 'Splunk_TA_' '{print $2}'`
-          echo "::set-output name=addon-name::$(echo "$ADDON_NAME" | tr '[:lower:]' '[:upper:]')"
+          ADDON_NAME=$(crudini --get package/default/app.conf id name | tr '[:lower:]' '[:upper:]')
+          ADDON_NAME=`echo ${ADDON_NAME} | awk -F 'SPLUNK_TA_' '{print $2}'`
+          echo "::set-output name=addon-name::$(echo "$ADDON_NAME")"
+
 
           JOB_NAME=${GITHUB_RUN_NUMBER}-${GITHUB_RUN_ID}
           JOB_NAME=`echo $JOB_NAME | sed "s/[_.]/-/g"`
