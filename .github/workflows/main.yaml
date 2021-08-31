@@ -31,6 +31,8 @@ jobs:
             AWS_SECRET_ACCESS_KEY
           REPOSITORIES: |
             splunk/splunk-add-on-for-*
+            splunk/splunk-add-on-for-cef
+            splunk/seckit_sa_geolocation
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN_ADMIN }}
           CONCURRENCY: 2
           REPOSITORIES_LIST_REGEX: true
