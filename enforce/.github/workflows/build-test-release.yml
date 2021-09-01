@@ -5,7 +5,7 @@ on:
     branches:
       - "main"
       - "develop"
-      - "test/wfe-test-ko-do-not-delete-01-09"
+      - "test/wfe-test-ui-mod-do-not-delete-01-09"
     tags:
       - "v[0-9]+.[0-9]+.[0-9]+"
   pull_request:
@@ -673,8 +673,7 @@ jobs:
           reporter: java-junit
 
   run-ui-tests:
-    # if: ${{ needs.test-inventory.outputs.ui == 'true' }}
-    if: false
+    if: ${{ needs.test-inventory.outputs.ui == 'true' }}
     needs:
       - build
       - artifact-registry
@@ -786,8 +785,7 @@ jobs:
           reporter: java-junit
 
   run-modinput-tests:
-    # if: ${{ needs.test-inventory.outputs.modinput_functional == 'true' }}
-    if: false
+    if: ${{ needs.test-inventory.outputs.modinput_functional == 'true' }}
     needs:
       - build
       - artifact-registry
