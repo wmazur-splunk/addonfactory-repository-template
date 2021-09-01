@@ -620,7 +620,7 @@ jobs:
           destroy-setup: "Yes"
           addon-url: ${{ needs.setup.outputs.addon-upload-path }}
           addon-secret-id: ADD_ON_${{ needs.setup.outputs.addon-name }}
-          extra-args: "-p sc4s-version=${{ needs.meta.outputs.sc4s }}"
+          extra-args: "-p sc4s-version=${{ needs.meta.outputs.supportedSC4S }}"
       - name: check if workflow completed
         env:
           ARGO_TOKEN: ${{ steps.get-argo-token.outputs.argo-token }}
