@@ -571,6 +571,7 @@ jobs:
       fail-fast: false
       matrix:
         splunk: ${{ fromJson(needs.meta.outputs.matrix_supportedSplunk) }}
+        sc4s: ${{ fromJson(needs.meta.outputs.matrix_supportedSC4S) }}
     container:
       image: ghcr.io/splunk/workflow-engine-base:2.0.3
     env:
@@ -604,6 +605,7 @@ jobs:
           JOB_NAME=${{ needs.setup.outputs.job-name }}-${RANDOM_STRING}
           JOB_NAME=`echo $JOB_NAME | sed "s/[_.]/-/g"`
           echo "::set-output name=job-name::$(echo $JOB_NAME)"
+          
       - name: run-tests
         id: run-tests
         env:
@@ -620,7 +622,7 @@ jobs:
           destroy-setup: "Yes"
           addon-url: ${{ needs.setup.outputs.addon-upload-path }}
           addon-secret-id: ADD_ON_${{ needs.setup.outputs.addon-name }}
-          extra-args: "-p sc4s-version=${{ needs.meta.outputs.supportedSC4S }}"
+          extra-args: "-p sc4s-version=${{ matrix.sc4s.version }}"
       - name: check if workflow completed
         env:
           ARGO_TOKEN: ${{ steps.get-argo-token.outputs.argo-token }}
