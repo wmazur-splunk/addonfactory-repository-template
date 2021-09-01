@@ -610,7 +610,7 @@ jobs:
         id: run-tests
         env:
           ARGO_TOKEN: ${{ steps.get-argo-token.outputs.argo-token }}
-        uses: splunk/wfe-test-runner-action@v1.4
+        uses: splunk/wfe-test-runner-action@v1.4.1
         with:
           splunk: ${{ matrix.splunk.version }}
           test-type: ${{ env.TEST_TYPE }}
@@ -622,7 +622,7 @@ jobs:
           destroy-setup: "Yes"
           addon-url: ${{ needs.setup.outputs.addon-upload-path }}
           addon-secret-id: ADD_ON_${{ needs.setup.outputs.addon-name }}
-          extra-args: "-p sc4s-version=${{ matrix.sc4s.version }}"
+          sc4s-version: ${{ matrix.sc4s.version }}
       - name: check if workflow completed
         env:
           ARGO_TOKEN: ${{ steps.get-argo-token.outputs.argo-token }}
@@ -724,7 +724,7 @@ jobs:
         id: run-tests
         env:
           ARGO_TOKEN: ${{ steps.get-argo-token.outputs.argo-token }}
-        uses: splunk/wfe-test-runner-action@v1.4
+        uses: splunk/wfe-test-runner-action@v1.4.1
         with:
           splunk: ${{ matrix.splunk.version }}
           test-type: ${{ env.TEST_TYPE }}
@@ -736,7 +736,7 @@ jobs:
           destroy-setup: "Yes"
           addon-url: ${{ needs.setup.outputs.addon-upload-path }}
           addon-secret-id: ADD_ON_${{ needs.setup.outputs.addon-name }}
-          extra-args: "-p sc4s-version=No"
+          sc4s-version: "No"
       - name: check if workflow completed
         env:
           ARGO_TOKEN: ${{ steps.get-argo-token.outputs.argo-token }}
@@ -837,7 +837,7 @@ jobs:
         id: run-tests
         env:
           ARGO_TOKEN: ${{ steps.get-argo-token.outputs.argo-token }}
-        uses: splunk/wfe-test-runner-action@v1.4
+        uses: splunk/wfe-test-runner-action@v1.4.1
         with:
           splunk: ${{ matrix.splunk.version }}
           test-type: ${{ env.TEST_TYPE }}
@@ -849,7 +849,7 @@ jobs:
           destroy-setup: "Yes"
           addon-url: ${{ needs.setup.outputs.addon-upload-path }}
           addon-secret-id: ADD_ON_${{ needs.setup.outputs.addon-name }}
-          extra-args: "-p sc4s-version=No"
+          sc4s-version: "No"
       - name: check if workflow completed
         env:
           ARGO_TOKEN: ${{ steps.get-argo-token.outputs.argo-token }}
