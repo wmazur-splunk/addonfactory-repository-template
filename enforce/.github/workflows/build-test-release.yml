@@ -658,10 +658,10 @@ jobs:
           fi
           ARGO_STATUS=`argo get ${WORKFLOW_NAME} -n workflows -o json | jq -r '.status.phase'`
           echo "Status of workflow:" $ARGO_STATUS
-          while [ "$ARGO_STATUS" == "Running" ]
+          while [ "$ARGO_STATUS" == "Running"  | "$ARGO_STATUS" == "Pending" ]
           do
               echo "... argo Workflow ${WORKFLOW_NAME} is running, waiting for it to complete."
-              argo wait ${WORKFLOW_NAME} -n workflows
+              argo wait ${WORKFLOW_NAME} -n workflows | continue
               ARGO_STATUS=`argo get ${WORKFLOW_NAME} -n workflows -o json | jq -r '.status.phase'`
           done
       - name: pull artifacts from s3 bucket
@@ -802,10 +802,10 @@ jobs:
           fi
           ARGO_STATUS=`argo get ${WORKFLOW_NAME} -n workflows -o json | jq -r '.status.phase'`
           echo "Status of workflow:" $ARGO_STATUS
-          while [ "$ARGO_STATUS" == "Running" ]
+          while [ "$ARGO_STATUS" == "Running" | | "$ARGO_STATUS" == "Pending" ]
           do
               echo "... argo Workflow ${WORKFLOW_NAME} is running, waiting for it to complete."
-              argo wait ${WORKFLOW_NAME} -n workflows
+              argo wait ${WORKFLOW_NAME} -n workflows | continue
               ARGO_STATUS=`argo get ${WORKFLOW_NAME} -n workflows -o json | jq -r '.status.phase'`
           done
       - name: pull artifacts from s3 bucket
@@ -946,10 +946,10 @@ jobs:
           fi
           ARGO_STATUS=`argo get ${WORKFLOW_NAME} -n workflows -o json | jq -r '.status.phase'`
           echo "Status of workflow:" $ARGO_STATUS
-          while [ "$ARGO_STATUS" == "Running" ]
+          while [ "$ARGO_STATUS" == "Running" | "$ARGO_STATUS" == "Pending" ]
           do
               echo "... argo Workflow ${WORKFLOW_NAME} is running, waiting for it to complete."
-              argo wait ${WORKFLOW_NAME} -n workflows
+              argo wait ${WORKFLOW_NAME} -n workflows | continue
               ARGO_STATUS=`argo get ${WORKFLOW_NAME} -n workflows -o json | jq -r '.status.phase'`
           done
       - name: pull artifacts from s3 bucket
