@@ -647,6 +647,7 @@ jobs:
           ARGO_TOKEN: ${{ steps.get-argo-token.outputs.argo-token }}
         if: always()
         run: |
+          set -o xtrace
           if [ -z "${{ steps.retry-wf.outputs.workflow-name }}" ]; then
             WORKFLOW_NAME=${{ steps.run-tests.outputs.workflow-name }}
           else
@@ -654,10 +655,10 @@ jobs:
           fi
           ARGO_STATUS=`argo get ${WORKFLOW_NAME} -n workflows -o json | jq -r '.status.phase'`
           echo "Status of workflow:" $ARGO_STATUS
-          while [ "$ARGO_STATUS" == "Running" ]
+          while [ "$ARGO_STATUS" = "Running" ]
           do
-              echo "... argo Workflow WORKFLOW_NAME is running, waiting for it to complete."
-              argo wait WORKFLOW_NAME -n workflows
+              echo "... argo Workflow ${WORKFLOW_NAME} is running, waiting for it to complete."
+              argo wait ${WORKFLOW_NAME} -n workflows
               ARGO_STATUS=`argo get ${WORKFLOW_NAME} -n workflows -o json | jq -r '.status.phase'`
           done
       - name: pull artifacts from s3 bucket
@@ -789,6 +790,7 @@ jobs:
           ARGO_TOKEN: ${{ steps.get-argo-token.outputs.argo-token }}
         if: always()
         run: |
+          set -o xtrace
           if [ -z "${{ steps.retry-wf.outputs.workflow-name }}" ]; then
             WORKFLOW_NAME=${{ steps.run-tests.outputs.workflow-name }}
           else
@@ -796,10 +798,10 @@ jobs:
           fi
           ARGO_STATUS=`argo get ${WORKFLOW_NAME} -n workflows -o json | jq -r '.status.phase'`
           echo "Status of workflow:" $ARGO_STATUS
-          while [ "$ARGO_STATUS" == "Running" ]
+          while [ "$ARGO_STATUS" = "Running" ]
           do
-              echo "... argo Workflow WORKFLOW_NAME is running, waiting for it to complete."
-              argo wait WORKFLOW_NAME -n workflows
+              echo "... argo Workflow ${WORKFLOW_NAME} is running, waiting for it to complete."
+              argo wait ${WORKFLOW_NAME} -n workflows
               ARGO_STATUS=`argo get ${WORKFLOW_NAME} -n workflows -o json | jq -r '.status.phase'`
           done
       - name: pull artifacts from s3 bucket
@@ -931,6 +933,7 @@ jobs:
           ARGO_TOKEN: ${{ steps.get-argo-token.outputs.argo-token }}
         if: always()
         run: |
+          set -o xtrace
           if [ -z "${{ steps.retry-wf.outputs.workflow-name }}" ]; then
             WORKFLOW_NAME=${{ steps.run-tests.outputs.workflow-name }}
           else
@@ -938,7 +941,7 @@ jobs:
           fi
           ARGO_STATUS=`argo get ${WORKFLOW_NAME} -n workflows -o json | jq -r '.status.phase'`
           echo "Status of workflow:" $ARGO_STATUS
-          while [ "$ARGO_STATUS" == "Running" ]
+          while [ "$ARGO_STATUS" = "Running" ]
           do
               echo "... argo Workflow ${WORKFLOW_NAME} is running, waiting for it to complete."
               argo wait ${WORKFLOW_NAME} -n workflows
