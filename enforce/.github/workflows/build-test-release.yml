@@ -627,9 +627,11 @@ jobs:
       - name: Check if pod was deleted
         id: is-pod-deleted
         if: always()
+        shell: bash
         env:
           ARGO_TOKEN: ${{ steps.get-argo-token.outputs.argo-token }}
         run: |
+          set -o xtrace
           if argo watch ${{ steps.run-tests.outputs.workflow-name }} -n workflows | grep "pod deleted"; then
             echo "::set-output name=retry-workflow::true"
           fi
@@ -645,6 +647,7 @@ jobs:
       - name: check if workflow completed
         env:
           ARGO_TOKEN: ${{ steps.get-argo-token.outputs.argo-token }}
+        shell: bash
         if: always()
         run: |
           set -o xtrace
@@ -655,7 +658,7 @@ jobs:
           fi
           ARGO_STATUS=`argo get ${WORKFLOW_NAME} -n workflows -o json | jq -r '.status.phase'`
           echo "Status of workflow:" $ARGO_STATUS
-          while [ "$ARGO_STATUS" = "Running" ]
+          while [ "$ARGO_STATUS" == "Running" ]
           do
               echo "... argo Workflow ${WORKFLOW_NAME} is running, waiting for it to complete."
               argo wait ${WORKFLOW_NAME} -n workflows
@@ -770,9 +773,11 @@ jobs:
       - name: Check if pod was deleted
         id: is-pod-deleted
         if: always()
+        shell: bash
         env:
           ARGO_TOKEN: ${{ steps.get-argo-token.outputs.argo-token }}
         run: |
+          set -o xtrace
           if argo watch ${{ steps.run-tests.outputs.workflow-name }} -n workflows | grep "pod deleted" ; then
             echo "::set-output name=retry-workflow::true"
           fi
@@ -789,6 +794,7 @@ jobs:
         env:
           ARGO_TOKEN: ${{ steps.get-argo-token.outputs.argo-token }}
         if: always()
+        shell: bash
         run: |
           set -o xtrace
           if [ -z "${{ steps.retry-wf.outputs.workflow-name }}" ]; then
@@ -798,7 +804,7 @@ jobs:
           fi
           ARGO_STATUS=`argo get ${WORKFLOW_NAME} -n workflows -o json | jq -r '.status.phase'`
           echo "Status of workflow:" $ARGO_STATUS
-          while [ "$ARGO_STATUS" = "Running" ]
+          while [ "$ARGO_STATUS" == "Running" ]
           do
               echo "... argo Workflow ${WORKFLOW_NAME} is running, waiting for it to complete."
               argo wait ${WORKFLOW_NAME} -n workflows
@@ -913,9 +919,11 @@ jobs:
       - name: Check if pod was deleted
         id: is-pod-deleted
         if: always()
+        shell: bash
         env:
           ARGO_TOKEN: ${{ steps.get-argo-token.outputs.argo-token }}
         run: |
+          set -o xtrace
           if argo watch ${{ steps.run-tests.outputs.workflow-name }} -n workflows | grep "pod deleted"; then
             echo "::set-output name=retry-workflow::true"
           fi
@@ -932,6 +940,7 @@ jobs:
         env:
           ARGO_TOKEN: ${{ steps.get-argo-token.outputs.argo-token }}
         if: always()
+        shell: bash
         run: |
           set -o xtrace
           if [ -z "${{ steps.retry-wf.outputs.workflow-name }}" ]; then
@@ -941,7 +950,7 @@ jobs:
           fi
           ARGO_STATUS=`argo get ${WORKFLOW_NAME} -n workflows -o json | jq -r '.status.phase'`
           echo "Status of workflow:" $ARGO_STATUS
-          while [ "$ARGO_STATUS" = "Running" ]
+          while [ "$ARGO_STATUS" == "Running" ]
           do
               echo "... argo Workflow ${WORKFLOW_NAME} is running, waiting for it to complete."
               argo wait ${WORKFLOW_NAME} -n workflows
