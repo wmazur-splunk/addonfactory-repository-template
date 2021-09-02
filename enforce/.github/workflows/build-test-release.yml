@@ -605,6 +605,7 @@ jobs:
           JOB_NAME=${{ needs.setup.outputs.job-name }}-${RANDOM_STRING}
           JOB_NAME=`echo $JOB_NAME | sed -e "s/TEST-TYPE/${{ env.TEST_TYPE }}/g"`
           JOB_NAME=`echo $JOB_NAME | sed "s/[_.]/-/g"`
+          JOB_NAME=`echo $JOB_NAME | tr '[:upper:]' '[:lower:]'`
           echo "::set-output name=job-name::$(echo $JOB_NAME)"
           
       - name: run-tests
@@ -720,6 +721,7 @@ jobs:
           JOB_NAME=${{ needs.setup.outputs.job-name }}-${RANDOM_STRING}
           JOB_NAME=`echo $JOB_NAME | sed -e "s/TEST-TYPE/${{ env.TEST_TYPE }}/g"`
           JOB_NAME=`echo $JOB_NAME | sed "s/[_.]/-/g"`
+          JOB_NAME=`echo $JOB_NAME | tr '[:upper:]' '[:lower:]'`
           echo "::set-output name=job-name::$(echo $JOB_NAME)"
       - name: run-tests
         id: run-tests
@@ -833,6 +835,7 @@ jobs:
           JOB_NAME=${{ needs.setup.outputs.job-name }}-${RANDOM_STRING}
           JOB_NAME=`echo $JOB_NAME | sed -e "s/TEST-TYPE/${{ env.TEST_TYPE }}/g"`
           JOB_NAME=`echo $JOB_NAME | sed "s/[_.]/-/g"`
+          JOB_NAME=`echo $JOB_NAME | tr '[:upper:]' '[:lower:]'`
           echo "::set-output name=job-name::$(echo $JOB_NAME)"
       - name: run-tests
         id: run-tests
