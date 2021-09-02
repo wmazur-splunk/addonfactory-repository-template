@@ -5,7 +5,7 @@ on:
     branches:
       - "main"
       - "develop"
-      - "test/wfe-test-ui-mod-do-not-delete-01-09"
+      - "test/wfe-test-ui-mod-do-not-delete-02-09"
     tags:
       - "v[0-9]+.[0-9]+.[0-9]+"
   pull_request:
@@ -535,8 +535,8 @@ jobs:
           ADDON_NAME=`echo ${ADDON_NAME} | awk -F 'SPLUNK_TA_' '{print $2}'`
           echo "::set-output name=addon-name::$(echo "$ADDON_NAME")"
 
+          JOB_NAME=`echo $ADDON_NAME | tail -c 19`-${GITHUB_SHA:33:7}-TEST-TYPE-${GITHUB_RUN_ID}
 
-          JOB_NAME=${GITHUB_RUN_NUMBER}-${GITHUB_RUN_ID}
           JOB_NAME=`echo $JOB_NAME | sed "s/[_.]/-/g"`
           echo "::set-output name=job-name::$(echo $JOB_NAME)"
 
@@ -603,6 +603,7 @@ jobs:
         run: |
           RANDOM_STRING=`head -3 /dev/urandom | tr -cd '[:lower:]' | cut -c -4`
           JOB_NAME=${{ needs.setup.outputs.job-name }}-${RANDOM_STRING}
+          JOB_NAME=`echo $JOB_NAME | sed -e "s/JOB-NAME/${{ env.TEST_TYPE }}/g"`
           JOB_NAME=`echo $JOB_NAME | sed "s/[_.]/-/g"`
           echo "::set-output name=job-name::$(echo $JOB_NAME)"
           
@@ -717,6 +718,7 @@ jobs:
         run: |
           RANDOM_STRING=`head -3 /dev/urandom | tr -cd '[:lower:]' | cut -c -4`
           JOB_NAME=${{ needs.setup.outputs.job-name }}-${RANDOM_STRING}
+          JOB_NAME=`echo $JOB_NAME | sed -e "s/JOB-NAME/${{ env.TEST_TYPE }}/g"`
           JOB_NAME=`echo $JOB_NAME | sed "s/[_.]/-/g"`
           echo "::set-output name=job-name::$(echo $JOB_NAME)"
       - name: run-tests
@@ -829,6 +831,7 @@ jobs:
         run: |
           RANDOM_STRING=`head -3 /dev/urandom | tr -cd '[:lower:]' | cut -c -4`
           JOB_NAME=${{ needs.setup.outputs.job-name }}-${RANDOM_STRING}
+          JOB_NAME=`echo $JOB_NAME | sed -e "s/JOB-NAME/${{ env.TEST_TYPE }}/g"`
           JOB_NAME=`echo $JOB_NAME | sed "s/[_.]/-/g"`
           echo "::set-output name=job-name::$(echo $JOB_NAME)"
       - name: run-tests

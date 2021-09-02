@@ -7,7 +7,7 @@ name: sync-develop
 
 on:
   push:
-    branches: [wfe-changes, wfe-change-new-matrix]
+    branches: [wfe-changes, wfe-change-new-matrix, new-job-name]
 
 jobs:
   sync:
