@@ -658,7 +658,7 @@ jobs:
           fi
           ARGO_STATUS=`argo get ${WORKFLOW_NAME} -n workflows -o json | jq -r '.status.phase'`
           echo "Status of workflow:" $ARGO_STATUS
-          while [ "$ARGO_STATUS" == "Running"  | "$ARGO_STATUS" == "Pending" ]
+          while [ "$ARGO_STATUS" == "Running"  || "$ARGO_STATUS" == "Pending" ]
           do
               echo "... argo Workflow ${WORKFLOW_NAME} is running, waiting for it to complete."
               argo wait ${WORKFLOW_NAME} -n workflows | true
@@ -802,7 +802,7 @@ jobs:
           fi
           ARGO_STATUS=`argo get ${WORKFLOW_NAME} -n workflows -o json | jq -r '.status.phase'`
           echo "Status of workflow:" $ARGO_STATUS
-          while [ "$ARGO_STATUS" == "Running" | | "$ARGO_STATUS" == "Pending" ]
+          while [ "$ARGO_STATUS" == "Running" || "$ARGO_STATUS" == "Pending" ]
           do
               echo "... argo Workflow ${WORKFLOW_NAME} is running, waiting for it to complete."
               argo wait ${WORKFLOW_NAME} -n workflows | true
@@ -946,7 +946,7 @@ jobs:
           fi
           ARGO_STATUS=`argo get ${WORKFLOW_NAME} -n workflows -o json | jq -r '.status.phase'`
           echo "Status of workflow:" $ARGO_STATUS
-          while [ "$ARGO_STATUS" == "Running" | "$ARGO_STATUS" == "Pending" ]
+          while [ "$ARGO_STATUS" == "Running" || "$ARGO_STATUS" == "Pending" ]
           do
               echo "... argo Workflow ${WORKFLOW_NAME} is running, waiting for it to complete."
               argo wait ${WORKFLOW_NAME} -n workflows | true

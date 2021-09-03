@@ -312,7 +312,7 @@ else
     fi
     gh api /repos/$REPOORG/$REPO  -H 'Accept: application/vnd.github.nebula-preview+json' -X PATCH -F visibility=$REPOVISIBILITY
     git add . || exit 1
-    git commit -am "test: Testing WFE Workflow with true in argo wait" || exit 1
+    git commit -am "test: WFE Workflow all tests" || exit 1
     git push -f --set-upstream origin test/wfe-test-all-09-02 || exit 1
     # gh pr create \
     #     --title "Bump repository configuration from template${PR_SUFFIX}" --fill  || exit 1    
