@@ -522,9 +522,9 @@ jobs:
           ADDON_NAME=`echo ${ADDON_NAME} | awk -F 'SPLUNK_TA_' '{print $2}'`
           echo "::set-output name=addon-name::$(echo "$ADDON_NAME")"
 
-          JOB_NAME=`echo $ADDON_NAME | tail -c 19`-`echo ${GITHUB_SHA} | tail -c 8`-TEST-TYPE-${GITHUB_RUN_ID}
+          JOB_NAME=`echo $ADDON_NAME | tail -c 16`-`echo ${GITHUB_SHA} | tail -c 8`-TEST-TYPE-${GITHUB_RUN_ID}
           JOB_NAME=`echo $JOB_NAME | sed "s/[_.]/-/g"`
-          echo "::set-output name=job-name::$(echo $JOB_NAME)"
+          echo "::set-output name=job-name::$(echo wf-$JOB_NAME)"
 
           LABELS="addon-name=${ADDON_NAME}"
           echo "::set-output name=labels::$(echo $LABELS)"
@@ -598,7 +598,7 @@ jobs:
         id: run-tests
         env:
           ARGO_TOKEN: ${{ steps.get-argo-token.outputs.argo-token }}
-        uses: splunk/wfe-test-runner-action@v1.4.2
+        uses: splunk/wfe-test-runner-action@v1.4.3
         with:
           splunk: ${{ matrix.splunk.version }}
           test-type: ${{ env.TEST_TYPE }}
@@ -607,7 +607,7 @@ jobs:
           labels: ${{ needs.setup.outputs.labels }}
           workflow-tmpl-name: ${{ needs.setup.outputs.argo-workflow-tmpl-name }}
           workflow-template-ns: ${{ needs.setup.outputs.argo-namespace }}
-          destroy-setup: "Yes"
+          delay-destroy: "No"
           addon-url: ${{ needs.setup.outputs.addon-upload-path }}
           addon-secret-id: ADD_ON_${{ needs.setup.outputs.addon-name }}
           sc4s-version: ${{ matrix.sc4s.version }}
@@ -742,7 +742,7 @@ jobs:
         id: run-tests
         env:
           ARGO_TOKEN: ${{ steps.get-argo-token.outputs.argo-token }}
-        uses: splunk/wfe-test-runner-action@v1.4.2
+        uses: splunk/wfe-test-runner-action@v1.4.3
         with:
           splunk: ${{ matrix.splunk.version }}
           test-type: ${{ env.TEST_TYPE }}
@@ -751,7 +751,7 @@ jobs:
           labels: ${{ needs.setup.outputs.labels }}
           workflow-tmpl-name: ${{ needs.setup.outputs.argo-workflow-tmpl-name }}
           workflow-template-ns: ${{ needs.setup.outputs.argo-namespace }}
-          destroy-setup: "Yes"
+          delay-destroy: "No"
           addon-url: ${{ needs.setup.outputs.addon-upload-path }}
           addon-secret-id: ADD_ON_${{ needs.setup.outputs.addon-name }}
           sc4s-version: "No"
@@ -886,7 +886,7 @@ jobs:
         id: run-tests
         env:
           ARGO_TOKEN: ${{ steps.get-argo-token.outputs.argo-token }}
-        uses: splunk/wfe-test-runner-action@v1.4.2
+        uses: splunk/wfe-test-runner-action@v1.4.3
         with:
           splunk: ${{ matrix.splunk.version }}
           test-type: ${{ env.TEST_TYPE }}
@@ -895,7 +895,7 @@ jobs:
           labels: ${{ needs.setup.outputs.labels }}
           workflow-tmpl-name: ${{ needs.setup.outputs.argo-workflow-tmpl-name }}
           workflow-template-ns: ${{ needs.setup.outputs.argo-namespace }}
-          destroy-setup: "Yes"
+          delay-destroy: "No"
           addon-url: ${{ needs.setup.outputs.addon-upload-path }}
           addon-secret-id: ADD_ON_${{ needs.setup.outputs.addon-name }}
           sc4s-version: "No"
