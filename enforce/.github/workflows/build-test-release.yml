@@ -160,32 +160,19 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: 3.7
-      - name: Get pip cache dir
-        id: pip-cache
-        run: |
-          echo "::set-output name=dir::$(pip cache dir)"
-      - name: Run Check there are libraries to scan
-        id: checklibs
-        run: if [ -f package/lib/requirements.txt ]; then echo "::set-output name=ENABLED::true"; fi
-      - name: pip cache
-        if: ${{ steps.checklibs.outputs.ENABLED == 'true' }}
-        uses: actions/cache@v2
-        with:
-          path: ${{ steps.pip-cache.outputs.dir }}
-          key: ${{ runner.os }}-pip-${{ hashFiles('package/lib/requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
-      - name: Install deps
-        if: ${{ steps.checklibs.outputs.ENABLED == 'true' }}
-        run: pip install -r package/lib/requirements.txt
       - uses: snyk/actions/setup@master
       - uses: actions/setup-go@v2.1.3
         with:
           go-version: "1.13"
       - name: Snyk monitor
-        run: snyk test --sarif-file-output=snyk.sarif
+        run: snyk test --sarif-file-output=snyk-scan_requirements.sarif --all-projects --print-deps --severity-threshold=high
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      - uses: actions/upload-artifact@v2
+        if: always() 
+        with:
+          name: snyk-results
+          path: snyk-scan_requirements.sarif
   build:
     name: build
     needs:
