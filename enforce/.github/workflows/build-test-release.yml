@@ -650,7 +650,7 @@ jobs:
           while [ "$ARGO_STATUS" == "Running"  || "$ARGO_STATUS" == "Pending" ]
           do
               echo "... argo Workflow ${WORKFLOW_NAME} is running, waiting for it to complete."
-              argo wait ${WORKFLOW_NAME} -n workflows | true
+              argo wait ${WORKFLOW_NAME} -n workflows || true
               ARGO_STATUS=$(argo get ${WORKFLOW_NAME} -n workflows -o json | jq -r '.status.phase')
           done
       - name: pull artifacts from s3 bucket
@@ -794,7 +794,7 @@ jobs:
           while [ "$ARGO_STATUS" == "Running" || "$ARGO_STATUS" == "Pending" ]
           do
               echo "... argo Workflow ${WORKFLOW_NAME} is running, waiting for it to complete."
-              argo wait ${WORKFLOW_NAME} -n workflows | true
+              argo wait ${WORKFLOW_NAME} -n workflows || true
               ARGO_STATUS=$(argo get ${WORKFLOW_NAME} -n workflows -o json | jq -r '.status.phase')
           done
       - name: pull artifacts from s3 bucket
@@ -938,7 +938,7 @@ jobs:
           while [ "$ARGO_STATUS" == "Running" || "$ARGO_STATUS" == "Pending" ]
           do
               echo "... argo Workflow ${WORKFLOW_NAME} is running, waiting for it to complete."
-              argo wait ${WORKFLOW_NAME} -n workflows | true
+              argo wait ${WORKFLOW_NAME} -n workflows || true
               ARGO_STATUS=$(argo get ${WORKFLOW_NAME} -n workflows -o json | jq -r '.status.phase')
           done
       - name: pull artifacts from s3 bucket
