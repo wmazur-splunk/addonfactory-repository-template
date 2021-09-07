@@ -92,8 +92,8 @@ else
     fi
     git remote set-url origin https://${GH_USER_ADMIN}:${GH_TOKEN_ADMIN}@github.com/$REPOORG/$REPO.git
 
-    ( git checkout test/wfe-ko-only-addons-test  && git checkout main && git branch -D test/wfe-ko-only-addons-test ) || true
-    git checkout -B "test/wfe-ko-only-addons-test" main
+    ( git checkout test/check-workflow-lint  && git checkout main && git branch -D test/check-workflow-lint ) || true
+    git checkout -B "test/check-workflow-lint" main
     git submodule update --init --recursive
 
     rsync -avh --include ".*" --ignore-existing ../../seed/ .
@@ -312,8 +312,8 @@ else
     fi
     gh api /repos/$REPOORG/$REPO  -H 'Accept: application/vnd.github.nebula-preview+json' -X PATCH -F visibility=$REPOVISIBILITY
     git add . || exit 1
-    git commit -am "test: WFE Workflow KO only addons rollout test" || exit 1
-    git push -f --set-upstream origin test/wfe-ko-only-addons-test || exit 1
+    git commit -am "test: Checking lint fix for workflow" || exit 1
+    git push -f --set-upstream origin test/check-workflow-lint || exit 1
     # gh pr create \
     #     --title "Bump repository configuration from template${PR_SUFFIX}" --fill  || exit 1    
 fi
