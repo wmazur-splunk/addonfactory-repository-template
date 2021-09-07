@@ -611,7 +611,7 @@ jobs:
           workflow-template-ns: ${{ needs.setup.outputs.argo-namespace }}
           delay-destroy: "No"
           addon-url: ${{ needs.setup.outputs.addon-upload-path }}
-          addon-secret-id: ADD_ON_${{ needs.setup.outputs.addon-name }}
+          addon-name: ${{ needs.setup.outputs.addon-name }}
           sc4s-version: ${{ matrix.sc4s.version }}
       - name: Check if pod was deleted
         id: is-pod-deleted
@@ -755,7 +755,7 @@ jobs:
           workflow-template-ns: ${{ needs.setup.outputs.argo-namespace }}
           delay-destroy: "No"
           addon-url: ${{ needs.setup.outputs.addon-upload-path }}
-          addon-secret-id: ADD_ON_${{ needs.setup.outputs.addon-name }}
+          addon-name: ${{ needs.setup.outputs.addon-name }}
           sc4s-version: "No"
       - name: Check if pod was deleted
         id: is-pod-deleted
@@ -899,7 +899,7 @@ jobs:
           workflow-template-ns: ${{ needs.setup.outputs.argo-namespace }}
           delay-destroy: "No"
           addon-url: ${{ needs.setup.outputs.addon-upload-path }}
-          addon-secret-id: ADD_ON_${{ needs.setup.outputs.addon-name }}
+          addon-name: ${{ needs.setup.outputs.addon-name }}
           sc4s-version: "No"
       - name: Check if pod was deleted
         id: is-pod-deleted
