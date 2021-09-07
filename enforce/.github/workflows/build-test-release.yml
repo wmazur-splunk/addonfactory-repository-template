@@ -285,7 +285,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
           echo "::set-output name=name::$(basename ${{ steps.slim.outputs.OUTPUT }})"
-          echo `basename ${{ steps.slim.outputs.OUTPUT }}`
+          echo $(basename ${{ steps.slim.outputs.OUTPUT }})
           aws s3 cp ${{ steps.slim.outputs.OUTPUT }} s3://ta-production-artifacts/ta-apps/
       - name: artifact-splunk-parts
         uses: actions/upload-artifact@v2
@@ -521,11 +521,11 @@ jobs:
           echo "::set-output name=argo-workflow-tmpl-name::ta-workflow"
 
           ADDON_NAME=$(crudini --get package/default/app.conf id name | tr '[:lower:]' '[:upper:]')
-          ADDON_NAME=`echo ${ADDON_NAME} | awk -F 'SPLUNK_TA_' '{print $2}'`
+          ADDON_NAME=$(echo ${ADDON_NAME} | awk -F 'SPLUNK_TA_' '{print $2}')
           echo "::set-output name=addon-name::$(echo "$ADDON_NAME")"
 
-          JOB_NAME=`echo $ADDON_NAME | tail -c 16`-`echo ${GITHUB_SHA} | tail -c 8`-TEST-TYPE-${GITHUB_RUN_ID}
-          JOB_NAME=`echo $JOB_NAME | sed "s/[_.]/-/g"`
+          JOB_NAME=$(echo $ADDON_NAME | tail -c 16)-$(echo ${GITHUB_SHA} | tail -c 8)-TEST-TYPE-${GITHUB_RUN_ID}
+          JOB_NAME=$(echo $JOB_NAME | sed "s/[_.]/-/g")
           echo "::set-output name=job-name::$(echo wf-$JOB_NAME)"
 
           LABELS="addon-name=${ADDON_NAME}"
@@ -584,16 +584,16 @@ jobs:
       - name: Read secrets from AWS Secrets Manager into environment variables
         id: get-argo-token
         run: |
-          ARGO_TOKEN=`aws secretsmanager get-secret-value --secret-id ta-github-workflow-automation-token | jq -r '.SecretString'`
+          ARGO_TOKEN=$(aws secretsmanager get-secret-value --secret-id ta-github-workflow-automation-token | jq -r '.SecretString')
           echo "::set-output name=argo-token::$(echo $ARGO_TOKEN)"
       - name: create job name
         id: create-job-name
         run: |
-          RANDOM_STRING=`head -3 /dev/urandom | tr -cd '[:lower:]' | cut -c -4`
+          RANDOM_STRING=$(head -3 /dev/urandom | tr -cd '[:lower:]' | cut -c -4)
           JOB_NAME=${{ needs.setup.outputs.job-name }}-${RANDOM_STRING}
-          JOB_NAME=`echo $JOB_NAME | sed -e "s/TEST-TYPE/${{ env.TEST_TYPE }}/g"`
-          JOB_NAME=`echo $JOB_NAME | sed "s/[_.]/-/g"`
-          JOB_NAME=`echo $JOB_NAME | tr '[:upper:]' '[:lower:]'`
+          JOB_NAME=$(echo $JOB_NAME | sed -e "s/TEST-TYPE/${{ env.TEST_TYPE }}/g")
+          JOB_NAME=$(echo $JOB_NAME | sed "s/[_.]/-/g")
+          JOB_NAME=$(echo $JOB_NAME | tr '[:upper:]' '[:lower:]')
           echo "::set-output name=job-name::$(echo $JOB_NAME)"
           
       - name: run-tests
@@ -630,7 +630,7 @@ jobs:
           ARGO_TOKEN: ${{ steps.get-argo-token.outputs.argo-token }}
         if: ${{ steps.is-pod-deleted.outputs.retry-workflow == 'true' }}
         run: |
-          WORKFLOW_NAME=`argo resubmit -v -o json -n workflows ${{ steps.run-tests.outputs.workflow-name }} | jq -r .metadata.name`
+          WORKFLOW_NAME=$(argo resubmit -v -o json -n workflows ${{ steps.run-tests.outputs.workflow-name }} | jq -r .metadata.name)
           echo "::set-output name=workflow-name::$(echo $WORKFLOW_NAME)"
           argo logs --follow ${WORKFLOW_NAME} -n workflows
       - name: check if workflow completed
@@ -645,13 +645,13 @@ jobs:
           else
             WORKFLOW_NAME="${{ steps.retry-wf.outputs.workflow-name }}"
           fi
-          ARGO_STATUS=`argo get ${WORKFLOW_NAME} -n workflows -o json | jq -r '.status.phase'`
+          ARGO_STATUS=$(argo get ${WORKFLOW_NAME} -n workflows -o json | jq -r '.status.phase')
           echo "Status of workflow:" $ARGO_STATUS
           while [ "$ARGO_STATUS" == "Running"  || "$ARGO_STATUS" == "Pending" ]
           do
               echo "... argo Workflow ${WORKFLOW_NAME} is running, waiting for it to complete."
               argo wait ${WORKFLOW_NAME} -n workflows | true
-              ARGO_STATUS=`argo get ${WORKFLOW_NAME} -n workflows -o json | jq -r '.status.phase'`
+              ARGO_STATUS=$(argo get ${WORKFLOW_NAME} -n workflows -o json | jq -r '.status.phase')
           done
       - name: pull artifacts from s3 bucket
         if: always()
@@ -729,16 +729,16 @@ jobs:
       - name: Read secrets from AWS Secrets Manager into environment variables
         id: get-argo-token
         run: |
-          ARGO_TOKEN=`aws secretsmanager get-secret-value --secret-id ta-github-workflow-automation-token | jq -r '.SecretString'`
+          ARGO_TOKEN=$(aws secretsmanager get-secret-value --secret-id ta-github-workflow-automation-token | jq -r '.SecretString')
           echo "::set-output name=argo-token::$(echo $ARGO_TOKEN)"
       - name: create job name
         id: create-job-name
         run: |
-          RANDOM_STRING=`head -3 /dev/urandom | tr -cd '[:lower:]' | cut -c -4`
+          RANDOM_STRING=$(head -3 /dev/urandom | tr -cd '[:lower:]' | cut -c -4)
           JOB_NAME=${{ needs.setup.outputs.job-name }}-${RANDOM_STRING}
-          JOB_NAME=`echo $JOB_NAME | sed -e "s/TEST-TYPE/${{ env.TEST_TYPE }}/g"`
-          JOB_NAME=`echo $JOB_NAME | sed "s/[_.]/-/g"`
-          JOB_NAME=`echo $JOB_NAME | tr '[:upper:]' '[:lower:]'`
+          JOB_NAME=$(echo $JOB_NAME | sed -e "s/TEST-TYPE/${{ env.TEST_TYPE }}/g")
+          JOB_NAME=$(echo $JOB_NAME | sed "s/[_.]/-/g")
+          JOB_NAME=$(echo $JOB_NAME | tr '[:upper:]' '[:lower:]')
           echo "::set-output name=job-name::$(echo $JOB_NAME)"
       - name: run-tests
         id: run-tests
@@ -774,7 +774,7 @@ jobs:
           ARGO_TOKEN: ${{ steps.get-argo-token.outputs.argo-token }}
         if: ${{ steps.is-pod-deleted.outputs.retry-workflow == 'true' }}
         run: |
-          WORKFLOW_NAME=`argo resubmit -v -o json -n workflows ${{ steps.run-tests.outputs.workflow-name }} | jq -r .metadata.name`
+          WORKFLOW_NAME=$(argo resubmit -v -o json -n workflows ${{ steps.run-tests.outputs.workflow-name }} | jq -r .metadata.name)
           echo "::set-output name=workflow-name::$(echo $WORKFLOW_NAME)"
           argo logs --follow ${WORKFLOW_NAME} -n workflows
       - name: check if workflow completed
@@ -789,13 +789,13 @@ jobs:
           else
             WORKFLOW_NAME="${{ steps.retry-wf.outputs.workflow-name }}"
           fi
-          ARGO_STATUS=`argo get ${WORKFLOW_NAME} -n workflows -o json | jq -r '.status.phase'`
+          ARGO_STATUS=$(argo get ${WORKFLOW_NAME} -n workflows -o json | jq -r '.status.phase')
           echo "Status of workflow:" $ARGO_STATUS
           while [ "$ARGO_STATUS" == "Running" || "$ARGO_STATUS" == "Pending" ]
           do
               echo "... argo Workflow ${WORKFLOW_NAME} is running, waiting for it to complete."
               argo wait ${WORKFLOW_NAME} -n workflows | true
-              ARGO_STATUS=`argo get ${WORKFLOW_NAME} -n workflows -o json | jq -r '.status.phase'`
+              ARGO_STATUS=$(argo get ${WORKFLOW_NAME} -n workflows -o json | jq -r '.status.phase')
           done
       - name: pull artifacts from s3 bucket
         if: always()
@@ -873,16 +873,16 @@ jobs:
       - name: Read secrets from AWS Secrets Manager into environment variables
         id: get-argo-token
         run: |
-          ARGO_TOKEN=`aws secretsmanager get-secret-value --secret-id ta-github-workflow-automation-token | jq -r '.SecretString'`
+          ARGO_TOKEN=$(aws secretsmanager get-secret-value --secret-id ta-github-workflow-automation-token | jq -r '.SecretString')
           echo "::set-output name=argo-token::$(echo $ARGO_TOKEN)"
       - name: create job name
         id: create-job-name
         run: |
-          RANDOM_STRING=`head -3 /dev/urandom | tr -cd '[:lower:]' | cut -c -4`
+          RANDOM_STRING=$(head -3 /dev/urandom | tr -cd '[:lower:]' | cut -c -4)
           JOB_NAME=${{ needs.setup.outputs.job-name }}-${RANDOM_STRING}
-          JOB_NAME=`echo $JOB_NAME | sed -e "s/TEST-TYPE/${{ env.TEST_TYPE }}/g"`
-          JOB_NAME=`echo $JOB_NAME | sed "s/[_.]/-/g"`
-          JOB_NAME=`echo $JOB_NAME | tr '[:upper:]' '[:lower:]'`
+          JOB_NAME=$(echo $JOB_NAME | sed -e "s/TEST-TYPE/${{ env.TEST_TYPE }}/g")
+          JOB_NAME=$(echo $JOB_NAME | sed "s/[_.]/-/g")
+          JOB_NAME=$(echo $JOB_NAME | tr '[:upper:]' '[:lower:]')
           echo "::set-output name=job-name::$(echo $JOB_NAME)"
       - name: run-tests
         id: run-tests
@@ -918,7 +918,7 @@ jobs:
           ARGO_TOKEN: ${{ steps.get-argo-token.outputs.argo-token }}
         if: ${{ steps.is-pod-deleted.outputs.retry-workflow == 'true' }}
         run: |
-          WORKFLOW_NAME=`argo resubmit -v -o json -n workflows ${{ steps.run-tests.outputs.workflow-name }} | jq -r .metadata.name`
+          WORKFLOW_NAME=$(argo resubmit -v -o json -n workflows ${{ steps.run-tests.outputs.workflow-name }} | jq -r .metadata.name)
           echo "::set-output name=workflow-name::$(echo $WORKFLOW_NAME)"
           argo logs --follow ${WORKFLOW_NAME} -n workflows
       - name: check if workflow completed
@@ -933,13 +933,13 @@ jobs:
           else
             WORKFLOW_NAME="${{ steps.retry-wf.outputs.workflow-name }}"
           fi
-          ARGO_STATUS=`argo get ${WORKFLOW_NAME} -n workflows -o json | jq -r '.status.phase'`
+          ARGO_STATUS=${argo get ${WORKFLOW_NAME} -n workflows -o json | jq -r '.status.phase'}
           echo "Status of workflow:" $ARGO_STATUS
           while [ "$ARGO_STATUS" == "Running" || "$ARGO_STATUS" == "Pending" ]
           do
               echo "... argo Workflow ${WORKFLOW_NAME} is running, waiting for it to complete."
               argo wait ${WORKFLOW_NAME} -n workflows | true
-              ARGO_STATUS=`argo get ${WORKFLOW_NAME} -n workflows -o json | jq -r '.status.phase'`
+              ARGO_STATUS=$(argo get ${WORKFLOW_NAME} -n workflows -o json | jq -r '.status.phase')
           done
       - name: pull artifacts from s3 bucket
         if: always()
