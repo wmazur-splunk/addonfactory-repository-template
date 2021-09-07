@@ -73,7 +73,6 @@ jobs:
   compliance-dependencies:
     name: compliance-dependencies
     runs-on: ubuntu-latest
-    continue-on-error: true
 
     steps:
       - name: Checkout
@@ -101,7 +100,6 @@ jobs:
   compliance-copyrights:
     name: compliance-copyrights
     runs-on: ubuntu-latest
-    continue-on-error: true
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -111,7 +109,6 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     name: quality-lint
-    continue-on-error: true
     steps:
       - uses: actions/checkout@v2
         with:
@@ -127,7 +124,6 @@ jobs:
   review_secrets:
     name: security-detect-secrets
     runs-on: ubuntu-latest
-    continue-on-error: true
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -142,7 +138,6 @@ jobs:
   semgrep:
     runs-on: ubuntu-latest
     name: security-sast-semgrep
-    continue-on-error: true
     steps:
       - uses: actions/checkout@v2
       - name: Semgrep
@@ -155,7 +150,6 @@ jobs:
   snyk:
     name: security-vuln-snyk
     runs-on: ubuntu-latest
-    continue-on-error: true
     steps:
       - uses: actions/checkout@v2
       - name: Setup python
@@ -293,7 +287,6 @@ jobs:
           name: package-deployment
           path: build/package/deployment**
         if: always()
-        continue-on-error: True
   security-virustotal:
     name: security-virustotal
     needs: build
@@ -389,7 +382,6 @@ jobs:
     name: quality-appinspect-${{ matrix.tags }}
     needs: build
     runs-on: ubuntu-latest
-    continue-on-error: true
     strategy:
       matrix:
         tags:
@@ -414,7 +406,6 @@ jobs:
 
   artifact-registry:
     runs-on: ubuntu-latest
-    continue-on-error: true
     needs:
       - appinspect
       - security-virustotal
@@ -674,7 +665,6 @@ jobs:
             ${{ needs.setup.outputs.directory-path }}/argo-logs
       - name: Test Report
         uses: dorny/test-reporter@v1
-        continue-on-error: true
         if: always()
         with:
           name: splunk ${{ matrix.splunk.version }} ${{ env.TEST_TYPE }} test report
@@ -818,7 +808,6 @@ jobs:
             ${{ needs.setup.outputs.directory-path }}/argo-logs
       - name: Test Report
         uses: dorny/test-reporter@v1
-        continue-on-error: true
         if: always()
         with:
           name: splunk ${{ matrix.splunk.version }} ${{ env.TEST_TYPE }} ${{ matrix.browser }} test report
@@ -962,7 +951,6 @@ jobs:
             ${{ needs.setup.outputs.directory-path }}/argo-logs
       - name: Test Report
         uses: dorny/test-reporter@v1
-        continue-on-error: true
         if: always()
         with:
           name: splunk ${{ matrix.splunk.version }} ${{ env.TEST_TYPE }} test report
