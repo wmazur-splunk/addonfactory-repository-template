@@ -5,7 +5,6 @@ splunk-add-on-for-bmc-remedy,Splunk_TA_remedy,internal,"Splunk Add-on for BMC Re
 splunk-add-on-for-box,Splunk_TA_box,internal,"Splunk Add-on for Box",main
 splunk-add-on-for-bromium,Splunk_TA_bromium,internal,"Splunk Add-on for Bromium",main
 splunk-add-on-for-carbon-black,Splunk_TA_bit9-carbonblack,internal,"Splunk Add-on for Carbon Black",main
-splunk-add-on-for-check-point-opsec-lea,Splunk_TA_checkpoint-opseclea,internal,"Splunk Add-on for Check Point OPSEC LEA",main
 splunk-add-on-for-cisco-asa,Splunk_TA_cisco-asa,internal,"Splunk Add-on for Cisco ASA",main
 splunk-add-on-for-cisco-esa,Splunk_TA_cisco-esa,internal,"Splunk Add-on for Cisco ESA",main
 splunk-add-on-for-cisco-firesight,Splunk_TA_sourcefire,internal,"Splunk Add-on for Cisco FireSIGHT",main
