@@ -5,7 +5,7 @@ on:
     branches:
       - "main"
       - "develop"
-      - "test/wfe-ko-only-addons-test"
+      - "test/common-template-wfe-rollout-changes"
     tags:
       - "v[0-9]+.[0-9]+.[0-9]+"
   pull_request:
@@ -73,7 +73,6 @@ jobs:
   compliance-dependencies:
     name: compliance-dependencies
     runs-on: ubuntu-latest
-    continue-on-error: true
 
     steps:
       - name: Checkout
@@ -101,7 +100,6 @@ jobs:
   compliance-copyrights:
     name: compliance-copyrights
     runs-on: ubuntu-latest
-    continue-on-error: true
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -111,7 +109,6 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     name: quality-lint
-    continue-on-error: true
     steps:
       - uses: actions/checkout@v2
         with:
@@ -127,7 +124,6 @@ jobs:
   review_secrets:
     name: security-detect-secrets
     runs-on: ubuntu-latest
-    continue-on-error: true
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -142,7 +138,6 @@ jobs:
   semgrep:
     runs-on: ubuntu-latest
     name: security-sast-semgrep
-    continue-on-error: true
     steps:
       - uses: actions/checkout@v2
       - name: Semgrep
@@ -155,7 +150,6 @@ jobs:
   snyk:
     name: security-vuln-snyk
     runs-on: ubuntu-latest
-    continue-on-error: true
     steps:
       - uses: actions/checkout@v2
       - name: Setup python
@@ -293,7 +287,6 @@ jobs:
           name: package-deployment
           path: build/package/deployment**
         if: always()
-        continue-on-error: True
   security-virustotal:
     name: security-virustotal
     needs: build
@@ -389,7 +382,6 @@ jobs:
     name: quality-appinspect-${{ matrix.tags }}
     needs: build
     runs-on: ubuntu-latest
-    continue-on-error: true
     strategy:
       matrix:
         tags:
@@ -414,7 +406,6 @@ jobs:
 
   artifact-registry:
     runs-on: ubuntu-latest
-    continue-on-error: true
     needs:
       - appinspect
       - security-virustotal
@@ -484,8 +475,68 @@ jobs:
         id: artifactid
         run: |
           echo "::set-output name=result::$(echo ${{ fromJSON(steps.meta.outputs.json).tags[0] }})"
+  publish:
+    needs:
+      - build
+      - artifact-registry
+      - test-inventory
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: false
+          persist-credentials: false
+      - name: Semantic Release
+        id: semantic
+        if: github.event_name != 'pull_request'
+        uses: cycjimmy/semantic-release-action@v2.5.4
+        with:
+          semantic_version: 17
+          extra_plugins: |
+            @semantic-release/exec
+            @semantic-release/git
+            @semantic-release/commit-analyzer
+            @semantic-release/release-notes-generator
+            @semantic-release/github
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN_ADMIN }}
+      - name: Download package-deployment
+        uses: actions/download-artifact@v2
+        id: download-package-deployment
+        with:
+          name: package-deployment
+          path: download/artifacts/
+      - name: Download package-splunkbase
+        uses: actions/download-artifact@v2
+        id: download-package-splunkbase
+        with:
+          name: package-splunkbase
+          path: download/artifacts/deployment
+      - name: List of assets
+        run: |
+          ls -la ${{ steps.download-package-splunkbase.outputs.download-path }}
+      - name: Upload assets to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GH_TOKEN_ADMIN }}
+          file: ${{ steps.download-package-splunkbase.outputs.download-path }}/*
+          overwrite: true
+          file_glob: true
+          tag: v${{ steps.semantic.outputs.new_release_version }}
+
+  update-semver:
+    name: release-set-git-tags
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs:
+      - publish
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: haya14busa/action-update-semver@v1
 
   setup:
+    if: false
     needs:
       - build
       - artifact-registry
@@ -535,19 +586,10 @@ jobs:
           echo "::set-output name=addon-upload-path::$(echo $ADDON_UPLOAD_PATH)"
           echo "::set-output name=directory-path::/tmp"
           echo "::set-output name=s3-bucket::ta-production-artifacts"
-      - name: check ENV
-        env:
-          STEPS: ${{ toJson(steps) }}
-        run: |
-          echo $STEPS
-          echo "splunk-version:" ${{ steps.test-setup.outputs.splunk-version }}
-          echo "addon-name:" ${{ steps.test-setup.outputs.addon-name }}
-          echo "job-name:" ${{ steps.test-setup.outputs.job-name }}
-          echo "labels:" ${{ steps.test-setup.outputs.labels }}
-          echo "addon-upload-path:" ${{ steps.test-setup.outputs.addon-upload-path }}
-
+  
   run-knowledge-tests:
-    if: ${{ needs.test-inventory.outputs.knowledge == 'true' }}
+    # if: ${{ needs.test-inventory.outputs.knowledge == 'true' }}
+    if: false
     needs:
       - build
       - artifact-registry
@@ -684,7 +726,6 @@ jobs:
             ${{ needs.setup.outputs.directory-path }}/argo-logs
       - name: Test Report
         uses: dorny/test-reporter@v1
-        continue-on-error: true
         if: always()
         with:
           name: splunk ${{ matrix.splunk.version }} ${{ env.TEST_TYPE }} test report
@@ -692,7 +733,8 @@ jobs:
           reporter: java-junit
 
   run-ui-tests:
-    if: ${{ needs.test-inventory.outputs.ui == 'true' }}
+    # if: ${{ needs.test-inventory.outputs.ui == 'true' }}
+    if: false
     needs:
       - build
       - artifact-registry
@@ -828,7 +870,6 @@ jobs:
             ${{ needs.setup.outputs.directory-path }}/argo-logs
       - name: Test Report
         uses: dorny/test-reporter@v1
-        continue-on-error: true
         if: always()
         with:
           name: splunk ${{ matrix.splunk.version }} ${{ env.TEST_TYPE }} ${{ matrix.browser }} test report
@@ -836,7 +877,8 @@ jobs:
           reporter: java-junit
 
   run-modinput-tests:
-    if: ${{ needs.test-inventory.outputs.modinput_functional == 'true' }}
+    # if: ${{ needs.test-inventory.outputs.modinput_functional == 'true' }}
+    if: false
     needs:
       - build
       - artifact-registry
@@ -972,20 +1014,19 @@ jobs:
             ${{ needs.setup.outputs.directory-path }}/argo-logs
       - name: Test Report
         uses: dorny/test-reporter@v1
-        continue-on-error: true
         if: always()
         with:
           name: splunk ${{ matrix.splunk.version }} ${{ env.TEST_TYPE }} test report
           path: "${{ needs.setup.outputs.directory-path }}/test-results/*.xml"
           reporter: java-junit
 
-  update-semver:
-    name: release-set-git-tags
-    if: startsWith(github.ref, 'refs/tags/v')
-    needs:
-      - test-unit
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: haya14busa/action-update-semver@v1
+  # update-semver:
+  #   name: release-set-git-tags
+  #   if: startsWith(github.ref, 'refs/tags/v')
+  #   needs:
+  #     - test-unit
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - uses: haya14busa/action-update-semver@v1
 # jscpd:ignore-end

@@ -7,7 +7,7 @@ name: sync-main
 
 on:
   push:
-    branches: [wfe-changes]
+    branches: [main]
 
 jobs:
   secrets:
