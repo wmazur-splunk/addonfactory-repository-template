@@ -318,7 +318,7 @@ jobs:
         name: testsets
         run: |
           find tests -type d -maxdepth 1 -mindepth 1 | sed 's|^tests/||g' |  while read -r TESTSET; do echo "::set-output name=$TESTSET::true"; echo "$TESTSET::true"; done
-  test-unit:
+  run-unit-tests:
     name: test-unit-python3-${{ matrix.python-version }}
     if: ${{ needs.test-inventory.outputs.unit == 'true' }}
     runs-on: ubuntu-latest
@@ -683,7 +683,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        splunk: ['8.1']
+        splunk: ['8.1.4']
     container:
       image: ghcr.io/splunk/workflow-engine-base:2.0.3
     env:
@@ -692,7 +692,6 @@ jobs:
       ARGO_SECURE: ${{ needs.setup.outputs.argo-secure }}
       ARGO_BASE_HREF: ${{ needs.setup.outputs.argo-href }}
       ARGO_NAMESPACE: ${{ needs.setup.outputs.argo-namespace }}
-      SPLUNK_VERSION_BASE: ${{ matrix.splunk.version }}
       TEST_TYPE: "requirement_test"
       TEST_ARGS: ""
     steps:
@@ -726,7 +725,7 @@ jobs:
           ARGO_TOKEN: ${{ steps.get-argo-token.outputs.argo-token }}
         uses: splunk/wfe-test-runner-action@v1.4.4
         with:
-          splunk: ${{ matrix.splunk.version }}
+          splunk: ${{ matrix.splunk }}
           test-type: ${{ env.TEST_TYPE }}
           test-args: ""
           job-name: ${{ steps.create-job-name.outputs.job-name }}
@@ -1104,6 +1103,8 @@ jobs:
       - run-modinput-tests
       - run-ui-tests
       - run-modinput-tests
+      - run-requirement-tests
+      - run-unit-tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
