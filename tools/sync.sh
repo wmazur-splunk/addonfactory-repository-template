@@ -93,7 +93,7 @@ else
     git remote set-url origin https://${GH_USER_ADMIN}:${GH_TOKEN_ADMIN}@github.com/$REPOORG/$REPO.git
 
     ( git checkout test/common-template-wfe-rollout-changes && git checkout main && git branch -D test/common-template-wfe-rollout-changes) || true
-    git checkout -B "test/wfe-ko-only-addons-test" main
+    git checkout -B "test/common-template-wfe-rollout-changes" main
     git submodule update --init --recursive
 
     rsync -avh --include ".*" --ignore-existing ../../seed/ .
