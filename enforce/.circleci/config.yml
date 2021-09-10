@@ -162,7 +162,7 @@ jobs:
         default: test
     docker:
       - image: circleci/python:3.7
-    resource_class: small
+    resource_class: medium
 
     steps:
       - checkout
