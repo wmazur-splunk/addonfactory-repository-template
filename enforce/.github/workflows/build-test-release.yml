@@ -514,6 +514,7 @@ jobs:
       - name: setup for test
         id: test-setup
         run: |
+          set -o xtrace
           echo "Fetching environment..."
           ENVIRONMENT=`aws secretsmanager get-secret-value --secret-id TA_ENVIRONMENT | jq '.SecretString | fromjson'`
           echo $ENVIRONMENT
