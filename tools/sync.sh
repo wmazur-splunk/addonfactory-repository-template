@@ -4,7 +4,6 @@ set -x
 PRSUFFIX=develop
 REPOORG=splunk
 CHANGE_BRANCH="test/$(git rev-parse --abbrev-ref HEAD)"
-command -v hub >/dev/null 2>&1 || { echo >&2 "I require hub but it's not installed.  Aborting."; exit 1; }
 command -v gh >/dev/null 2>&1 || { echo >&2 "I require gh but it's not installed.  Aborting."; exit 1; }
 command -v git >/dev/null 2>&1 || { echo >&2 "I require git but it's not installed.  Aborting."; exit 1; }
 command -v crudini >/dev/null 2>&1 || { echo >&2 "I require crudini but it's not installed.  Aborting."; exit 1; }
@@ -61,14 +60,16 @@ then
     git commit -am "base"
     git tag -a v0.2.0 -m "CI base"
 
-    hub create -p $REPOORG/$REPO
-    hub api orgs/$REPOORG/teams/products-shared-services-all/repos/$REPOORG/$REPO --raw-field 'permission=maintain' -X PUT
-    hub api orgs/$REPOORG/teams/productsecurity/repos/$REPOORG/$REPO --raw-field 'permission=read' -X PUT
-    hub api orgs/$REPOORG/teams/products-gdi-addons/repos/$REPOORG/$REPO --raw-field 'permission=maintain' -X PUT
-    hub api orgs/$REPOORG/teams/products-gdi-addons-adminrepo/repos/$REPOORG/$REPO --raw-field 'permission=admin' -X PUT
-    hub api orgs/$REPOORG/$REPO -X PATCH --field default_branch=main
-    hub api /repos/$REPOORG/$REPO --raw-field 'visibility=${REPOVISIBILITY}' -X PATCH
-    hub api /repos/$REPOORG/$REPO  -H 'Accept: application/vnd.github.nebula-preview+json' -X PATCH -F visibility=$REPOVISIBILITY
+    # gh repo create -p $REPOORG/$REPO -y
+    gh repo create $REPOORG/$REPO --confirm
+
+    gh api orgs/$REPOORG/teams/products-shared-services-all/repos/$REPOORG/$REPO --raw-field 'permission=maintain' -X PUT
+    gh api orgs/$REPOORG/teams/productsecurity/repos/$REPOORG/$REPO --raw-field 'permission=read' -X PUT
+    gh api orgs/$REPOORG/teams/products-gdi-addons/repos/$REPOORG/$REPO --raw-field 'permission=maintain' -X PUT
+    gh api orgs/$REPOORG/teams/products-gdi-addons-adminrepo/repos/$REPOORG/$REPO --raw-field 'permission=admin' -X PUT
+    gh api orgs/$REPOORG/$REPO -X PATCH --field default_branch=main
+    gh api /repos/$REPOORG/$REPO --raw-field 'visibility=${REPOVISIBILITY}' -X PATCH
+    gh api /repos/$REPOORG/$REPO  -H 'Accept: application/vnd.github.nebula-preview+json' -X PATCH -F visibility=$REPOVISIBILITY
 
 else
     echo Repository is existing
