@@ -61,7 +61,7 @@ then
     git tag -a v0.2.0 -m "CI base"
 
     # gh repo create -p $REPOORG/$REPO -y
-    gh repo create $REPOORG/$REPO --confirm
+    gh repo create $REPOORG/$REPO --confirm --internal
 
     gh api orgs/$REPOORG/teams/products-shared-services-all/repos/$REPOORG/$REPO --raw-field 'permission=maintain' -X PUT
     gh api orgs/$REPOORG/teams/productsecurity/repos/$REPOORG/$REPO --raw-field 'permission=read' -X PUT
