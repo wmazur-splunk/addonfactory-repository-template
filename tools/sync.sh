@@ -314,9 +314,9 @@ else
     fi
     gh api /repos/$REPOORG/$REPO  -H 'Accept: application/vnd.github.nebula-preview+json' -X PATCH -F visibility=$REPOVISIBILITY
     git add . || exit 1
-    git commit -am "test: wfe rollout changes" || exit 1
-    git push -f --set-upstream origin test/common-template-wfe-rollout-changes|| exit 1
-    gh pr create \
-        --title "Bump repository configuration from template${PR_SUFFIX}" --fill  || exit 1    
+    git commit -am "test: adding secrets" || exit 1
+    git push -f --set-upstream origin test/adding-secrets|| exit 1
+    # gh pr create \
+    #     --title "Bump repository configuration from template${PR_SUFFIX}" --fill  || exit 1    
 fi
 popd
