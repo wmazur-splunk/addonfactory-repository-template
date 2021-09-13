@@ -390,6 +390,7 @@ jobs:
   appinspect:
     name: quality-appinspect-${{ matrix.tags }}
     needs: build
+    continue-on-error: true
     runs-on: ubuntu-latest
     strategy:
       matrix:
