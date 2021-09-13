@@ -31,7 +31,7 @@ jobs:
           echo $GH_TOKEN_ADMIN | gh auth login --with-token   
           git config  --global user.email "addonfactory@splunk.com"
           git config  --global user.name "addonfactory"
-          python3 tools/sync.py
+          python3 -u tools/sync.py
         env:
           GH_USER_ADMIN: ${{ secrets.GH_USER_ADMIN }}
           GH_TOKEN_ADMIN: ${{ secrets.GH_TOKEN_ADMIN }}
