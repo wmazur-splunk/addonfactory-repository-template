@@ -7,7 +7,7 @@ name: sync-develop
 
 on:
   push:
-    branches: [develop, wfe-changes ]
+    branches: [develop, new_test_repo]
 
 jobs:
   sync:
