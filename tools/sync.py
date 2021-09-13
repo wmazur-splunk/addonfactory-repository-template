@@ -19,4 +19,5 @@ if __name__ == '__main__':
         for r in rows:
             inventory.append(r)
     with Pool(processes=4) as p:
-        pprint.pprint(p.map(f, inventory))
+        pp = pprint.PrettyPrinter(indent=4)
+        pp.pprint(p.map(f, inventory))

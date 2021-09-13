@@ -74,8 +74,10 @@ then
 else
     echo Repository is existing
 
-    mkdir -p work/$REPO || true
+    mkdir -p work/|| true
+    git clone https://$GH_USER_ADMIN:$GH_TOKEN_ADMIN@github.com/splunk/splunk-add-on-for-github-ta-testing.git
     pushd work/$REPO || exit 1
+    
     
     rsync -avh --include ".*" ../../seed/ .
     rsync -avh --include ".*" ../../enforce/ .
@@ -115,11 +117,11 @@ else
     git add .
     git commit -am "base"
     
-    git remote set-url origin https://$GITHUB_USER:$GITHUB_TOKEN@github.com/$REPOORG/$REPO.git
-    git checkout -b $BRANCH
-    git push --set-upstream origin $BRANCH
-    git tag -a v$(crudini --get package/default/app.conf launcher version) -m "Release"
-    git push --follow-tags
+    git remote set-url origin https://$GH_USER_ADMIN:$GH_TOKEN_ADMIN@github.com/$REPOORG/$REPO.git || exit 1
+    git checkout -b $BRANCH || exit 1
+    git push --set-upstream origin $BRANCH || exit 1
+    git tag -a v$(crudini --get package/default/app.conf launcher version) -m "Release" || exit 1
+    git push --follow-tags || exit 1
 
 
     # gh api repos/$REPOORG/$REPO --raw-field 'visibility=${REPOVISIBILITY}' -X PATCH || true
