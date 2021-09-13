@@ -7,7 +7,7 @@ name: sync-develop
 
 on:
   push:
-    branches: [develop, wfe-changes ]
+    branches: [develop, wfe-changes, feat/13-09-configurable-github-environment]
 
 jobs:
   sync:
