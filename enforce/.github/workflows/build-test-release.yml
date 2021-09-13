@@ -689,7 +689,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        splunk: ['8.1.4']
+        splunk: ['8.2.1']
     container:
       image: ghcr.io/splunk/workflow-engine-base:2.0.3
     env:
@@ -1104,15 +1104,27 @@ jobs:
           reporter: java-junit
 
   publish:
+    if: github.event_name != 'pull_request'
     needs:
       - run-knowledge-tests
       - run-modinput-tests
       - run-ui-tests
-      - run-modinput-tests
-      - run-requirement-tests
       - run-unit-tests
     runs-on: ubuntu-latest
     steps:
+      - name: check if tests have passed or skipped
+        id: check
+        run: |
+          RUN_PUBLISH=`echo $NEEDS | jq ".[] |  select(  ( .result != \"skipped\" ) and .result != \"success\" ) | length == 0"`
+          if [[ $RUN_PUBLISH != 'false' ]]
+          then
+              echo "::set-output name=run-publish::true"
+          fi
+      - name: exit without publish
+        if: ${{ steps.check.outputs.run-publish != 'true' }}
+        run: |
+          echo " some test job failed. "
+          exit 1
       - name: Checkout
         uses: actions/checkout@v2
         with:
@@ -1120,7 +1132,7 @@ jobs:
           persist-credentials: false
       - name: Semantic Release
         id: semantic
-        if: github.event_name != 'pull_request'
+        if: ${{ steps.check.outputs.run-publish == 'true' }}
         uses: cycjimmy/semantic-release-action@v2.5.4
         with:
           semantic_version: 17
