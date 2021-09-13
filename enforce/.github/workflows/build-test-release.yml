@@ -283,6 +283,8 @@ jobs:
           echo "::set-output name=name::$(basename ${{ steps.slim.outputs.OUTPUT }})"
           echo `basename ${{ steps.slim.outputs.OUTPUT }}`
 
+          aws secretsmanager get-secret-value --secret-id ta-github-workflow-automation-token
+
           echo "Fetching environment..."
           ENVIRONMENT=`aws secretsmanager get-secret-value --secret-id TA_ENVIRONMENT | jq '.SecretString | fromjson'`
           S3_BUCKET_NAME=`echo $ENVIRONMENT | jq -r '.s3_bucket'`
