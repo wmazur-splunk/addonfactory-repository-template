@@ -55,7 +55,6 @@ then
     git init
     git config  user.email "addonfactory@splunk.com"
     git config  user.name "Addon Factory template"
-    git submodule add git@github.com:$REPOORG/addonfactory-splunk_sa_cim.git deps/apps/Splunk_SA_CIM
     
     git add .
     git commit -am "base"
