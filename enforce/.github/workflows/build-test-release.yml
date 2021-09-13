@@ -1104,7 +1104,7 @@ jobs:
           reporter: java-junit
 
   publish:
-    if: github.event_name != 'pull_request'
+    if: always()
     needs:
       - run-knowledge-tests
       - run-modinput-tests
@@ -1113,6 +1113,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: check if tests have passed or skipped
+        if: github.event_name != 'pull_request'
         id: check
         run: |
           RUN_PUBLISH=`echo $NEEDS | jq ".[] |  select(  ( .result != \"skipped\" ) and .result != \"success\" ) | length == 0"`
