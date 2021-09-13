@@ -516,7 +516,7 @@ jobs:
         run: |
           set -o xtrace
           echo "Fetching environment..."
-          ENVIRONMENT=$(aws secretsmanager get-secret-value --secret-id TA_ENVIRONMENT | jq '.SecretString | fromjson')
+          ENVIRONMENT="$(aws secretsmanager get-secret-value --secret-id TA_ENVIRONMENT | jq '.SecretString | fromjson')"
           echo $ENVIRONMENT
 
           echo "::set-output name=argo-server::$(echo $ENVIRONMENT | jq -r '.argo_server')"
@@ -587,7 +587,7 @@ jobs:
       - name: Read secrets from AWS Secrets Manager into environment variables
         id: get-argo-token
         run: |
-          ENVIRONMENT=$(aws secretsmanager get-secret-value --secret-id TA_ENVIRONMENT | jq '.SecretString | fromjson')
+          ENVIRONMENT="$(aws secretsmanager get-secret-value --secret-id TA_ENVIRONMENT | jq '.SecretString | fromjson')"
           GITHUB_TOKEN_NAME=$(echo $ENVIRONMENT | jq -r '.github_automation_token_name')
           ARGO_TOKEN=$(aws secretsmanager get-secret-value --secret-id $GITHUB_TOKEN_NAME | jq -r '.SecretString')
           echo "::set-output name=argo-token::$(echo $ARGO_TOKEN)"
@@ -730,7 +730,7 @@ jobs:
       - name: Read secrets from AWS Secrets Manager into environment variables
         id: get-argo-token
         run: |
-          ENVIRONMENT=$(aws secretsmanager get-secret-value --secret-id TA_ENVIRONMENT | jq '.SecretString | fromjson')
+          ENVIRONMENT="$(aws secretsmanager get-secret-value --secret-id TA_ENVIRONMENT | jq '.SecretString | fromjson')"
           GITHUB_TOKEN_NAME=$(echo $ENVIRONMENT | jq -r '.github_automation_token_name')
           ARGO_TOKEN=$(aws secretsmanager get-secret-value --secret-id $GITHUB_TOKEN_NAME | jq -r '.SecretString')
       - name: create job name
@@ -874,7 +874,7 @@ jobs:
       - name: Read secrets from AWS Secrets Manager into environment variables
         id: get-argo-token
         run: |
-          ENVIRONMENT=$(aws secretsmanager get-secret-value --secret-id TA_ENVIRONMENT | jq '.SecretString | fromjson')
+          ENVIRONMENT="$(aws secretsmanager get-secret-value --secret-id TA_ENVIRONMENT | jq '.SecretString | fromjson')"
           GITHUB_TOKEN_NAME=$(echo $ENVIRONMENT | jq -r '.github_automation_token_name')
           ARGO_TOKEN=$(aws secretsmanager get-secret-value --secret-id $GITHUB_TOKEN_NAME | jq -r '.SecretString')
           echo "::set-output name=argo-token::$(echo $ARGO_TOKEN)"
@@ -1018,7 +1018,7 @@ jobs:
       - name: Read secrets from AWS Secrets Manager into environment variables
         id: get-argo-token
         run: |
-          ENVIRONMENT=$(aws secretsmanager get-secret-value --secret-id TA_ENVIRONMENT | jq '.SecretString | fromjson')
+          ENVIRONMENT="$(aws secretsmanager get-secret-value --secret-id TA_ENVIRONMENT | jq '.SecretString | fromjson')"
           GITHUB_TOKEN_NAME=$(echo $ENVIRONMENT | jq -r '.github_automation_token_name')
           ARGO_TOKEN=$(aws secretsmanager get-secret-value --secret-id $GITHUB_TOKEN_NAME | jq -r '.SecretString')
           echo "::set-output name=argo-token::$(echo $ARGO_TOKEN)"
