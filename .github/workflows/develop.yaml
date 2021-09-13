@@ -22,6 +22,7 @@ jobs:
         run: |
           pip3 install git+https://github.com/pixelb/crudini.git 
           pip3 install reuse
+          pip3 install poetry
 
       - name: sync
         run: |
