@@ -75,8 +75,9 @@ else
     echo Repository is existing
 
     mkdir -p work/|| true
+    cd work
     git clone https://$GH_USER_ADMIN:$GH_TOKEN_ADMIN@github.com/splunk/splunk-add-on-for-github-ta-testing.git
-    pushd work/$REPO || exit 1
+    pushd $REPO || exit 1
     
     
     rsync -avh --include ".*" ../../seed/ .
