@@ -705,7 +705,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        splunk: ['8.1.4']
+        splunk: ['8.2.1']
+        sc4s: ${{ fromJson(needs.meta.outputs.matrix_supportedSC4S) }}
     container:
       image: ghcr.io/splunk/workflow-engine-base:2.0.3
     env:
@@ -757,7 +758,7 @@ jobs:
           delay-destroy: "No"
           addon-url: ${{ needs.setup.outputs.addon-upload-path }}
           addon-name: ${{ needs.setup.outputs.addon-name }}
-          sc4s-version: 'No'
+          sc4s-version: ${{ matrix.sc4s.version }}
       - name: Check if pod was deleted
         id: is-pod-deleted
         if: always()
@@ -1122,15 +1123,28 @@ jobs:
           reporter: java-junit
 
   publish:
+    if: always()
     needs:
       - run-knowledge-tests
       - run-modinput-tests
       - run-ui-tests
-      - run-modinput-tests
-      - run-requirement-tests
       - run-unit-tests
     runs-on: ubuntu-latest
     steps:
+      - name: check if tests have passed or skipped
+        if: github.event_name != 'pull_request'
+        id: check
+        run: |
+          RUN_PUBLISH=`echo $NEEDS | jq ".[] |  select(  ( .result != \"skipped\" ) and .result != \"success\" ) | length == 0"`
+          if [[ $RUN_PUBLISH != 'false' ]]
+          then
+              echo "::set-output name=run-publish::true"
+          fi
+      - name: exit without publish
+        if: ${{ steps.check.outputs.run-publish != 'true' }}
+        run: |
+          echo " some test job failed. "
+          exit 1
       - name: Checkout
         uses: actions/checkout@v2
         with:
@@ -1138,7 +1152,7 @@ jobs:
           persist-credentials: false
       - name: Semantic Release
         id: semantic
-        if: github.event_name != 'pull_request'
+        if: ${{ steps.check.outputs.run-publish == 'true' }}
         uses: cycjimmy/semantic-release-action@v2.5.4
         with:
           semantic_version: 17
@@ -1151,25 +1165,25 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN_ADMIN }}
       - name: Download package-deployment
-        if: ${{ steps.semantic.outputs.new_release_published }} == 'true' 
+        if: ${{ steps.semantic.outputs.new_release_published == 'true' }} 
         uses: actions/download-artifact@v2
         id: download-package-deployment
         with:
           name: package-deployment
           path: download/artifacts/
       - name: Download package-splunkbase
-        if: ${{ steps.semantic.outputs.new_release_published }} == 'true' 
+        if: ${{ steps.semantic.outputs.new_release_published == 'true' }} 
         uses: actions/download-artifact@v2
         id: download-package-splunkbase
         with:
           name: package-splunkbase
           path: download/artifacts/deployment
       - name: List of assets
-        if: ${{ steps.semantic.outputs.new_release_published }} == 'true' 
+        if: ${{ steps.semantic.outputs.new_release_published == 'true' }} 
         run: |
           ls -la ${{ steps.download-package-splunkbase.outputs.download-path }}
       - name: Upload assets to release
-        if: ${{ steps.semantic.outputs.new_release_published }} == 'true' 
+        if: ${{ steps.semantic.outputs.new_release_published == 'true' }} 
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GH_TOKEN_ADMIN }}
