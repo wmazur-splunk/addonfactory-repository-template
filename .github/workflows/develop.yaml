@@ -7,7 +7,7 @@ name: sync-develop
 
 on:
   push:
-    branches: [develop, wfe-changes ]
+    branches: [develop, wfe-changes, feature/configurable-environment]
 
 jobs:
   sync:

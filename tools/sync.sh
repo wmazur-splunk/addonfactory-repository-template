@@ -92,8 +92,8 @@ else
     fi
     git remote set-url origin https://${GH_USER_ADMIN}:${GH_TOKEN_ADMIN}@github.com/$REPOORG/$REPO.git
 
-    ( git checkout test/common-template-wfe-rollout-changes && git checkout main && git branch -D test/common-template-wfe-rollout-changes) || true
-    git checkout -B "test/common-template-wfe-rollout-changes" main
+    ( git checkout feature/configurable-environment && git checkout main && git branch -D feature/configurable-environment) || true
+    git checkout -B "feature/configurable-environment" main
     git submodule update --init --recursive
 
     rsync -avh --include ".*" --ignore-existing ../../seed/ .
@@ -313,8 +313,8 @@ else
     gh api /repos/$REPOORG/$REPO  -H 'Accept: application/vnd.github.nebula-preview+json' -X PATCH -F visibility=$REPOVISIBILITY
     git add . || exit 1
     git commit -am "test: wfe rollout changes" || exit 1
-    git push -f --set-upstream origin test/common-template-wfe-rollout-changes|| exit 1
-    gh pr create \
-        --title "Bump repository configuration from template${PR_SUFFIX}" --fill  || exit 1    
+    git push -f --set-upstream origin feature/configurable-environment|| exit 1
+#    gh pr create \
+#        --title "Bump repository configuration from template${PR_SUFFIX}" --fill  || exit 1
 fi
 popd
