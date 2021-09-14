@@ -282,10 +282,7 @@ jobs:
         run: |
           echo "::set-output name=name::$(basename ${{ steps.slim.outputs.OUTPUT }})"
           echo `basename ${{ steps.slim.outputs.OUTPUT }}`
-
-          aws secretsmanager get-secret-value --secret-id ta-github-workflow-automation-token
-
-          S3_BUCKET_NAME=GITHUB_TOKEN_NAME=$(aws secretsmanager get-secret-value --secret-id TA_ENVIRONMENT | jq -r '.SecretString | fromjson | .s3_bucket')
+          S3_BUCKET_NAME=$(aws secretsmanager get-secret-value --secret-id TA_ENVIRONMENT | jq -r '.SecretString | fromjson | .s3_bucket')
           aws s3 cp ${{ steps.slim.outputs.OUTPUT }} s3://$S3_BUCKET_NAME/ta-apps/
       - name: artifact-splunk-parts
         uses: actions/upload-artifact@v2
