@@ -510,8 +510,8 @@ jobs:
         id: test-setup
         run: |
           set -o xtrace
-
-          echo "::set-output name=argo-server::$(aws secretsmanager get-secret-value --secret-id TA_ENVIRONMENT | jq -r '.SecretString | fromjson | .argo_server')"
+          ENVIRONMENT=$(aws secretsmanager get-secret-value --secret-id TA_ENVIRONMENT | jq -r '.SecretString | fromjson | .argo_server')
+          echo "::set-output name=argo-server::$(echo $ENVIRONMENT)"
           echo "::set-output name=argo-http1::true"
           echo "::set-output name=argo-secure::true"
           echo "::set-output name=argo-base-href::\'\'"
