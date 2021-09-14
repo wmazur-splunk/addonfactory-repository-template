@@ -285,9 +285,7 @@ jobs:
 
           aws secretsmanager get-secret-value --secret-id ta-github-workflow-automation-token
 
-          echo "Fetching environment..."
-          ENVIRONMENT=`aws secretsmanager get-secret-value --secret-id TA_ENVIRONMENT | jq '.SecretString | fromjson'`
-          S3_BUCKET_NAME=`echo $ENVIRONMENT | jq -r '.s3_bucket'`
+          S3_BUCKET_NAME=GITHUB_TOKEN_NAME=$(aws secretsmanager get-secret-value --secret-id TA_ENVIRONMENT | jq -r '.SecretString | fromjson | .s3_bucket')
           aws s3 cp ${{ steps.slim.outputs.OUTPUT }} s3://$S3_BUCKET_NAME/ta-apps/
       - name: artifact-splunk-parts
         uses: actions/upload-artifact@v2
@@ -515,16 +513,13 @@ jobs:
         id: test-setup
         run: |
           set -o xtrace
-          echo "Fetching environment..."
-          ENVIRONMENT="$(aws secretsmanager get-secret-value --secret-id TA_ENVIRONMENT | jq '.SecretString | fromjson')"
-          echo $ENVIRONMENT
 
-          echo "::set-output name=argo-server::$(echo $ENVIRONMENT | jq -r '.argo_server')"
+          echo "::set-output name=argo-server::$(aws secretsmanager get-secret-value --secret-id TA_ENVIRONMENT | jq -r '.SecretString | fromjson | .argo_server')"
           echo "::set-output name=argo-http1::true"
           echo "::set-output name=argo-secure::true"
           echo "::set-output name=argo-base-href::\'\'"
           echo "::set-output name=argo-namespace::workflows"
-          echo "::set-output name=argo-workflow-tmpl-name::$(echo $ENVIRONMENT | jq -r '.argo_workflow_tmpl_name')"
+          echo "::set-output name=argo-workflow-tmpl-name::$(aws secretsmanager get-secret-value --secret-id TA_ENVIRONMENT | jq -r '.SecretString | fromjson | .argo_workflow_tmpl_name')"
 
           ADDON_NAME=$(crudini --get package/default/app.conf id name | tr '[:lower:]' '[:upper:]')
           if [[ ! -z $(echo ${ADDON_NAME} | awk -F 'SPLUNK_TA_' '{print $2}') ]];
@@ -543,7 +538,7 @@ jobs:
           LABELS="addon-name=${ADDON_NAME}"
           echo "::set-output name=labels::$(echo $LABELS)"
 
-          S3_BUCKET_NAME=$(echo $ENVIRONMENT | jq -r '.s3_bucket')
+          S3_BUCKET_NAME=$(aws secretsmanager get-secret-value --secret-id TA_ENVIRONMENT | jq -r '.SecretString | fromjson | .s3_bucket')
           ADDON_UPLOAD_PATH="s3://$S3_BUCKET_NAME/ta-apps/${{ needs.build.outputs.buildname }}"
           echo "::set-output name=addon-upload-path::$(echo $ADDON_UPLOAD_PATH)"
           echo "::set-output name=directory-path::/tmp"
@@ -587,8 +582,7 @@ jobs:
       - name: Read secrets from AWS Secrets Manager into environment variables
         id: get-argo-token
         run: |
-          ENVIRONMENT="$(aws secretsmanager get-secret-value --secret-id TA_ENVIRONMENT | jq '.SecretString | fromjson')"
-          GITHUB_TOKEN_NAME=$(echo $ENVIRONMENT | jq -r '.github_automation_token_name')
+          GITHUB_TOKEN_NAME=$(aws secretsmanager get-secret-value --secret-id TA_ENVIRONMENT | jq -r '.SecretString | fromjson | .github_automation_token_name')
           ARGO_TOKEN=$(aws secretsmanager get-secret-value --secret-id $GITHUB_TOKEN_NAME | jq -r '.SecretString')
           echo "::set-output name=argo-token::$(echo $ARGO_TOKEN)"
       - name: create job name
@@ -730,8 +724,7 @@ jobs:
       - name: Read secrets from AWS Secrets Manager into environment variables
         id: get-argo-token
         run: |
-          ENVIRONMENT="$(aws secretsmanager get-secret-value --secret-id TA_ENVIRONMENT | jq '.SecretString | fromjson')"
-          GITHUB_TOKEN_NAME=$(echo $ENVIRONMENT | jq -r '.github_automation_token_name')
+          GITHUB_TOKEN_NAME=$(aws secretsmanager get-secret-value --secret-id TA_ENVIRONMENT | jq -r '.SecretString | fromjson | .github_automation_token_name')
           ARGO_TOKEN=$(aws secretsmanager get-secret-value --secret-id $GITHUB_TOKEN_NAME | jq -r '.SecretString')
       - name: create job name
         id: create-job-name
@@ -874,8 +867,7 @@ jobs:
       - name: Read secrets from AWS Secrets Manager into environment variables
         id: get-argo-token
         run: |
-          ENVIRONMENT="$(aws secretsmanager get-secret-value --secret-id TA_ENVIRONMENT | jq '.SecretString | fromjson')"
-          GITHUB_TOKEN_NAME=$(echo $ENVIRONMENT | jq -r '.github_automation_token_name')
+          GITHUB_TOKEN_NAME=$(aws secretsmanager get-secret-value --secret-id TA_ENVIRONMENT | jq -r '.SecretString | fromjson | .github_automation_token_name')
           ARGO_TOKEN=$(aws secretsmanager get-secret-value --secret-id $GITHUB_TOKEN_NAME | jq -r '.SecretString')
           echo "::set-output name=argo-token::$(echo $ARGO_TOKEN)"
       - name: create job name
@@ -1018,8 +1010,7 @@ jobs:
       - name: Read secrets from AWS Secrets Manager into environment variables
         id: get-argo-token
         run: |
-          ENVIRONMENT="$(aws secretsmanager get-secret-value --secret-id TA_ENVIRONMENT | jq '.SecretString | fromjson')"
-          GITHUB_TOKEN_NAME=$(echo $ENVIRONMENT | jq -r '.github_automation_token_name')
+          GITHUB_TOKEN_NAME=$(aws secretsmanager get-secret-value --secret-id TA_ENVIRONMENT | jq -r '.SecretString | fromjson | .github_automation_token_name')
           ARGO_TOKEN=$(aws secretsmanager get-secret-value --secret-id $GITHUB_TOKEN_NAME | jq -r '.SecretString')
           echo "::set-output name=argo-token::$(echo $ARGO_TOKEN)"
       - name: create job name
