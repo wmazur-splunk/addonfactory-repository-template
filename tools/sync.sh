@@ -55,10 +55,8 @@ then
     git init
     git config  user.email "addonfactory@splunk.com"
     git config  user.name "Addon Factory template"
-    git submodule add git@github.com:$REPOORG/addonfactory_test_matrix_splunk.git deps/build/addonfactory_test_matrix_splunk
     git submodule add git@github.com:$REPOORG/addonfactory-splunk_sa_cim.git deps/apps/Splunk_SA_CIM
-    git submodule add git@github.com:$REPOORG/addonfactory-splunk_env_indexer.git deps/apps/splunk_env_indexer
-
+    
     git add .
     git commit -am "base"
     git tag -a v0.2.0 -m "CI base"
@@ -132,6 +130,14 @@ else
         git add deps/apps/splunk_env_indexer
         git commit -m "Deprecate splunk_env_indexer submodule"
     fi       
+    if [ -d "deps/build/addonfactory_test_matrix_splunk" ]; then
+        git submodule deinit -f deps/build/addonfactory_test_matrix_splunk
+        rm -rf .git/modules/deps/build/addonfactory_test_matrix_splunk
+        git rm -f deps/build/addonfactory_test_matrix_splunk
+        git add deps/build/addonfactory_test_matrix_splunk
+        git commit -m "Deprecate deps/build/addonfactory_test_matrix_splunk submodule"
+    fi       
+
     if [[ -f "requirements.txt" ]]; then
         mkdir -p package/lib || true
         git mv requirements.txt package/lib/

@@ -26,6 +26,11 @@ jobs:
             RP_UUID
             SNYK_TOKEN
             VT_API_KEY
+            AWS_ACCESS_KEY_ID
+            AWS_DEFAULT_REGION
+            AWS_SECRET_ACCESS_KEY
+            SEMGREP_DEPLOYMENT_ID
+            SEMGREP_PUBLISH_TOKEN
           REPOSITORIES: |
             splunk-dbx-add-on-for-*
             splunk/splunk-add-on-for-*
@@ -46,3 +51,8 @@ jobs:
           RP_UUID: ${{secrets.RP_UUID}}
           SNYK_TOKEN: ${{secrets.SNYK_TOKEN}}
           VT_API_KEY: ${{secrets.VT_API_KEY}}
+          AWS_ACCESS_KEY_ID: ${{secrets.AWS_ACCESS_KEY_ID}}
+          AWS_DEFAULT_REGION: ${{secrets.AWS_DEFAULT_REGION}}
+          AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+          SEMGREP_PUBLISH_TOKEN: ${{ secrets.SEMGREP_PUBLISH_TOKEN }}
+          SEMGREP_DEPLOYMENT_ID: ${{ secrets.SEMGREP_DEPLOYMENT_ID }}
