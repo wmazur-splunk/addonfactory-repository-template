@@ -314,6 +314,7 @@ else
     git add . || exit 1
     git commit -am "test: common template rollout changes" || exit 1
     git push -f --set-upstream origin test/common-template-rollout-changes${PR_SUFFIX} || exit 1
+    sleep 10s
     gh pr create \
         --title "Bump repository configuration from template${PR_SUFFIX}" --fill  || exit 1    
 fi
