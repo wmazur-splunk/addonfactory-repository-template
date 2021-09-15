@@ -92,8 +92,8 @@ else
     fi
     git remote set-url origin https://${GH_USER_ADMIN}:${GH_TOKEN_ADMIN}@github.com/$REPOORG/$REPO.git
 
-    ( git checkout test/common-template-rollout-changes${PR_SUFFIX}  && git checkout main && git branch -D test/common-template-rollout-changes${PR_SUFFIX} ) || true
-    git checkout -B "test/common-template-rollout-changes${PR_SUFFIX}" main
+    ( git checkout test/common-template-rollout-github-actions  && git checkout main && git branch -D test/common-template-rollout-github-actions ) || true
+    git checkout -B "test/common-template-rollout-github-actions" main
     git submodule update --init --recursive
 
     rsync -avh --include ".*" --ignore-existing ../../seed/ .
@@ -313,7 +313,7 @@ else
     gh api /repos/$REPOORG/$REPO  -H 'Accept: application/vnd.github.nebula-preview+json' -X PATCH -F visibility=$REPOVISIBILITY
     git add . || exit 1
     git commit -am "test: common template rollout changes" || exit 1
-    git push -f --set-upstream origin test/common-template-rollout-changes${PR_SUFFIX} || exit 1
+    git push -f --set-upstream origin test/common-template-rollout-github-actions || exit 1
     sleep 10s
     gh pr create \
         --title "Bump repository configuration from template${PR_SUFFIX}" --fill  || exit 1    
