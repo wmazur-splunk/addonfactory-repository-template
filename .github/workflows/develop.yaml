@@ -7,7 +7,7 @@ name: sync-develop
 
 on:
   push:
-    branches: [develop]
+    branches: [develop, test/delete-branches-from-addons]
 
 jobs:
   sync:
