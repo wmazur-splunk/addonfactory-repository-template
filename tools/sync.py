@@ -18,5 +18,5 @@ if __name__ == '__main__':
         rows = csv.DictReader(csvfile,fieldnames=fields)
         for r in rows:
             inventory.append(r)
-    with Pool(processes=4) as p:
+    with Pool(processes=2) as p:
         pprint.pprint(p.map(f, inventory))
