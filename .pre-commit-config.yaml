@@ -1,0 +1,7 @@
+repos:
+  - repo: https://github.com/rhysd/actionlint
+    rev: v1.6.3
+    hooks:
+      - id: actionlint
+        args: [-ignore, 'property ".+" is not defined in object type']
+        files: ^enforce/.github/workflows/
