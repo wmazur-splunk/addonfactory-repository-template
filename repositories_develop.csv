@@ -40,3 +40,4 @@ splunk-add-on-for-mcafee-nsp,Splunk_TA_mcafee_nsp,internal,"Splunk Add-on for Mc
 splunk-add-on-for-checkpoint-log-exporter,Splunk_TA_checkpoint_log_exporter,internal,"Splunk Add-on for Checkpoint Log Exporter",main
 splunk-add-on-for-cef,TA-cef-for-splunk,public,"TA CEF for Splunk",main
 splunk-add-on-for-github-ta-testing,Splunk_TA_github-ta-testing,internal,"Splunk Add-on for Github TA testing",main
+splunk-add-on-for-stream-wire-data,Splunk_TA_stream_wire_data,internal,"Splunk Add-on for Stream WireData",main
