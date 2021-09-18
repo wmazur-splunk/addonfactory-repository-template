@@ -44,7 +44,6 @@ jobs:
         with:
           SECRETS: |
             SNYK_TOKEN
-            CIRCLECI_TOKEN
             GH_TOKEN_ADMIN
             GH_USER_ADMIN
             PAT_CLATOOL
@@ -52,6 +51,9 @@ jobs:
             RP_UUID
             SNYK_TOKEN
             VT_API_KEY
+            AWS_ACCESS_KEY_ID
+            AWS_DEFAULT_REGION
+            AWS_SECRET_ACCESS_KEY
           REPOSITORIES: |
             splunk-dbx-add-on-for-*
             splunk/splunk-add-on-for-*
@@ -64,7 +66,6 @@ jobs:
           CONCURRENCY: 2
           REPOSITORIES_LIST_REGEX: true
         env:
-          CIRCLECI_TOKEN: ${{secrets.CIRCLECI_TOKEN}}
           GH_TOKEN_ADMIN: ${{secrets.GH_TOKEN_ADMIN}}
           GH_USER_ADMIN: ${{secrets.GH_USER_ADMIN}}
           PAT_CLATOOL: ${{secrets.PAT_CLATOOL}}
@@ -72,3 +73,6 @@ jobs:
           RP_UUID: ${{secrets.RP_UUID}}
           SNYK_TOKEN: ${{secrets.SNYK_TOKEN}}
           VT_API_KEY: ${{secrets.VT_API_KEY}}
+          AWS_ACCESS_KEY_ID: ${{secrets.AWS_ACCESS_KEY_ID}}
+          AWS_DEFAULT_REGION: ${{secrets.AWS_DEFAULT_REGION}}
+          AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
