@@ -41,3 +41,10 @@ splunk-add-on-for-checkpoint-log-exporter,Splunk_TA_checkpoint_log_exporter,inte
 splunk-add-on-for-cef,TA-cef-for-splunk,public,"TA CEF for Splunk",main
 splunk-add-on-for-github-ta-testing,Splunk_TA_github-ta-testing,internal,"Splunk Add-on for Github TA testing",main
 splunk-add-on-for-stream-wire-data,Splunk_TA_stream_wire_data,internal,"Splunk Add-on for Stream WireData",main
+splunk-add-on-for-google-workspace,Splunk_TA_Google_Workspace,internal,"Splunk Add-on for Google Workspace",main
+splunk-add-on-for-jira-cloud,Splunk_TA_jira-cloud,internal,"Splunk Add-on for Jira Cloud",main
+splunk-add-on-for-palo-alto-networks,Splunk_TA_paloalto,internal,"Palo Alto Networks Add-on",main
+splunk-add-on-for-fortinet-fortigate,Splunk_TA_fortinet_fortigate,internal,"Fortinet Fortigate Add-on for Splunk",main
+splunk-add-on-for-microsoft-sysmon,Splunk_TA_microsoft_sysmon,internal,"Splunk Add-on for Sysmon",main
+splunk-add-on-for-tenable,TA-tenable,internal,"Tenable Add-On for Splunk",main
+splunk-add-on-for-dynatrace,Splunk_TA_Dynatrace,internal,Splunk_TA_Dynatrace,main
