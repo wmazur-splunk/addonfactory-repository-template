@@ -1120,6 +1120,9 @@ jobs:
       - snyk
       - semgrep
       - compliance-dependencies
+      - compliance-copyrights
+      - lint
+      - compliance-sample-scanner
     runs-on: ubuntu-latest
     env:
       NEEDS: ${{ toJson(needs) }}
