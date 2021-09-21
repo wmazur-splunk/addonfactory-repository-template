@@ -382,6 +382,7 @@ jobs:
     name: quality-appinspect-${{ matrix.tags }}
     needs: build
     runs-on: ubuntu-latest
+    continue-on-error: true
     strategy:
       matrix:
         tags:
@@ -407,7 +408,6 @@ jobs:
   artifact-registry:
     runs-on: ubuntu-latest
     needs:
-      - appinspect
       - security-virustotal
     outputs:
       artifact: ${{ steps.artifactid.outputs.result }}
@@ -1107,22 +1107,24 @@ jobs:
   publish:
     if: always()
     needs:
-      - run-knowledge-tests
-      - run-modinput-tests
-      - run-ui-tests
-      - run-unit-tests
-      - setup
-      - artifact-registry
-      - build
       - meta
-      - test-inventory
-      - review_secrets
-      - snyk
-      - semgrep
+      - compliance-sample-scanner
       - compliance-dependencies
       - compliance-copyrights
       - lint
-      - compliance-sample-scanner
+      - review_secrets
+      - semgrep
+      - snyk
+      - build
+      - security-virustotal
+      - test-inventory
+      - run-unit-tests
+      - appinspect
+      - artifact-registry
+      - setup
+      - run-knowledge-tests
+      - run-modinput-tests
+      - run-ui-tests
     runs-on: ubuntu-latest
     env:
       NEEDS: ${{ toJson(needs) }}
