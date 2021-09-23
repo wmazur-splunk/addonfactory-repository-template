@@ -148,6 +148,7 @@ jobs:
 
   snyk:
     name: security-vuln-snyk
+    continue-on-error: true
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -832,7 +833,7 @@ jobs:
       fail-fast: false
       matrix:
         splunk: ${{ fromJson(needs.meta.outputs.matrix_supportedSplunk) }}
-        browser: ["chrome:92", "firefox", "safari"]
+        browser: ["chrome", "firefox", "safari"]
     container:
       image: ghcr.io/splunk/workflow-engine-base:2.0.3
     env:
@@ -845,15 +846,6 @@ jobs:
       TEST_TYPE: "ui"
       TEST_ARGS: "--browser ${{ matrix.browser }}"
     steps:
-      - name: set browser name
-        run: |
-          if [[ "${{ matrix.browser }}" =~ ":" ]]
-          then
-            echo "BROWSER=$(echo "${{ matrix.browser }}" | cut -d ":" -f 1)" >> $GITHUB_ENV
-          else
-            echo "BROWSER=$(echo "${{ matrix.browser }}")" >> $GITHUB_ENV
-          fi
-          env
       - uses: actions/checkout@v2
         with:
           submodules: recursive
@@ -960,14 +952,14 @@ jobs:
       - uses: actions/upload-artifact@v2.2.4
         if: always()
         with:
-          name: archive splunk ${{ matrix.splunk.version }} ${{ env.TEST_TYPE }} ${{ env.BROWSER }} tests logs
+          name: archive splunk ${{ matrix.splunk.version }} ${{ env.TEST_TYPE }} ${{ matrix.browser }} tests logs
           path: |
             ${{ needs.setup.outputs.directory-path }}/argo-logs
       - name: Test Report
         uses: dorny/test-reporter@v1
         if: always()
         with:
-          name: splunk ${{ matrix.splunk.version }} ${{ env.TEST_TYPE }} ${{ env.BROWSER }} test report
+          name: splunk ${{ matrix.splunk.version }} ${{ env.TEST_TYPE }} ${{ matrix.browser }} test report
           path: "${{ needs.setup.outputs.directory-path }}/test-results/*.xml"
           reporter: java-junit
   run-modinput-tests:
