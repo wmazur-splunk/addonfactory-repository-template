@@ -7,7 +7,7 @@ name: sync-develop
 
 on:
   push:
-    branches: [develop]
+    branches: [develop, test/debug-browser-and-retry-issue]
 
 jobs:
   sync:
