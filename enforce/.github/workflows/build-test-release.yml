@@ -614,13 +614,21 @@ jobs:
           fi
       - name: Retrying workflow
         id: retry-wf
+        shell: bash
         env:
           ARGO_TOKEN: ${{ steps.get-argo-token.outputs.argo-token }}
-        if: ${{ steps.is-pod-deleted.outputs.retry-workflow == 'true' }}
+        if: always()
         run: |
-          WORKFLOW_NAME=`argo resubmit -v -o json -n workflows ${{ steps.run-tests.outputs.workflow-name }} | jq -r .metadata.name`
-          echo "::set-output name=workflow-name::$(echo $WORKFLOW_NAME)"
-          argo logs --follow ${WORKFLOW_NAME} -n workflows
+          set -o xtrace
+          if [[ "${{ steps.is-pod-deleted.outputs.retry-workflow }}" == "true" ]]
+          then
+            WORKFLOW_NAME=`argo resubmit -v -o json -n workflows ${{ steps.run-tests.outputs.workflow-name }} | jq -r .metadata.name`
+            echo "::set-output name=workflow-name::$(echo $WORKFLOW_NAME)"
+            argo logs --follow ${WORKFLOW_NAME} -n workflows
+          else
+            echo "No retry required"
+            argo watch ${{ steps.run-tests.outputs.workflow-name }} -n workflows
+          fi
       - name: check if workflow completed
         env:
           ARGO_TOKEN: ${{ steps.get-argo-token.outputs.argo-token }}
@@ -756,13 +764,21 @@ jobs:
           fi
       - name: Retrying workflow
         id: retry-wf
+        shell: bash
         env:
           ARGO_TOKEN: ${{ steps.get-argo-token.outputs.argo-token }}
-        if: ${{ steps.is-pod-deleted.outputs.retry-workflow == 'true' }}
+        if: always()
         run: |
-          WORKFLOW_NAME=`argo resubmit -v -o json -n workflows ${{ steps.run-tests.outputs.workflow-name }} | jq -r .metadata.name`
-          echo "::set-output name=workflow-name::$(echo $WORKFLOW_NAME)"
-          argo logs --follow ${WORKFLOW_NAME} -n workflows
+          set -o xtrace
+          if [[ "${{ steps.is-pod-deleted.outputs.retry-workflow }}" == "true" ]]
+          then
+            WORKFLOW_NAME=`argo resubmit -v -o json -n workflows ${{ steps.run-tests.outputs.workflow-name }} | jq -r .metadata.name`
+            echo "::set-output name=workflow-name::$(echo $WORKFLOW_NAME)"
+            argo logs --follow ${WORKFLOW_NAME} -n workflows
+          else
+            echo "No retry required"
+            argo watch ${{ steps.run-tests.outputs.workflow-name }} -n workflows
+          fi
       - name: check if workflow completed
         env:
           ARGO_TOKEN: ${{ steps.get-argo-token.outputs.argo-token }}
@@ -832,7 +848,7 @@ jobs:
       fail-fast: false
       matrix:
         splunk: ${{ fromJson(needs.meta.outputs.matrix_supportedSplunk) }}
-        browser: ["chrome:92", "firefox", "safari"]
+        browser: ["chrome", "firefox", "safari"]
     container:
       image: ghcr.io/splunk/workflow-engine-base:2.0.3
     env:
@@ -864,7 +880,7 @@ jobs:
         run: |
           RANDOM_STRING=`head -3 /dev/urandom | tr -cd '[:lower:]' | cut -c -4`
           JOB_NAME=${{ needs.setup.outputs.job-name }}-${RANDOM_STRING}
-          JOB_NAME=`echo $JOB_NAME | sed -e "s/TEST-TYPE/${{ env.TEST_TYPE }}/g"`
+          JOB_NAME=`echo $JOB_NAME | sed -e "s/TEST-TYPE/${{ env.TEST_TYPE }}-${{ matrix.browser }}/g"`
           JOB_NAME=`echo $JOB_NAME | sed "s/[_.:]/-/g"`
           JOB_NAME=`echo $JOB_NAME | tr '[:upper:]' '[:lower:]'`
           echo "::set-output name=job-name::$(echo $JOB_NAME)"
@@ -898,13 +914,21 @@ jobs:
           fi
       - name: Retrying workflow
         id: retry-wf
+        shell: bash
         env:
           ARGO_TOKEN: ${{ steps.get-argo-token.outputs.argo-token }}
-        if: ${{ steps.is-pod-deleted.outputs.retry-workflow == 'true' }}
+        if: always()
         run: |
-          WORKFLOW_NAME=`argo resubmit -v -o json -n workflows ${{ steps.run-tests.outputs.workflow-name }} | jq -r .metadata.name`
-          echo "::set-output name=workflow-name::$(echo $WORKFLOW_NAME)"
-          argo logs --follow ${WORKFLOW_NAME} -n workflows
+          set -o xtrace
+          if [[ "${{ steps.is-pod-deleted.outputs.retry-workflow }}" == "true" ]]
+          then
+            WORKFLOW_NAME=`argo resubmit -v -o json -n workflows ${{ steps.run-tests.outputs.workflow-name }} | jq -r .metadata.name`
+            echo "::set-output name=workflow-name::$(echo $WORKFLOW_NAME)"
+            argo logs --follow ${WORKFLOW_NAME} -n workflows
+          else
+            echo "No retry required"
+            argo watch ${{ steps.run-tests.outputs.workflow-name }} -n workflows
+          fi
       - name: check if workflow completed
         env:
           ARGO_TOKEN: ${{ steps.get-argo-token.outputs.argo-token }}
@@ -1040,13 +1064,21 @@ jobs:
           fi
       - name: Retrying workflow
         id: retry-wf
+        shell: bash
         env:
           ARGO_TOKEN: ${{ steps.get-argo-token.outputs.argo-token }}
-        if: ${{ steps.is-pod-deleted.outputs.retry-workflow == 'true' }}
+        if: always()
         run: |
-          WORKFLOW_NAME=`argo resubmit -v -o json -n workflows ${{ steps.run-tests.outputs.workflow-name }} | jq -r .metadata.name`
-          echo "::set-output name=workflow-name::$(echo $WORKFLOW_NAME)"
-          argo logs --follow ${WORKFLOW_NAME} -n workflows
+          set -o xtrace
+          if [[ "${{ steps.is-pod-deleted.outputs.retry-workflow }}" == "true" ]]
+          then
+            WORKFLOW_NAME=`argo resubmit -v -o json -n workflows ${{ steps.run-tests.outputs.workflow-name }} | jq -r .metadata.name`
+            echo "::set-output name=workflow-name::$(echo $WORKFLOW_NAME)"
+            argo logs --follow ${WORKFLOW_NAME} -n workflows
+          else
+            echo "No retry required"
+            argo watch ${{ steps.run-tests.outputs.workflow-name }} -n workflows
+          fi
       - name: check if workflow completed
         env:
           ARGO_TOKEN: ${{ steps.get-argo-token.outputs.argo-token }}
