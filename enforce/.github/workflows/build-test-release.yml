@@ -173,7 +173,7 @@ jobs:
     needs:
       - review_secrets
       - snyk
-      - semgrep
+      #- semgrep
       #- lint
       #- compliance-copyrights
       - compliance-dependencies
@@ -352,6 +352,10 @@ jobs:
            fi
           if [ ! -f requirements_dev.txt ]; then echo no requirements;exit 0 ;fi
           pip install -r requirements_dev.txt
+      - name: Create directories
+        run: |
+          mkdir -p /opt/splunk/var/log/splunk
+          chmod -R 777 /opt/splunk/var/log/splunk
       - name: Copy pytest ini
         run: cp tests/unit/pytest-ci.ini pytest.ini
       - name: Run Pytest with coverage
