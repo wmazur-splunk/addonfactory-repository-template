@@ -5,10 +5,8 @@ splunk-add-on-for-bmc-remedy,Splunk_TA_remedy,internal,"Splunk Add-on for BMC Re
 splunk-add-on-for-box,Splunk_TA_box,internal,"Splunk Add-on for Box",main
 splunk-add-on-for-bromium,Splunk_TA_bromium,internal,"Splunk Add-on for Bromium",main
 splunk-add-on-for-carbon-black,Splunk_TA_bit9-carbonblack,internal,"Splunk Add-on for Carbon Black",main
-splunk-add-on-for-check-point-opsec-lea,Splunk_TA_checkpoint-opseclea,internal,"Splunk Add-on for Check Point OPSEC LEA",main
 splunk-add-on-for-cisco-asa,Splunk_TA_cisco-asa,internal,"Splunk Add-on for Cisco ASA",main
 splunk-add-on-for-cisco-esa,Splunk_TA_cisco-esa,internal,"Splunk Add-on for Cisco ESA",main
-splunk-add-on-for-cisco-firesight,Splunk_TA_sourcefire,internal,"Splunk Add-on for Cisco FireSIGHT",main
 splunk-add-on-for-cisco-identity-services,Splunk_TA_cisco-ise,internal,"Splunk Add-on for Cisco ISE",main
 splunk-add-on-for-cisco-ucs,Splunk_TA_cisco-ucs,internal,"Splunk Add-on for Cisco UCS",main
 splunk-add-on-for-cisco-wsa,Splunk_TA_cisco-wsa,internal,"Splunk Add-on for Cisco WSA",main
@@ -30,7 +28,6 @@ splunk-add-on-for-juniper,Splunk_TA_juniper,internal,"Splunk Add-on for Juniper"
 splunk-add-on-for-linux,Splunk_TA_linux,internal,"Splunk Add-on for Linux",main
 splunk-add-on-for-mcafee-epo-syslog,Splunk_TA_mcafee_epo_syslog,internal,"Splunk Add-on for McAfee EPO Syslog",main
 splunk-add-on-for-mcafee-web-gateway,Splunk_TA_mcafee-wg,internal,"Splunk Add-on for McAfee Web Gateway",main
-splunk-add-on-for-mcafee,Splunk_TA_mcafee,internal,"Splunk Add-on for McAfee",main
 splunk-add-on-for-microsoft-cloud-services,Splunk_TA_microsoft-cloudservices,internal,"Splunk Add-on for Microsoft Cloud Services",main
 splunk-add-on-for-microsoft-hyper-v,Splunk_TA_microsoft-hyperv,internal,"Splunk Add-on for Microsoft Hyper-V",main
 splunk-add-on-for-microsoft-iis,Splunk_TA_microsoft-iis,internal,"Splunk Add-on for Microsoft IIS",main
@@ -55,7 +52,6 @@ splunk-add-on-for-symantec-endpoint-protection,Splunk_TA_symantec-ep,internal,"S
 splunk-add-on-for-tomcat,Splunk_TA_tomcat,internal,"Splunk Add-on for Tomcat",main
 splunk-add-on-for-unix-and-linux,Splunk_TA_nix,internal,"Splunk Add-on for Unix and Linux",main
 splunk-add-on-for-websense-dlp,Splunk_TA_websense-dlp,internal,"Splunk Add-on for Websense DLP",main
-splunk-add-on-for-zeek-aka-bro,Splunk_TA_bro,internal,"Splunk Add-on for Zeek aka Bro",main
 splunk-add-on-for-rsa-securid-cas,Splunk_TA_rsa_securid_cas,internal,"Splunk Add-on for RSA SecurID CAS",main
 splunk-add-on-for-zoom,Splunk_TA_zoom,internal,"Splunk Add-on for Zoom",main
 splunk-add-on-for-google-gsuite,Splunk_TA_google-gsuite,internal,"Splunk Add-on for G Suite",main
@@ -83,10 +79,14 @@ splunk-add-on-for-proofpoint-email,TA_pps,internal,"Proofpoint Email Security Ad
 splunk-add-on-for-cisco-cloudlock,cisco-cloud-security,internal,"Cisco Cloud Security",main
 google-chrome-add-on-for-splunk,TA_google_chrome,internal,"Google Chrome Add-on for Splunk",main
 splunk-add-on-for-microsoft-azure,TA-MS-AAD,internal,"Microsoft Azure Add-on for Splunk",main
-splunk-dbx-add-on-for-microsoft-sql-server,Splunk_DBX_mssql,"Splunk DBX Add-on for Microsoft SQL Server",main
-splunk-dbx-add-on-for-mysql,Splunk_DBX_mysql,"Splunk DBX Add-on for MySQL",main
-splunk-dbx-add-on-for-postgres,Splunk_DBX_postgres,"Splunk DBX Add-on for Postgres",main
-splunk-dbx-add-on-for-Redshift,Splunk_DBX_redshift,"Splunk DBX Add-on for redshift",main
-splunk-dbx-add-on-for-presto,Splunk_DBX_presto,"Splunk DBX Add-on for Presto",main
-splunk-dbx-add-on-for-athena,Splunk_DBX_athena,"Splunk DBX Add-on for Athena",main
-splunk-dbx-add-on-for-snowflake,Splunk_DBX_snowflake,"Splunk DBX Add-on for Snowflake",main
+splunk-dbx-add-on-for-microsoft-sql-server,Splunk_DBX_mssql,internal,"Splunk DBX Add-on for Microsoft SQL Server",main
+splunk-dbx-add-on-for-mysql,Splunk_DBX_mysql,internal,"Splunk DBX Add-on for MySQL",main
+splunk-dbx-add-on-for-postgres,Splunk_DBX_postgres,internal,"Splunk DBX Add-on for Postgres",main
+splunk-dbx-add-on-for-Redshift,Splunk_DBX_redshift,internal,"Splunk DBX Add-on for redshift",main
+splunk-dbx-add-on-for-presto,Splunk_DBX_presto,internal,"Splunk DBX Add-on for Presto",main
+splunk-dbx-add-on-for-athena,Splunk_DBX_athena,internal,"Splunk DBX Add-on for Athena",main
+splunk-dbx-add-on-for-snowflake,Splunk_DBX_snowflake,internal,"Splunk DBX Add-on for Snowflake",main
+splunk-add-on-for-jira-cloud,Splunk_TA_jira-cloud,internal,"Splunk Add-on for Jira Cloud",main
+splunk-dbx-add-on-for-oracle,Splunk_DBX_oracle,internal,"Splunk DBX Add-on for Oracle",main
+splunk-add-on-for-github-ta-testing,Splunk_TA_github-ta-testing,internal,"Splunk Add-on for Github TA testing",main
+splunk-add-on-for-stream-wire-data,Splunk_TA_stream_wire_data,internal,"Splunk Add-on for Stream WireData",main
