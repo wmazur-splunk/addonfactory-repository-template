@@ -631,7 +631,8 @@ jobs:
             argo logs --follow ${WORKFLOW_NAME} -n workflows
           else
             echo "No retry required"
-            argo watch ${{ steps.run-tests.outputs.workflow-name }} -n workflows
+            argo wait ${{ steps.run-tests.outputs.workflow-name }} -n workflows
+            argo watch ${{ steps.run-tests.outputs.workflow-name }} -n workflows | grep "test-addon"
           fi
       - name: check if workflow completed
         env:
@@ -781,7 +782,8 @@ jobs:
             argo logs --follow ${WORKFLOW_NAME} -n workflows
           else
             echo "No retry required"
-            argo watch ${{ steps.run-tests.outputs.workflow-name }} -n workflows
+            argo wait ${{ steps.run-tests.outputs.workflow-name }} -n workflows
+            argo watch ${{ steps.run-tests.outputs.workflow-name }} -n workflows | grep "test-addon"
           fi
       - name: check if workflow completed
         env:
@@ -931,7 +933,8 @@ jobs:
             argo logs --follow ${WORKFLOW_NAME} -n workflows
           else
             echo "No retry required"
-            argo watch ${{ steps.run-tests.outputs.workflow-name }} -n workflows
+            argo wait ${{ steps.run-tests.outputs.workflow-name }} -n workflows
+            argo watch ${{ steps.run-tests.outputs.workflow-name }} -n workflows | grep "test-addon"
           fi
       - name: check if workflow completed
         env:
@@ -1081,7 +1084,8 @@ jobs:
             argo logs --follow ${WORKFLOW_NAME} -n workflows
           else
             echo "No retry required"
-            argo watch ${{ steps.run-tests.outputs.workflow-name }} -n workflows
+            argo wait ${{ steps.run-tests.outputs.workflow-name }} -n workflows
+            argo watch ${{ steps.run-tests.outputs.workflow-name }} -n workflows | grep "test-addon"
           fi
       - name: check if workflow completed
         env:
