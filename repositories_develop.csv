@@ -48,15 +48,12 @@ splunk-add-on-for-tomcat,Splunk_TA_tomcat,internal,"Splunk Add-on for Tomcat",ma
 splunk-add-on-for-unix-and-linux,Splunk_TA_nix,internal,"Splunk Add-on for Unix and Linux",main
 splunk-add-on-for-websense-dlp,Splunk_TA_websense-dlp,internal,"Splunk Add-on for Websense DLP",main
 splunk-add-on-for-rsa-securid-cas,Splunk_TA_rsa_securid_cas,internal,"Splunk Add-on for RSA SecurID CAS",main
-splunk-add-on-for-zoom,Splunk_TA_zoom,internal,"Splunk Add-on for Zoom",main
-splunk-add-on-for-google-gsuite,Splunk_TA_google-gsuite,internal,"Splunk Add-on for G Suite",main
 splunk-add-on-for-cef,TA-cef-for-splunk,public,"TA CEF for Splunk",main
 splunk-add-on-for-mcafee-nsp,Splunk_TA_mcafee_nsp,internal,"Splunk Add-on for McAfee NSP",main
 splunk-add-on-for-ucc-example,Splunk_TA_UCCExample,public,"Splunk_TA_UCCExample",main
 seckit_sa_geolocation,SecKit_SA_geolocation,public,"SecKit Geolocation with Maxmind",main
 splunk-add-on-for-modinput-test,Splunk_TA_Modinput_Test,public,"Splunk Add-on for Modinput Test",main
 splunk-add-on-for-checkpoint-log-exporter,Splunk_TA_checkpoint_log_exporter,internal,"Splunk Add-on for Checkpoint Log Exporter",main
-dropbox-app-for-splunk,splunk-app-dropbox,internal,"Dropbox Business App for Splunk",main
 dropbox-add-on-for-splunk,TA_Dropbox,internal,"Dropbox Business Add-on for Splunk",main
 splunk-add-on-for-sc4snmp,Splunk_TA_sc4snmp,public,"Splunk Add-on for Splunk Connect for SNNP",main
 splunk-add-on-for-cisco-meraki,Splunk_TA_cisco-meraki,internal,"Splunk Add-on for Cisco Meraki",main
