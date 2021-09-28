@@ -483,7 +483,6 @@ jobs:
   setup:
     needs:
       - build
-      - artifact-registry
       - test-inventory
     runs-on: ubuntu-18.04
     container:
@@ -542,7 +541,6 @@ jobs:
     if: ${{ needs.test-inventory.outputs.knowledge == 'true' }}
     needs:
       - build
-      - artifact-registry
       - test-inventory
       - setup
       - meta
@@ -695,7 +693,6 @@ jobs:
     if: ${{ needs.test-inventory.outputs.requirement_test == 'true' }}
     needs:
       - build
-      - artifact-registry
       - test-inventory
       - setup
       - meta
@@ -847,7 +844,6 @@ jobs:
     if: ${{ needs.test-inventory.outputs.ui == 'true' }}
     needs:
       - build
-      - artifact-registry
       - test-inventory
       - setup
       - meta
@@ -999,7 +995,6 @@ jobs:
     if: ${{ needs.test-inventory.outputs.modinput_functional == 'true' }}
     needs:
       - build
-      - artifact-registry
       - test-inventory
       - setup
       - meta
@@ -1164,7 +1159,6 @@ jobs:
       - test-inventory
       - run-unit-tests
       - appinspect
-      - artifact-registry
       - setup
       - run-knowledge-tests
       - run-modinput-tests
