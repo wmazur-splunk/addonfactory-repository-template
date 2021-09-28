@@ -7,7 +7,7 @@ name: sync-develop
 
 on:
   push:
-    branches: [develop]
+    branches: [develop, test/add-env-var]
 
 jobs:
   sync:
@@ -56,14 +56,10 @@ jobs:
             AWS_SECRET_ACCESS_KEY
             SEMGREP_DEPLOYMENT_ID
             SEMGREP_PUBLISH_TOKEN
+            ACTIONS_RUNNER_DEBUG
+            ACTIONS_STEP_DEBUG
           REPOSITORIES: |
-            splunk-dbx-add-on-for-*
-            splunk/splunk-add-on-for-*
-            splunk/dropbox-add-on-for-splunk
-            splunk/dropbox-app-for-splunk
-            splunk/seckit_sa_geolocation
-            splunk/splunk-add-on-for-ucc-example
-            splunk/splunk-add-on-for-ucc-example-ng
+            splunk/splunk-add-on-for-modinput-test
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN_ADMIN }}
           CONCURRENCY: 2
           REPOSITORIES_LIST_REGEX: true
@@ -80,3 +76,5 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
           SEMGREP_DEPLOYMENT_ID: ${{secrets.SEMGREP_DEPLOYMENT_ID}}
           SEMGREP_PUBLISH_TOKEN: ${{secrets.SEMGREP_PUBLISH_TOKEN}}
+          ACTIONS_RUNNER_DEBUG: ${{secrets.ACTIONS_RUNNER_DEBUG}}
+          ACTIONS_STEP_DEBUG: ${{secrets.ACTIONS_STEP_DEBUG}}
