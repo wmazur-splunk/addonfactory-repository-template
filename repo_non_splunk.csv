@@ -1,0 +1,12 @@
+splunk-add-on-for-rsa-dlp,Splunk_TA_rsa-dlp,internal,"Splunk Add-on for RSA DLP",main
+seckit_sa_geolocation,SecKit_SA_geolocation,public,"SecKit Geolocation with Maxmind",main
+splunk-add-on-for-modinput-test,Splunk_TA_Modinput_Test,public,"Splunk Add-on for Modinput Test",main
+dropbox-add-on-for-splunk,TA_Dropbox,internal,"Dropbox Business Add-on for Splunk",main
+splunk-add-on-for-crowdstrike-fdr,Splunk_TA_CrowdStrike-FDR,internal,"Splunk Add-on for CrowdStrike FDR",main
+splunk-add-on-for-okta-identity-cloud,TA-Okta_Identity_Cloud_for_Splunk,internal,"Okta Identity Cloud Add-on for Splunk",main
+splunk-add-on-for-google-workspace,Splunk_TA_Google_Workspace,internal,"Google Workspace Add-on for Splunk",main
+splunk-add-on-for-cisco-umbrella,Splunk_TA_cisco-umbrella,internal,"Splunk Add-on for Cisco Umbrella",main
+splunk-add-on-for-proofpoint-email,TA_pps,internal,"Proofpoint Email Security Add-On for Splunk",main
+splunk-add-on-for-cisco-cloudlock,cisco-cloud-security,internal,"Cisco Cloud Security",main
+google-chrome-add-on-for-splunk,TA_google_chrome,internal,"Google Chrome Add-on for Splunk",main
+splunk-add-on-for-microsoft-azure,TA-MS-AAD,internal,"Microsoft Azure Add-on for Splunk",main
