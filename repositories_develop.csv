@@ -59,7 +59,6 @@ splunk-add-on-for-tenable,TA-Tenable,internal,"Tenable Add-On for Splunk",main
 splunk-add-on-for-proofpoint-email,TA_pps,internal,"Proofpoint Email Security Add-On for Splunk",main
 splunk-add-on-for-cisco-cloudlock,cisco-cloud-security,internal,"Cisco Cloud Security",main
 google-chrome-add-on-for-splunk,TA_google_chrome,internal,"Google Chrome Add-on for Splunk",main
-splunk-add-on-for-microsoft-azure,TA-MS-AAD,internal,"Microsoft Azure Add-on for Splunk",main
 splunk-dbx-add-on-for-microsoft-sql-server,Splunk_DBX_mssql,internal,"Splunk DBX Add-on for Microsoft SQL Server",main
 splunk-dbx-add-on-for-mysql,Splunk_DBX_mysql,internal,"Splunk DBX Add-on for MySQL",main
 splunk-dbx-add-on-for-postgres,Splunk_DBX_postgres,internal,"Splunk DBX Add-on for Postgres",main
