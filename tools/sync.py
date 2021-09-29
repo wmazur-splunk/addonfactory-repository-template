@@ -13,7 +13,7 @@ def f(row):
 
 if __name__ == '__main__':
     inventory = []
-    with open('repo_ui.csv', newline='') as csvfile:
+    with open('repositories_develop.csv', newline='') as csvfile:
         fields = ['REPO', 'TAID', 'REPOVISIBILITY', 'TITLE', 'BRANCH', 'OTHER']
         rows = csv.DictReader(csvfile,fieldnames=fields)
         for r in rows:
