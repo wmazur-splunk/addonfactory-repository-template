@@ -60,6 +60,7 @@ jobs:
             splunk-dbx-add-on-for-*
             splunk/splunk-add-on-for-*
             splunk/dropbox-add-on-for-splunk
+            splunk/google-chrome-add-on-for-splunk
             splunk/dropbox-app-for-splunk
             splunk/seckit_sa_geolocation
             splunk/splunk-add-on-for-ucc-example
