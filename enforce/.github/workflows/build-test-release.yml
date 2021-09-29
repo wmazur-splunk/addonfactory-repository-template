@@ -627,7 +627,7 @@ jobs:
           then
             WORKFLOW_NAME=`argo resubmit -v -o json -n workflows ${{ steps.run-tests.outputs.workflow-name }} | jq -r .metadata.name`
             echo "::set-output name=workflow-name::$(echo $WORKFLOW_NAME)"
-            argo logs --follow ${WORKFLOW_NAME} -n workflows
+            argo logs --follow ${WORKFLOW_NAME} -n workflows || echo "... there was an error fetching logs, the workflow is still in progress. please wait for the workflow to complete ..."
           else
             echo "No retry required"
             argo wait ${{ steps.run-tests.outputs.workflow-name }} -n workflows
@@ -778,7 +778,7 @@ jobs:
           then
             WORKFLOW_NAME=`argo resubmit -v -o json -n workflows ${{ steps.run-tests.outputs.workflow-name }} | jq -r .metadata.name`
             echo "::set-output name=workflow-name::$(echo $WORKFLOW_NAME)"
-            argo logs --follow ${WORKFLOW_NAME} -n workflows
+            argo logs --follow ${WORKFLOW_NAME} -n workflows || echo "... there was an error fetching logs, the workflow is still in progress. please wait for the workflow to complete ..."
           else
             echo "No retry required"
             argo wait ${{ steps.run-tests.outputs.workflow-name }} -n workflows
@@ -929,7 +929,7 @@ jobs:
           then
             WORKFLOW_NAME=`argo resubmit -v -o json -n workflows ${{ steps.run-tests.outputs.workflow-name }} | jq -r .metadata.name`
             echo "::set-output name=workflow-name::$(echo $WORKFLOW_NAME)"
-            argo logs --follow ${WORKFLOW_NAME} -n workflows
+            argo logs --follow ${WORKFLOW_NAME} -n workflows || echo "... there was an error fetching logs, the workflow is still in progress. please wait for the workflow to complete ..."
           else
             echo "No retry required"
             argo wait ${{ steps.run-tests.outputs.workflow-name }} -n workflows
@@ -1080,7 +1080,7 @@ jobs:
           then
             WORKFLOW_NAME=`argo resubmit -v -o json -n workflows ${{ steps.run-tests.outputs.workflow-name }} | jq -r .metadata.name`
             echo "::set-output name=workflow-name::$(echo $WORKFLOW_NAME)"
-            argo logs --follow ${WORKFLOW_NAME} -n workflows
+            argo logs --follow ${WORKFLOW_NAME} -n workflows || echo "... there was an error fetching logs, the workflow is still in progress. please wait for the workflow to complete ..."
           else
             echo "No retry required"
             argo wait ${{ steps.run-tests.outputs.workflow-name }} -n workflows

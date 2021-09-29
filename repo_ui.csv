@@ -8,5 +8,3 @@ splunk-add-on-for-salesforce,Splunk_TA_salesforce,internal,"Splunk Add-on for Sa
 splunk-add-on-for-servicenow,Splunk_TA_snow,internal,"Splunk Add-on for ServiceNow",main
 splunk-add-on-for-rsa-securid-cas,Splunk_TA_rsa_securid_cas,internal,"Splunk Add-on for RSA SecurID CAS",main
 splunk-add-on-for-ucc-example,Splunk_TA_UCCExample,public,"Splunk_TA_UCCExample",main
-splunk-add-on-for-ibm-websphere-application-server,Splunk_TA_ibm-was,internal,"Splunk Add-on for IBM WebSphere Application Server",main
-
