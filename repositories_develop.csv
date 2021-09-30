@@ -68,3 +68,12 @@ splunk-dbx-add-on-for-athena,Splunk_DBX_athena,internal,"Splunk DBX Add-on for A
 splunk-dbx-add-on-for-snowflake,Splunk_DBX_snowflake,internal,"Splunk DBX Add-on for Snowflake",main
 splunk-add-on-for-jira-cloud,Splunk_TA_jira-cloud,internal,"Splunk Add-on for Jira Cloud",main
 splunk-dbx-add-on-for-oracle,Splunk_DBX_oracle,internal,"Splunk DBX Add-on for Oracle",main
+splunk-add-on-for-bmc-remedy,Splunk_TA_remedy,internal,"Splunk Add-on for BMC Remedy",main
+splunk-add-on-for-citrix-netscaler,Splunk_TA_citrix-netscaler,internal,"Splunk Add-on for Citrix NetScaler",main
+splunk-add-on-for-cyberark-epm,Splunk_TA_cyberark_epm,internal,Splunk Add-on for CyberArk EPM,main
+splunk-add-on-for-f5-big-ip,Splunk_TA_f5-bigip,internal,"Splunk Add-on for F5 BIG-IP",main
+splunk-add-on-for-microsoft-system-center-operations-manager,Splunk_TA_microsoft-scom,internal,"Splunk Add-on for Microsoft SCOM",main
+splunk-add-on-for-salesforce,Splunk_TA_salesforce,internal,"Splunk Add-on for Salesforce",main
+splunk-add-on-for-servicenow,Splunk_TA_snow,internal,"Splunk Add-on for ServiceNow",main
+splunk-add-on-for-rsa-securid-cas,Splunk_TA_rsa_securid_cas,internal,"Splunk Add-on for RSA SecurID CAS",main
+splunk-add-on-for-ucc-example,Splunk_TA_UCCExample,public,"Splunk_TA_UCCExample",main

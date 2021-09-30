@@ -1173,12 +1173,14 @@ jobs:
         shell: bash
         run: |
           RUN_PUBLISH=`echo $NEEDS | jq ".[] |  select(  ( .result != \"skipped\" ) and .result != \"success\" ) | length == 0"`
-          if [[ $RUN_PUBLISH != 'false' ]]
+          if [[ $RUN_PUBLISH != *'false'* ]]
           then
               echo "::set-output name=run-publish::true"
+          else
+              echo "::set-output name=run-publish::false"
           fi
       - name: exit without publish
-        if: ${{ steps.check.outputs.run-publish != 'true' }}
+        if: ${{ steps.check.outputs.run-publish == 'false' || github.event_name == 'pull_request'}}
         run: |
           echo " some test job failed. "
           exit 1
