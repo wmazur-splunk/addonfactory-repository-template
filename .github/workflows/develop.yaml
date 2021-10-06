@@ -7,7 +7,7 @@ name: sync-develop
 
 on:
   push:
-    branches: [develop]
+    branches: [test/add-secrets-to-repo]
 
 jobs:
   secrets:
