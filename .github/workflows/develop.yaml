@@ -31,8 +31,8 @@ jobs:
             SEMGREP_DEPLOYMENT_ID
             SEMGREP_PUBLISH_TOKEN
           REPOSITORIES: |
-            splunk/addonfactory-ucc-library
-            splunk/addon-factory-smartx-ui-test-library
+            splunk/pytest-splunk-addon
+            splunk/addonfactory-ta-library-python
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN_ADMIN }}
           CONCURRENCY: 2
           REPOSITORIES_LIST_REGEX: true
