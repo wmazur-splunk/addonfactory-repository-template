@@ -30,9 +30,11 @@ jobs:
             AWS_SECRET_ACCESS_KEY
             SEMGREP_DEPLOYMENT_ID
             SEMGREP_PUBLISH_TOKEN
+            SAUCE_IDENTIFIER
+            SAUCE_PASSWORD
+            SAUCE_USERNAME
           REPOSITORIES: |
-            splunk/pytest-splunk-addon
-            splunk/addonfactory-ta-library-python
+            splunk/addon-factory-smartx-ui-test-library
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN_ADMIN }}
           CONCURRENCY: 2
           REPOSITORIES_LIST_REGEX: true
@@ -49,3 +51,6 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
           SEMGREP_DEPLOYMENT_ID: ${{secrets.SEMGREP_DEPLOYMENT_ID}}
           SEMGREP_PUBLISH_TOKEN: ${{secrets.SEMGREP_PUBLISH_TOKEN}}
+          SAUCE_IDENTIFIER: ${{secrets.SAUCE_IDENTIFIER}}
+          SAUCE_PASSWORD: ${{secrets.SAUCE_PASSWORD}}
+          SAUCE_USERNAME: ${{secrets.SAUCE_USERNAME}}
