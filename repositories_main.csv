@@ -1,11 +1,7 @@
 splunk-add-on-for-amazon-kinesis-firehose,Splunk_TA_aws-kinesis-firehose,internal,"Splunk Add-on For Kinesis Firehose",main
-splunk-add-on-for-amazon-web-services,Splunk_TA_aws,internal,"Splunk Add-on for AWS",main
 splunk-add-on-for-box,Splunk_TA_box,internal,"Splunk Add-on for Box",main
 splunk-add-on-for-google-cloud-platform,Splunk_TA_google-cloudplatform,internal,"Splunk Add-on for Google Cloud Platform",main
 splunk-add-on-for-java-management-extensions,Splunk_TA_jmx,internal,"Splunk Add-on for Java Management Extensions",main
 splunk-add-on-for-jboss,Splunk_TA_jboss,internal,"Splunk Add-on for JBoss",main
 splunk-add-on-for-microsoft-cloud-services,Splunk_TA_microsoft-cloudservices,internal,"Splunk Add-on for Microsoft Cloud Services",main
 splunk-add-on-for-microsoft-office-365,splunk_ta_o365,internal,"Splunk Add-on for Microsoft Office 365",main
-splunk-add-on-for-nginx,Splunk_TA_nginx,internal,"Splunk Add-on for Nginx",main
-splunk-add-on-for-rsa-securid-cas,Splunk_TA_rsa_securid_cas,internal,"Splunk Add-on for RSA SecurID CAS",main
-splunk-add-on-for-crowdstrike-fdr,Splunk_TA_CrowdStrike-FDR,internal,"Splunk Add-on for CrowdStrike FDR",main
