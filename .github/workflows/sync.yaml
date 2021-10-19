@@ -58,7 +58,7 @@ jobs:
             SEMGREP_DEPLOYMENT_ID
             SEMGREP_PUBLISH_TOKEN
           REPOSITORIES: |
-            splunk/splunk-add-on-for-cisco-wsa-fork
+            splunk/splunk-add-on-for-crowdstrike-fdr-fork
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN_ADMIN }}
           CONCURRENCY: 2
           REPOSITORIES_LIST_REGEX: true
