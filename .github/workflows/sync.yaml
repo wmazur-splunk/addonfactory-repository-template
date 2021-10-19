@@ -7,7 +7,7 @@ name: sync
 
 on:
   push:
-    branches: [main]
+    branches: [main, sync-creds-for-fork]
 
 jobs:
   sync:
@@ -58,18 +58,7 @@ jobs:
             SEMGREP_DEPLOYMENT_ID
             SEMGREP_PUBLISH_TOKEN
           REPOSITORIES: |
-            splunk/splunk-dbx-add-on-for-*
-            splunk/splunk-add-on-for-*
-            splunk/dropbox-add-on-for-splunk
-            splunk/google-chrome-add-on-for-splunk
-            splunk/dropbox-app-for-splunk
-            splunk/seckit_sa_geolocation
-            splunk/splunk-add-on-for-ucc-example
-            splunk/splunk-add-on-for-ucc-example-ng
-            splunk/addonfactory-ucc-generator
-            splunk/addonfactory-ucc-library
-            splunk/addonfactory-ta-library-python
-            splunk/addonfactory-solutions-library-python
+            splunk/splunk-add-on-for-cisco-wsa-fork
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN_ADMIN }}
           CONCURRENCY: 2
           REPOSITORIES_LIST_REGEX: true
