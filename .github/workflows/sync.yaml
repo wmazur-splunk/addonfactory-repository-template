@@ -66,6 +66,9 @@ jobs:
             splunk/seckit_sa_geolocation
             splunk/splunk-add-on-for-ucc-example
             splunk/splunk-add-on-for-ucc-example-ng
+            splunk/addonfactory-ucc-generator
+            splunk/addonfactory-ucc-library
+            splunk/addonfactory-ta-library-python
             splunk/addonfactory-solutions-library-python
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN_ADMIN }}
           CONCURRENCY: 2
