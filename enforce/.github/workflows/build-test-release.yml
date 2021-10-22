@@ -684,6 +684,20 @@ jobs:
           name: archive splunk ${{ matrix.splunk.version }}${{ secrets.OTHER_TA_REQUIRED_CONFIGS }} ${{ env.TEST_TYPE }} tests logs
           path: |
             ${{ needs.setup.outputs.directory-path }}/argo-logs
+      - name: Upload cim-compliance-report for ${{ matrix.splunk.version }}
+        uses: actions/upload-artifact@v2
+        if: ${{ matrix.splunk.islatest == true }}
+        with:
+          name: cim-compliance-report
+          path: |
+            ${{ needs.setup.outputs.directory-path }}/test-results/cim-compliance-report.md
+      - name: Upload cim-field-report for ${{ matrix.splunk.version }}
+        uses: actions/upload-artifact@v2
+        if: ${{ matrix.splunk.islatest == true }}
+        with:
+          name: cim-field-report
+          path: |
+            ${{ needs.setup.outputs.directory-path }}/test-results/cim_field_report.json
       - name: Test Report
         uses: dorny/test-reporter@v1
         if: always()
@@ -1227,6 +1241,22 @@ jobs:
         id: download-package-splunkbase
         with:
           name: package-splunkbase
+          path: download/artifacts/deployment
+      - name: Download cim-compliance-report
+        id: download-cim-compliance-report
+        if: ${{ steps.semantic.outputs.new_release_published == 'true' }}
+        continue-on-error: true
+        uses: actions/download-artifact@v2
+        with:
+          name: cim-compliance-report
+          path: download/artifacts/deployment
+      - name: Download cim-field-report
+        id: download-cim-field-report
+        if: ${{ steps.semantic.outputs.new_release_published == 'true' }}
+        continue-on-error: true
+        uses: actions/download-artifact@v2
+        with:
+          name: cim-field-report
           path: download/artifacts/deployment
       - name: List of assets
         if: ${{ steps.semantic.outputs.new_release_published == 'true' }} 
