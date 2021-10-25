@@ -55,7 +55,6 @@ jobs:
             AWS_ACCESS_KEY_ID
             AWS_DEFAULT_REGION
             AWS_SECRET_ACCESS_KEY
-            SEMGREP_DEPLOYMENT_ID
             SEMGREP_PUBLISH_TOKEN
           REPOSITORIES: |
             splunk/splunk-dbx-add-on-for-*
@@ -84,5 +83,4 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{secrets.AWS_ACCESS_KEY_ID}}
           AWS_DEFAULT_REGION: ${{secrets.AWS_DEFAULT_REGION}}
           AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
-          SEMGREP_DEPLOYMENT_ID: ${{secrets.SEMGREP_DEPLOYMENT_ID}}
           SEMGREP_PUBLISH_TOKEN: ${{secrets.SEMGREP_PUBLISH_TOKEN}}
