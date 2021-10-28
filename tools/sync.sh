@@ -315,6 +315,11 @@ else
     if [[ -d .circleci ]]; then
         git rm -rf .circleci
     fi
+
+    if [[ ! -f ".app-vetting.yaml" ]]; then
+        touch .app-vetting.yaml
+    fi
+
     gh api /repos/$REPOORG/$REPO  -H 'Accept: application/vnd.github.nebula-preview+json' -X PATCH -F visibility=$REPOVISIBILITY
     git add . || exit 1
     git commit -am "test: common template rollout changes" || exit 1
