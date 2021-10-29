@@ -320,6 +320,10 @@ else
         touch .app-vetting.yaml
     fi
 
+    if [[ -f semtag ]]; then
+        git rm semtag
+    fi
+
     gh api /repos/$REPOORG/$REPO  -H 'Accept: application/vnd.github.nebula-preview+json' -X PATCH -F visibility=$REPOVISIBILITY
     git add . || exit 1
     git commit -am "test: common template rollout changes" || exit 1
