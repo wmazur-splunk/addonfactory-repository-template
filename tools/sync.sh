@@ -86,7 +86,7 @@ else
 
     if [ ! -d "work/$REPO" ]; then
         #hub clone $REPOORG/$REPO work/$REPO
-        git clone https://${GH_USER_ADMIN}:${GH_TOKEN_ADMIN}@github.com/$REPOORG/$REPO.git work/$REPO || exit 1
+        git clone --depth 1 https://${GH_USER_ADMIN}:${GH_TOKEN_ADMIN}@github.com/$REPOORG/$REPO.git work/$REPO || exit 1
         pushd work/$REPO || exit 1
         git checkout main || exit 1
     else
