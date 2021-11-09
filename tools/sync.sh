@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # echo all the commands 
-set -x 
-PRSUFFIX=develop
+set -x
 REPOORG=splunk
+BRANCH_NAME=test/common-template-rollout-github-actions
 
 command -v gh >/dev/null 2>&1 || { echo >&2 "I require gh but it's not installed.  Aborting."; exit 1; }
 command -v git >/dev/null 2>&1 || { echo >&2 "I require git but it's not installed.  Aborting."; exit 1; }
@@ -97,8 +97,8 @@ else
     fi
     git remote set-url origin https://${GH_USER_ADMIN}:${GH_TOKEN_ADMIN}@github.com/$REPOORG/$REPO.git
 
-    ( git checkout test/common-template-rollout-github-actions  && git checkout main && git branch -D test/common-template-rollout-github-actions ) || true
-    git checkout -B "test/common-template-rollout-github-actions" main
+    ( git checkout "$BRANCH_NAME"  && git checkout main && git branch -D "$BRANCH_NAME" ) || true
+    git checkout -B "$BRANCH_NAME" main
     git submodule update --init --recursive
 
     rsync -avh --include ".*" --ignore-existing ../../seed/ .
@@ -327,9 +327,9 @@ else
     gh api /repos/$REPOORG/$REPO  -H 'Accept: application/vnd.github.nebula-preview+json' -X PATCH -F visibility=$REPOVISIBILITY
     git add . || exit 1
     git commit -am "test: common template rollout changes" || exit 1
-    git push -f --set-upstream origin test/common-template-rollout-github-actions || exit 1
+    git push -f --set-upstream origin "$BRANCH_NAME" || exit 1
     sleep 10s
     gh pr create \
-        --title "Bump repository configuration from template${PR_SUFFIX}" --fill  || exit 1    
+        --title "Bump repository configuration from template${PR_SUFFIX}" --fill --head "$BRANCH_NAME" || exit 1
 fi
 popd
