@@ -324,6 +324,10 @@ else
         git rm semtag
     fi
 
+    if [[ -f "LICENSES/LicenseRef-Splunk-1-2020.txt" ]]; then
+        git rm LICENSES/LicenseRef-Splunk-1-2020.txt
+    fi
+
     gh api /repos/$REPOORG/$REPO  -H 'Accept: application/vnd.github.nebula-preview+json' -X PATCH -F visibility=$REPOVISIBILITY
     git add . || exit 1
     git commit -am "test: common template rollout changes" || exit 1
