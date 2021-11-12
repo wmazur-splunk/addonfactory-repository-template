@@ -69,6 +69,7 @@ jobs:
             splunk/addonfactory-ucc-library
             splunk/addonfactory-ta-library-python
             splunk/addonfactory-solutions-library-python
+            splunk/addonfactory-splunk-conf-parser-lib
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN_ADMIN }}
           CONCURRENCY: 2
           REPOSITORIES_LIST_REGEX: true
