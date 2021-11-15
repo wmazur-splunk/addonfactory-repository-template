@@ -85,3 +85,28 @@ jobs:
           AWS_DEFAULT_REGION: ${{secrets.AWS_DEFAULT_REGION}}
           AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
           SEMGREP_PUBLISH_TOKEN: ${{secrets.SEMGREP_PUBLISH_TOKEN}}
+  secrets-pypi:
+    runs-on: ubuntu-latest
+    needs:
+      - secrets
+    steps:
+      - name: Sync PyPI Secrets
+        uses: google/secrets-sync-action@v1.4.1
+        with:
+          SECRETS: |
+            PYPI_USERNAME
+            PYPI_TOKEN
+          REPOSITORIES: |
+            splunk/addonfactory-ucc-generator
+            splunk/addonfactory-ucc-library
+            splunk/addonfactory-ta-library-python
+            splunk/addonfactory-solutions-library-python
+            splunk/addonfactory-splunk-conf-parser-lib
+            splunk/pytest-splunk-addon
+            splunk/addon-factory-smartx-ui-test-library
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN_ADMIN }}
+          CONCURRENCY: 2
+          REPOSITORIES_LIST_REGEX: false
+        env:
+          PYPI_USERNAME: ${{secrets.PYPI_USERNAME}}
+          PYPI_TOKEN: ${{secrets.PYPI_TOKEN}}
