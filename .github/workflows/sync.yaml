@@ -37,6 +37,7 @@ jobs:
           GH_TOKEN_ADMIN: ${{ secrets.GH_TOKEN_ADMIN }}
   secrets:
     runs-on: ubuntu-latest
+    continue-on-error: true
     needs:
       - sync
     steps:
