@@ -24,17 +24,27 @@ jobs:
           pip3 install reuse
           pip3 install poetry
 
+      - name: Import GPG key
+        uses: crazy-max/ghaction-import-gpg@v4
+        with:
+          gpg_private_key: ${{ secrets.SA_GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.SA_GPG_PASSPHRASE }}
+          git_user_signingkey: true
+          git_commit_gpgsign: true
+
       - name: sync
         run: |
           export PR_SUFFIX=-${{ github.ref }}
           mkdir work || true
-          echo $GH_TOKEN_ADMIN | gh auth login --with-token   
-          git config  --global user.email "addonfactory@splunk.com"
-          git config  --global user.name "addonfactory"
+          echo ${{ secrets.SA_GH_TOKEN_ADMIN }} | gh auth login --with-token
+          git config --global user.email ${{ secrets.SA_GH_USER_EMAIL }}
+          git config --global user.name ${{ secrets.SA_GH_USER_ADMIN }}
+          git config --global commit.gpgsign true
           python3 tools/sync.py
         env:
-          GH_USER_ADMIN: ${{ secrets.GH_USER_ADMIN }}
-          GH_TOKEN_ADMIN: ${{ secrets.GH_TOKEN_ADMIN }}
+          GH_USER_ADMIN: ${{ secrets.SA_GH_USER_ADMIN }}
+          GH_TOKEN_ADMIN: ${{ secrets.SA_GH_TOKEN_ADMIN }}
+          GH_USER_EMAIL: ${{ secrets.SA_GH_USER_EMAIL }}
   secrets:
     runs-on: ubuntu-latest
     continue-on-error: true
@@ -71,12 +81,12 @@ jobs:
             splunk/addonfactory-ta-library-python
             splunk/addonfactory-solutions-library-python
             splunk/addonfactory-splunk-conf-parser-lib
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN_ADMIN }}
+          GITHUB_TOKEN: ${{ secrets.SA_GH_TOKEN_ADMIN }}
           CONCURRENCY: 2
           REPOSITORIES_LIST_REGEX: true
         env:
-          GH_TOKEN_ADMIN: ${{secrets.GH_TOKEN_ADMIN}}
-          GH_USER_ADMIN: ${{secrets.GH_USER_ADMIN}}
+          GH_TOKEN_ADMIN: ${{secrets.SA_GH_TOKEN_ADMIN}}
+          GH_USER_ADMIN: ${{secrets.SA_GH_USER_ADMIN}}
           PAT_CLATOOL: ${{secrets.PAT_CLATOOL}}
           RP_ENDPOINT: ${{secrets.RP_ENDPOINT}}
           RP_UUID: ${{secrets.RP_UUID}}
@@ -105,7 +115,7 @@ jobs:
             splunk/addonfactory-splunk-conf-parser-lib
             splunk/pytest-splunk-addon
             splunk/addon-factory-smartx-ui-test-library
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN_ADMIN }}
+          GITHUB_TOKEN: ${{ secrets.SA_GH_TOKEN_ADMIN }}
           CONCURRENCY: 2
           REPOSITORIES_LIST_REGEX: false
         env:
