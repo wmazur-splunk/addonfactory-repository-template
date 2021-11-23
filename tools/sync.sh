@@ -327,6 +327,7 @@ else
     if [[ -f "LICENSES/LicenseRef-Splunk-1-2020.txt" ]]; then
         git rm LICENSES/LicenseRef-Splunk-1-2020.txt
     fi
+    python3 tools/update_app_manifest_license.py
 
     gh api /repos/$REPOORG/$REPO  -H 'Accept: application/vnd.github.nebula-preview+json' -X PATCH -F visibility=$REPOVISIBILITY
     git add . || exit 1
