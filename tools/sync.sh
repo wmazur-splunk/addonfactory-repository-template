@@ -39,18 +39,7 @@ then
 
     poetry init -n --author "Splunk Inc, <sales@splunk.com>" --python "^3.7" -l "Splunk-1-2020"
     reuse add pyproject.toml
-    poetry add --lock --dev splunk-add-on-ucc-framework
-    poetry add --lock --dev lovely-pytest-docker
-    poetry add --lock --dev reuse
-    poetry add --lock --dev pytest
-    poetry add --lock --dev splunk-packaging-toolkit
-    poetry add --lock --dev pytest-xdist
-    poetry add --lock --dev pytest-splunk-addon
-    poetry add --lock --dev pytest-expect
-    poetry add --lock --dev pytest-splunk-addon-ui-smartx
-    poetry add --lock --dev pytest-rerunfailures
-    poetry add --lock --dev coverage
-    poetry add --lock --dev pytest-cov
+    poetry add --lock --dev splunk-add-on-ucc-framework lovely-pytest-docker reuse pytest splunk-packaging-toolkit pytest-xdist pytest-splunk-addon pytest-expect pytest-splunk-addon-ui-smartx pytest-rerunfailures coverage pytest-cov
     
     git init
     git config user.email ${GH_USER_EMAIL}
