@@ -102,6 +102,7 @@ jobs:
             splunk/google-chrome-add-on-for-splunk
             splunk/dropbox-app-for-splunk
             splunk/seckit_sa_geolocation
+            splunk/splunk-configurations-base-indexes
             splunk/splunk-add-on-for-ucc-example
             splunk/splunk-add-on-for-ucc-example-ng
             splunk/addonfactory-ucc-generator
