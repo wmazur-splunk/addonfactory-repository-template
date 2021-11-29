@@ -7,16 +7,19 @@ echo "Setting branch protection rules for" "$REPOORG"/"$REPO"
 # temporary we need to skip some explicite given repositories and those without pre-publish job
 ## SKIP START
 
-declare -a repos_to_be_ommited=("splunk-add-on-for-cyberark-epm")
+repos_to_be_ommited=(
+    "splunk-add-on-for-cyberark-epm"
+    "splunk-add-on-for-amazon-web-services"
+    "splunk-add-on-for-microsoft-windows"
+    "splunk-add-on-for-unix-and-linux"
+    "splunk-add-on-for-cef"
+    "seckit_sa_geolocation"
+    "splunk-add-on-for-google-cloud-platform"
+    "splunk-add-on-for-java-management-extensions"
+    "splunk-add-on-for-microsoft-cloud-services"
+)
 
-for repo_to_omit in $repos_to_be_ommited
-do
-    [[ "$REPO" == "$repo_to_omit" ]] && echo "Setting branch protection rules for $REPOORG/$REPO is skipped: repo marked as to be ommitted" && exit
-done
-
-run_id_on_main=$(gh api "repos/$REPOORG/$REPO/actions/runs" -q "[.workflow_runs[] | select (.head_branch==\"main\" and .name==\"build-test-release\")][0] | .id")
-has_pre_publish=$(gh api "repos/$REPOORG/$REPO/actions/runs/$run_id_on_main/jobs" -q 'any(.jobs[].name; . == "pre-publish")')
-[[ "$has_pre_publish" == "false" ]] && echo "Setting branch protection rules for $REPOORG/$REPO is skipped: no pre-publish job on main" && exit
+[[ " ${repos_to_be_ommited[*]} " =~ " ${REPO} " ]] && echo "Setting branch protection rules for $REPOORG/$REPO is skipped: repo marked as to be ommitted" && exit
 
 ##SKIP STOP
 
