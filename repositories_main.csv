@@ -1,3 +1,4 @@
+splunk-configurations-base-indexes,splunk_configurations_base_indexes,public,"Splunk Base index configurations",main
 splunk-add-on-for-amazon-web-services,Splunk_TA_aws,internal,"Splunk Add-on for AWS",main
 splunk-add-on-for-github-ta-testing,Splunk_TA_github-ta-testing,internal,"Splunk Add-on for Github TA testing",main
 splunk-add-on-for-stream-wire-data,Splunk_TA_stream_wire_data,internal,"Splunk Add-on for Stream WireData",main
@@ -86,4 +87,3 @@ splunk-add-on-for-jboss,Splunk_TA_jboss,internal,"Splunk Add-on for JBoss",main
 splunk-add-on-for-microsoft-cloud-services,Splunk_TA_microsoft-cloudservices,internal,"Splunk Add-on for Microsoft Cloud Services",main
 splunk-add-on-for-microsoft-office-365,splunk_ta_o365,internal,"Splunk Add-on for Microsoft Office 365",main
 splunk-add-on-for-github-audit-log-monitoring,Splunk_TA_github_audit_log_monitoring,internal,"GitHub Audit Log Monitoring Add-On for Splunk",main
-splunk-configurations-base-indexes,splunk_configurations_base_indexes,public,"Splunk Base index configurations",main
