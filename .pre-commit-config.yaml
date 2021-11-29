@@ -1,7 +1,10 @@
 repos:
-  - repo: https://github.com/rhysd/actionlint
-    rev: v1.6.3
+-   repo: local
     hooks:
       - id: actionlint
+        name: actionlint
+        entry: actionlint
         args: [-ignore, 'property ".+" is not defined in object type']
+        language: script
+        types: ["yaml"]
         files: ^enforce/.github/workflows/
