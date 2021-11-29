@@ -255,6 +255,17 @@ jobs:
         uses: splunk/addonfactory-packaging-toolkit-action@v1
         with:
           source: ${{ steps.uccgen.outputs.OUTPUT }}
+      - name: Rename slim output
+        id: slim-renamed
+        run: |
+          set -o xtrace
+          pushd build/package/splunkbase/
+          echo ${{ steps.slim.outputs.OUTPUT }}
+          find . -name "*.spl" -exec bash -c 'sudo mv "$1" "${1%.spl}".tar.gz' - '{}' +
+          ls -al
+          PACKAGE=$(sudo ls)
+          echo "::set-output name=OUTPUT::build/package/splunkbase/${PACKAGE}"
+          popd
       - name: artifact-splunk-unpacked
         uses: actions/upload-artifact@v2
         with:
@@ -265,7 +276,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: package-splunkbase
-          path: ${{ steps.slim.outputs.OUTPUT }}
+          path: ${{ steps.slim-renamed.outputs.OUTPUT }}
         if: always()
       - name: upload-build-to-s3
         id: buildupload
@@ -274,9 +285,9 @@ jobs:
           AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
-          echo "::set-output name=name::$(basename "${{ steps.slim.outputs.OUTPUT }}")"
-          basename "${{ steps.slim.outputs.OUTPUT }}"
-          aws s3 cp "${{ steps.slim.outputs.OUTPUT }}" s3://ta-production-artifacts/ta-apps/
+          echo "::set-output name=name::$(basename "${{ steps.slim-renamed.outputs.OUTPUT }}")"
+          basename "${{ steps.slim-renamed.outputs.OUTPUT }}"
+          aws s3 cp "${{ steps.slim-renamed.outputs.OUTPUT }}" s3://ta-production-artifacts/ta-apps/
       - name: artifact-splunk-parts
         uses: actions/upload-artifact@v2
         with:
@@ -477,14 +488,14 @@ jobs:
           pushd build/package/splunkbase/
           PACKAGE=$(ls ./*)
           echo "$PACKAGE"
-          mv "$PACKAGE" "${{ steps.getappid.outputs.result }}".spl
+          mv "$PACKAGE" "${{ steps.getappid.outputs.result }}".tar.gz
           while IFS= read -r line
           do
             echo ">>$line<<"
             oras push \
                 --manifest-config /dev/null:application/vnd.splunk.ent.package.v1.tar+gzip \
                 "$line" \
-                "${{ steps.getappid.outputs.result }}".spl
+                "${{ steps.getappid.outputs.result }}".tar.gz
             echo "  complete"
           done < /tmp/tags
           popd
