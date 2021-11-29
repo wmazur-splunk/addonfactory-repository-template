@@ -43,7 +43,7 @@ then
     
     git init
     git config user.email ${GH_USER_EMAIL}
-    git config user.name ${GH_USER_ADMIN }
+    git config user.name ${GH_USER_ADMIN}
     git submodule add https://${GH_USER_ADMIN}:${GH_TOKEN_ADMIN}@github.com/$REPOORG/addonfactory-splunk_sa_cim.git deps/apps/Splunk_SA_CIM
 
     git add .
