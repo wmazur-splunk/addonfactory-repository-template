@@ -18,6 +18,17 @@ jobs:
         with:
           submodules: recursive
           persist-credentials: false
+      - uses: dorny/paths-filter@v2
+        id: changes
+        with:
+          filters: |
+            src:
+            - 'enforce/**'
+            - 'seed/**'
+            - 'tools/sync.sh'
+            - 'repositories_main.csv'
+            - '.github/workflows/sync.yaml'
+  
       - name: Setup
         run: |
           pip3 install git+https://github.com/pixelb/crudini.git 
@@ -33,6 +44,7 @@ jobs:
           git_commit_gpgsign: true
 
       - name: sync
+        if: steps.changes.outputs.src == 'true'
         run: |
           export PR_SUFFIX=-${{ github.ref }}
           mkdir work || true
@@ -60,12 +72,12 @@ jobs:
         id: changes
         with:
           filters: |
-            bpr:
+            src:
               - 'tools/branch_protection_rules.sh'
               - 'repositories_main.csv'
               - '.github/workflows/sync.yaml'
       - name: create-rules
-        if: steps.changes.outputs.bpr == 'true'
+        if: steps.changes.outputs.src == 'true'
         run: |
           echo ${{ secrets.SA_GH_TOKEN_ADMIN }} | gh auth login --with-token
           python3 tools/sync.py tools/branch_protection_rules.sh repositories_main.csv
@@ -79,7 +91,20 @@ jobs:
     needs:
       - sync
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
+          persist-credentials: false
+      - uses: dorny/paths-filter@v2
+        id: changes
+        with:
+          filters: |
+            src:
+              - 'repositories_main.csv'
+              - '.github/workflows/sync.yaml'
       - name: Sync Secrets
+        if: steps.changes.outputs.src == 'true'
         uses: google/secrets-sync-action@v1.4.1
         with:
           SECRETS: |
@@ -133,7 +158,20 @@ jobs:
     needs:
       - secrets
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
+          persist-credentials: false
+      - uses: dorny/paths-filter@v2
+        id: changes
+        with:
+          filters: |
+            src:
+              - 'repositories_main.csv'
+              - '.github/workflows/sync.yaml'
       - name: Sync PyPI Secrets
+        if: steps.changes.outputs.src == 'true'
         uses: google/secrets-sync-action@v1.4.1
         with:
           SECRETS: |
