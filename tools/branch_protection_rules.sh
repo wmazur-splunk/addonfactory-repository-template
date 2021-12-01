@@ -81,6 +81,8 @@ main_settings="requiresApprovingReviews: true
     allowsDeletions: false"
 
 develop_settings="${main_settings/allowsDeletions: false/allowsDeletions: true}"
+develop_settings="${develop_settings/allowsForcePushes: false/allowsForcePushes: true}"
+
 common_settings="requiresApprovingReviews: false
     requiresStatusChecks: false
     requiresConversationResolution: false
