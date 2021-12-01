@@ -1214,6 +1214,7 @@ jobs:
       - run-knowledge-tests
       - run-modinput-tests
       - run-ui-tests
+      - run-requirement-tests
     runs-on: ubuntu-latest
     env:
       NEEDS: ${{ toJson(needs) }}
