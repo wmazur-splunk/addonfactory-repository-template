@@ -4,7 +4,7 @@ set -x
 
 
 BRANCH=$(git rev-parse --abbrev-ref HEAD -- | head -n 1)
-INPUTFILE=repositories_$BRANCH.csv
+INPUTFILE=repositories_test.csv
 echo Working branch $BRANCH - $INPUTFILE
 REPOORG=splunk
 
@@ -141,8 +141,8 @@ do
         git config  user.email "addonfactory@splunk.com"
         git config  user.name "Addon Factory template"
 
-        ( git checkout test/common-template-rollout-changes  && git checkout $BRANCH && git branch -D test/common-template-rollout-changes ) || true
-        git checkout -B "test/common-template-rollout-changes" $BRANCH
+        ( git checkout test/configurable-environment  && git checkout $BRANCH && git branch -D test/configurable-environment ) || true
+        git checkout -B "test/configurable-environment" $BRANCH
         git submodule update --init --recursive
         #fi
         rsync -avh --include ".*" --ignore-existing ../../seed/ .
@@ -352,10 +352,10 @@ do
         fi
 
         git add . || true
-        git commit -am "test: common template rollout changes" || true
+        git commit -am "test: config environemt " || true
 
-        git push -f --set-upstream origin test/common-template-rollout-changes
-        hub pull-request -b $BRANCH "Bump repository configuration from template" --no-edit
+        git push -f --set-upstream origin test/configurable-environment
+        # hub pull-request -b $BRANCH "Bump repository configuration from template" --no-edit
         hub api /repos/$REPOORG/$REPO  -H 'Accept: application/vnd.github.nebula-preview+json' -X PATCH -F visibility=$REPOVISIBILITY
         hub api repos/$REPOORG/$REPO --raw-field 'delete_branch_on_merge=true' -X PATCH || true
 
