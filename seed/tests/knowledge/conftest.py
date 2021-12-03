@@ -1,10 +1,12 @@
 #
 # SPDX-FileCopyrightText: 2021 Splunk, Inc. <sales@splunk.com>
-# SPDX-License-Identifier: LicenseRef-Splunk-1-2020
+# SPDX-License-Identifier: LicenseRef-Splunk-8-2021
 #
 #
 import os
+
 import pytest
+
 pytest_plugins = "pytester"
 
 
@@ -27,6 +29,6 @@ def docker_compose_files(request):
     docker_compose_path = os.path.join(
         str(request.config.invocation_dir), "docker-compose.yml"
     )
-    #LOGGER.info("docker-compose path: %s", docker_compose_path)
+    # LOGGER.info("docker-compose path: %s", docker_compose_path)
 
     return [docker_compose_path]
