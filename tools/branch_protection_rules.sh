@@ -8,12 +8,8 @@ echo "Setting branch protection rules for" "$REPOORG"/"$REPO"
 ## SKIP START
 
 repos_to_be_ommited=(
-    "splunk-add-on-for-cyberark-epm"
     "splunk-add-on-for-amazon-web-services"
-    "splunk-add-on-for-microsoft-windows"
     "splunk-add-on-for-unix-and-linux"
-    "splunk-add-on-for-cef"
-    "seckit_sa_geolocation"
     "splunk-add-on-for-google-cloud-platform"
     "splunk-add-on-for-java-management-extensions"
     "splunk-add-on-for-microsoft-cloud-services"
