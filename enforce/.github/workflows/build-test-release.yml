@@ -550,10 +550,6 @@ jobs:
     if: ${{ needs.test-inventory.outputs.knowledge == 'true' }}
     needs:
       - build
-      - artifact-registry
-      - test-inventory
-      - setup
-      - meta
     runs-on: ubuntu-18.04
     strategy:
       fail-fast: false
@@ -695,10 +691,6 @@ jobs:
     if: ${{ needs.test-inventory.outputs.requirement_test == 'true' }}
     needs:
       - build
-      - artifact-registry
-      - test-inventory
-      - setup
-      - meta
     runs-on: ubuntu-18.04
     strategy:
       fail-fast: false
@@ -838,10 +830,6 @@ jobs:
     if: ${{ needs.test-inventory.outputs.ui == 'true' }}
     needs:
       - build
-      - artifact-registry
-      - test-inventory
-      - setup
-      - meta
     runs-on: ubuntu-18.04
     strategy:
       fail-fast: false
