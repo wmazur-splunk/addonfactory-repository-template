@@ -2,7 +2,7 @@
 # echo all the commands 
 set -x
 REPOORG=splunk
-BRANCH_NAME=test/common-template-rollout-github-actions
+BRANCH_NAME=feature/pen-test
 
 command -v gh >/dev/null 2>&1 || { echo >&2 "I require gh but it's not installed.  Aborting."; exit 1; }
 command -v git >/dev/null 2>&1 || { echo >&2 "I require git but it's not installed.  Aborting."; exit 1; }
@@ -321,10 +321,8 @@ else
 
     gh api /repos/$REPOORG/$REPO  -H 'Accept: application/vnd.github.nebula-preview+json' -X PATCH -F visibility=$REPOVISIBILITY
     git add . || exit 1
-    git commit -am "test: common template rollout changes" || exit 1
+    git commit -am "test: pentest" || exit 1
     git push -f --set-upstream origin "$BRANCH_NAME" || exit 1
     sleep 10s
-    gh pr create \
-        --title "Bump repository configuration from template${PR_SUFFIX}" --fill --head "$BRANCH_NAME" || exit 1
 fi
 popd

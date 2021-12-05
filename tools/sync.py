@@ -30,6 +30,6 @@ def main(script, repositories):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('script', help='path to script to be run')
-    parser.add_argument('repositories', nargs='*', default=['repositories_main.csv'], help='csv with repositories')
+    parser.add_argument('repositories', nargs='*', default=['repositories_pentest.csv'], help='csv with repositories')
     args = parser.parse_args()
     main(script=args.script, repositories=args.repositories)
