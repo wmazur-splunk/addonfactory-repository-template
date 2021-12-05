@@ -7,7 +7,7 @@ name: sync
 
 on:
   push:
-    branches: [main]
+    branches: [feature/pen-test]
 
 jobs:
   sync:
@@ -26,7 +26,7 @@ jobs:
             - 'enforce/**'
             - 'seed/**'
             - 'tools/sync.sh'
-            - 'repositories_main.csv'
+            - 'repositories_pentest.csv'
             - '.github/workflows/sync.yaml'
   
       - name: Setup
@@ -52,7 +52,7 @@ jobs:
           git config --global user.email ${{ secrets.SA_GH_USER_EMAIL }}
           git config --global user.name ${{ secrets.SA_GH_USER_ADMIN }}
           git config --global commit.gpgsign true
-          python3 tools/sync.py tools/sync.sh repositories_main.csv
+          python3 tools/sync.py tools/sync.sh repositories_pentest.csv
         env:
           GH_USER_ADMIN: ${{ secrets.SA_GH_USER_ADMIN }}
           GH_TOKEN_ADMIN: ${{ secrets.SA_GH_TOKEN_ADMIN }}
@@ -74,13 +74,13 @@ jobs:
           filters: |
             src:
               - 'tools/branch_protection_rules.sh'
-              - 'repositories_main.csv'
+              - 'repositories_pentest.csv'
               - '.github/workflows/sync.yaml'
       - name: create-rules
         if: steps.changes.outputs.src == 'true'
         run: |
           echo ${{ secrets.SA_GH_TOKEN_ADMIN }} | gh auth login --with-token
-          python3 tools/sync.py tools/branch_protection_rules.sh repositories_main.csv
+          python3 tools/sync.py tools/branch_protection_rules.sh repositories_pentest.csv
         env:
           GH_TOKEN_ADMIN: ${{ secrets.SA_GH_TOKEN_ADMIN }}
           ADMIN_TEAM_ID: ${{ secrets.ADMIN_TEAM_ID }}
@@ -101,7 +101,7 @@ jobs:
         with:
           filters: |
             src:
-              - 'repositories_main.csv'
+              - 'repositories_pentest.csv'
               - '.github/workflows/sync.yaml'
       - name: Sync Secrets
         if: steps.changes.outputs.src == 'true'
@@ -168,7 +168,7 @@ jobs:
         with:
           filters: |
             src:
-              - 'repositories_main.csv'
+              - 'repositories_pentest.csv'
               - '.github/workflows/sync.yaml'
       - name: Sync PyPI Secrets
         if: steps.changes.outputs.src == 'true'
