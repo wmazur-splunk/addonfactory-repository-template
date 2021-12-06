@@ -7,4 +7,4 @@ repos:
         args: [-ignore, 'property ".+" is not defined in object type']
         language: script
         types: ["yaml"]
-        files: ^enforce/.github/workflows/
+        files: (^enforce/.github/workflows/|^.github/workflows/)
