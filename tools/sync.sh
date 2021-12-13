@@ -53,7 +53,6 @@ then
     gh repo create $REPOORG/$REPO --$REPOVISIBILITY --confirm
     gh api orgs/$REPOORG/teams/products-shared-services-all/repos/$REPOORG/$REPO --raw-field 'permission=maintain' -X PUT
     gh api orgs/$REPOORG/teams/productsecurity/repos/$REPOORG/$REPO --raw-field 'permission=read' -X PUT
-    gh api orgs/$REPOORG/teams/products-gdi-addons/repos/$REPOORG/$REPO --raw-field 'permission=maintain' -X PUT
     gh api orgs/$REPOORG/teams/products-gdi-addons-adminrepo/repos/$REPOORG/$REPO --raw-field 'permission=admin' -X PUT
     gh api orgs/$REPOORG/$REPO -X PATCH --field default_branch=main
     gh api /repos/$REPOORG/$REPO  -H 'Accept: application/vnd.github.nebula-preview+json' -X PATCH -F visibility=$REPOVISIBILITY
@@ -70,7 +69,6 @@ else
     gh api repos/$REPOORG/$REPO --raw-field 'visibility=${REPOVISIBILITY}' -X PATCH || true
     
     echo "adding permission for teams"
-    gh api orgs/$REPOORG/teams/products-gdi-addons/repos/$REPOORG/$REPO --raw-field 'permission=maintain' -X PUT
     gh api orgs/$REPOORG/teams/products-gdi-addons-adminrepo/repos/$REPOORG/$REPO --raw-field 'permission=admin' -X PUT
 
     if [ ! -d "work/$REPO" ]; then
@@ -318,6 +316,10 @@ else
     fi
     sed -i 's/LicenseRef-Splunk-1-2020/LicenseRef-Splunk-8-2021/g' .reuse/dep5
     python3 ../../tools/update_app_manifest_license.py
+
+    if [[ -f .slimignore ]]; then
+        git rm .slimignore
+    fi
 
     gh api /repos/$REPOORG/$REPO  -H 'Accept: application/vnd.github.nebula-preview+json' -X PATCH -F visibility=$REPOVISIBILITY
     git add . || exit 1

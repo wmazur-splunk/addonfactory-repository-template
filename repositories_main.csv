@@ -1,5 +1,4 @@
 splunk-configurations-base-indexes,splunk_configurations_base_indexes,public,"Splunk Base index configurations",main
-splunk-add-on-for-amazon-web-services,Splunk_TA_aws,internal,"Splunk Add-on for AWS",main
 splunk-add-on-for-github-ta-testing,Splunk_TA_github-ta-testing,internal,"Splunk Add-on for Github TA testing",main
 splunk-add-on-for-stream-wire-data,Splunk_TA_stream_wire_data,internal,"Splunk Add-on for Stream WireData",main
 splunk-add-on-for-apache-web-server,Splunk_TA_apache,internal,"Splunk Add-on for Apache",main

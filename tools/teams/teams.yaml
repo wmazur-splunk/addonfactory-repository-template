@@ -1,0 +1,24 @@
+products-gdi-developers:
+  parent_team: products-gdi-addons
+  description: ''
+  repo_permission: push
+
+products-gdi-lead-developers:
+  parent_team: products-gdi-developers
+  description: ''
+  repo_permission: push
+
+products-gdi-qa:
+  parent_team: products-gdi-addons
+  description: ''
+  repo_permission: push
+
+products-gdi-lead-qa:
+  parent_team: products-gdi-qa
+  description: ''
+  repo_permission: push
+
+products-gdi-sme:
+  parent_team: products-gdi-addons
+  description: ''
+  repo_permission: push

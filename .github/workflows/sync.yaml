@@ -27,11 +27,9 @@ jobs:
             - 'seed/**'
             - 'tools/sync.sh'
             - 'repositories_main.csv'
-            - '.github/workflows/sync.yaml'
-  
       - name: Setup
         run: |
-          pip3 install git+https://github.com/pixelb/crudini.git 
+          pip3 install git+https://github.com/pixelb/crudini.git
           pip3 install reuse
           pip3 install poetry
 
@@ -75,7 +73,6 @@ jobs:
             src:
               - 'tools/branch_protection_rules.sh'
               - 'repositories_main.csv'
-              - '.github/workflows/sync.yaml'
       - name: create-rules
         if: steps.changes.outputs.src == 'true'
         run: |
@@ -193,3 +190,27 @@ jobs:
         env:
           PYPI_USERNAME: ${{secrets.PYPI_USERNAME}}
           PYPI_TOKEN: ${{secrets.PYPI_TOKEN}}
+
+  github-teams:
+    runs-on: ubuntu-latest
+    needs:
+      - sync
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - uses: dorny/paths-filter@v2
+        id: changes
+        with:
+          filters: |
+            src:
+            - 'repositories_main.csv'
+            - 'tools/teams/teams.yaml'
+      - name: Setup
+        run: pip3 install -r tools/teams/requirements.txt
+      - name: Create GitHub teams
+        if: steps.changes.outputs.src == 'true'
+        run: |
+          echo ${{ secrets.SA_GH_TOKEN_ADMIN }} | gh auth login --with-token
+          python tools/teams/create_github_teams.py ${{ secrets.SA_GH_TOKEN_ADMIN }} tools/teams/teams.yaml repositories_main.csv
+        env:
+          ADMIN_TEAM: ${{ secrets.ADMIN_TEAM_NAME }}
