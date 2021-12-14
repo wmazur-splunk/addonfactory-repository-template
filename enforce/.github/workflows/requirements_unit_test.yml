@@ -1,0 +1,29 @@
+name: Requirement unit tests workflow
+on: push
+jobs:
+  build:
+    name: Run unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Install Python 3
+        uses: actions/setup-python@v1
+        with:
+            python-version: 3.8
+      - name: Check file existence
+        id: check_files
+        uses: andstor/file-existence-action@v1
+        with:
+          files: "tests/requirement_test"
+      - id: requirement_test_pre_requisite_test
+        if: steps.check_files.outputs.files_exists == 'true'
+        uses:  splunk/requirement-files-unit-tests@main 
+        with:
+          input-files: tests/requirement_test/logs
+      - name: Archive production artifacts
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-results
+          path: |
+            test_*.txt
