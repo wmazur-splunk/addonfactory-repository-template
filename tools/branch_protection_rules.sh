@@ -63,7 +63,7 @@ main_settings="requiresApprovingReviews: true
     requiresStatusChecks: true
     requiresStrictStatusChecks: true
     requiredStatusCheckContexts: [
-        \"pre-publish\"
+        \"call-workflow / pre-publish\"
     ]
     requiresConversationResolution: false
     requiresCommitSignatures: true
