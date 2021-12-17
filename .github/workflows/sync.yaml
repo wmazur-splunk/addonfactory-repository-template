@@ -135,6 +135,9 @@ jobs:
             splunk/addonfactory-cloudconnect-library
             splunk/addonfactory-github-workflows
             splunk/addon-factory-smartx-ui-test-library
+            splunk/addonfactory-sample-scanner
+            splunk/appinspect-cli-action
+            splunk/addonfactory-ort-action
           GITHUB_TOKEN: ${{ secrets.SA_GH_TOKEN_ADMIN }}
           CONCURRENCY: 2
           REPOSITORIES_LIST_REGEX: true
