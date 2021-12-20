@@ -317,6 +317,10 @@ else
     sed -i 's/LicenseRef-Splunk-1-2020/LicenseRef-Splunk-8-2021/g' .reuse/dep5
     python3 ../../tools/update_app_manifest_license.py
 
+    if [[ -f .github/workflows/release-notes.yml ]]; then
+        git rm .github/workflows/release-notes.yml
+    fi
+
     gh api /repos/$REPOORG/$REPO  -H 'Accept: application/vnd.github.nebula-preview+json' -X PATCH -F visibility=$REPOVISIBILITY
     git add . || exit 1
     git commit -am "test: common template rollout changes" || exit 1
