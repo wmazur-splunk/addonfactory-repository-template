@@ -145,7 +145,7 @@ jobs:
         env:
           GH_TOKEN_ADMIN: ${{secrets.SA_GH_TOKEN_ADMIN}}
           GH_USER_ADMIN: ${{secrets.SA_GH_USER_ADMIN}}
-          PAT_CLATOOL: ${{secrets.PAT_CLATOOL}}
+          PAT_CLATOOL: ${{secrets.SA_PAT_CLATOOL}}
           RP_ENDPOINT: ${{secrets.RP_ENDPOINT}}
           RP_UUID: ${{secrets.RP_UUID}}
           SNYK_TOKEN: ${{secrets.SNYK_TOKEN}}
