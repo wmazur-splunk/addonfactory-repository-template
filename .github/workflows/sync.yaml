@@ -139,6 +139,7 @@ jobs:
             splunk/appinspect-cli-action
             splunk/addonfactory-ort-action
             splunk/addonfactory-workflow-requirement-files-unit-tests
+            splunk/pytest-splunk-addon
           GITHUB_TOKEN: ${{ secrets.SA_GH_TOKEN_ADMIN }}
           CONCURRENCY: 2
           REPOSITORIES_LIST_REGEX: true
