@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+echo "Your docker-compose version should be 1.x"
+docker-compose --version
+pip uninstall -r <(pip freeze)
+docker system prune -a
+# in most cases it is sufficient to remove containers and networks
+# docker container rm -f $(docker container ls -aq) ; docker network prune -f
+cd ..
+git submodule update --init --recursive
+mkdir deps/build/ && cd deps/build/ && git clone git@github.com:splunk/addonfactory_test_matrix_splunk.git && cd ../..
+mv tests/knowledge/conftest.py . ; mv tests/requirement_test/conftest.py tests/requirement_test/conftest.py.back
+mv tests/requirement_test/test_addon.py tests/requirement_test/test_addon.py.backup
+poetry update; mkdir -p package/lib ; poetry export --without-hashes -o package/lib/requirements.txt ; poetry export --without-hashes -o requirements_dev.txt ; poetry export --without-hashes -o package/lib/requirements.txt ; poetry export --without-hashes -o package/lib/requirements_dev.txt ; poetry run ucc-gen; export SPLUNK_VERSION=latest && export SPLUNK_APP_ID=$(crudini --get package/default/app.conf id name) && export SPLUNK_APP_PACKAGE=output/$(ls output/) && export TEST_TYPE=knowledge && export TEST_SET=tests/$TEST_TYPE && export IMAGE_TAG="3.7-browsers" && export SC4S_VERSION=latest ; echo "COMPOSE_HTTP_TIMEOUT=300" > .env ; poetry run docker-compose -f docker-compose.yml build ; poetry run pytest
+mv tests/requirement_test/test_addon.py.backup tests/requirement_test/test_addon.py
+mv conftest.py tests/knowledge/ ; mv tests/requirement_test/conftest.py.back tests/requirement_test/conftest.py
+cd tests
