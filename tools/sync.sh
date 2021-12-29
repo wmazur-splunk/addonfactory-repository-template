@@ -44,7 +44,7 @@ then
     git init
     git config user.email ${GH_USER_EMAIL}
     git config user.name ${GH_USER_ADMIN}
-    git submodule add https://${GH_USER_ADMIN}:${GH_TOKEN_ADMIN}@github.com/$REPOORG/addonfactory-splunk_sa_cim.git deps/apps/Splunk_SA_CIM
+    git submodule add git@github.com:$REPOORG/addonfactory-splunk_sa_cim.git deps/apps/Splunk_SA_CIM
 
     git add .
     git commit -am "base"
@@ -57,7 +57,7 @@ then
     gh api orgs/$REPOORG/$REPO -X PATCH --field default_branch=main
     gh api /repos/$REPOORG/$REPO  -H 'Accept: application/vnd.github.nebula-preview+json' -X PATCH -F visibility=$REPOVISIBILITY
 
-    git remote set-url origin https://${GH_USER_ADMIN}:${GH_TOKEN_ADMIN}@github.com/$REPOORG/$REPO.git
+    git remote add origin https://${GH_USER_ADMIN}:${GH_TOKEN_ADMIN}@github.com/$REPOORG/$REPO.git
     git checkout -b main
     git push --set-upstream origin main
     git tag -a v$(crudini --get package/default/app.conf launcher version) -m "Release"

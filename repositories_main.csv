@@ -86,3 +86,4 @@ splunk-add-on-for-microsoft-cloud-services,Splunk_TA_microsoft-cloudservices,int
 splunk-add-on-for-microsoft-office-365,splunk_ta_o365,internal,"Splunk Add-on for Microsoft Office 365",main
 splunk-add-on-for-github-audit-log-monitoring,Splunk_TA_github_audit_log_monitoring,internal,"GitHub Audit Log Monitoring Add-On for Splunk",main
 splunk-add-on-for-okta-identity-cloud,Splunk_TA_okta-identity-cloud,internal,"Splunk Add-on for Okta Identity Cloud",main
+splunk-add-on-for-uf-testing,Splunk_TA_uf-testing,internal,"Splunk Add-on for uf testing",main
