@@ -140,6 +140,9 @@ jobs:
             splunk/addonfactory-ort-action
             splunk/addonfactory-workflow-requirement-files-unit-tests
             splunk/pytest-splunk-addon
+            splunk/addonfactory-get-splunk-package-version-action
+            splunk/addonfactory-packaging-toolkit-action
+            splunk/addonfactory-test-matrix-action
           GITHUB_TOKEN: ${{ secrets.SA_GH_TOKEN_ADMIN }}
           CONCURRENCY: 2
           REPOSITORIES_LIST_REGEX: true
