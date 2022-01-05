@@ -2,9 +2,9 @@
 echo "Your docker-compose version should be 1.x"
 docker-compose --version
 pip uninstall -r <(pip freeze)
-docker system prune -a
+docker container rm -f $(docker container ls -aq) ; docker network prune -f
 # in most cases it is sufficient to remove containers and networks
-# docker container rm -f $(docker container ls -aq) ; docker network prune -f
+docker system prune -a
 cd ..
 git submodule update --init --recursive
 mkdir deps/build/ && cd deps/build/ && git clone git@github.com:splunk/addonfactory_test_matrix_splunk.git && cd ../..
