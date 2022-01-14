@@ -118,31 +118,30 @@ jobs:
             AWS_SECRET_ACCESS_KEY
             SEMGREP_PUBLISH_TOKEN
           REPOSITORIES: |
-            splunk/splunk-dbx-add-on-for-*
-            splunk/splunk-add-on-for-*
-            splunk/dropbox-add-on-for-splunk
-            splunk/google-chrome-add-on-for-splunk
-            splunk/dropbox-app-for-splunk
-            splunk/seckit_sa_geolocation
-            splunk/splunk-configurations-base-indexes
-            splunk/splunk-add-on-for-ucc-example
-            splunk/splunk-add-on-for-ucc-example-ng
-            splunk/addonfactory-ucc-generator
-            splunk/addonfactory-ucc-library
-            splunk/addonfactory-ta-library-python
+            splunk-configurations-base-indexes
+            splunk/addon-factory-smartx-ui-test-library
+            splunk/addonfactory-cloudconnect-library
+            splunk/addonfactory-get-splunk-package-version-action
+            splunk/addonfactory-github-workflows
+            splunk/addonfactory-ort-action
+            splunk/addonfactory-packaging-toolkit-action
+            splunk/addonfactory-sample-scanner
             splunk/addonfactory-solutions-library-python
             splunk/addonfactory-splunk-conf-parser-lib
-            splunk/addonfactory-cloudconnect-library
-            splunk/addonfactory-github-workflows
-            splunk/addon-factory-smartx-ui-test-library
-            splunk/addonfactory-sample-scanner
-            splunk/appinspect-cli-action
-            splunk/addonfactory-ort-action
-            splunk/addonfactory-workflow-requirement-files-unit-tests
-            splunk/pytest-splunk-addon
-            splunk/addonfactory-get-splunk-package-version-action
-            splunk/addonfactory-packaging-toolkit-action
+            splunk/addonfactory-ta-library-python
             splunk/addonfactory-test-matrix-action
+            splunk/addonfactory-ucc-generator
+            splunk/addonfactory-ucc-library
+            splunk/addonfactory-workflow-requirement-files-unit-tests
+            splunk/appinspect-cli-action
+            splunk/dropbox-add-on-for-splunk
+            splunk/dropbox-app-for-splunk
+            splunk/google-chrome-add-on-for-splunk
+            splunk/pytest-splunk-addon
+            splunk/seckit_sa_geolocation
+            splunk/splunk-add-on-for-*
+            splunk/splunk-configurations-base-indexes
+            splunk/splunk-dbx-add-on-for-*
           GITHUB_TOKEN: ${{ secrets.SA_GH_TOKEN_ADMIN }}
           CONCURRENCY: 2
           REPOSITORIES_LIST_REGEX: true
