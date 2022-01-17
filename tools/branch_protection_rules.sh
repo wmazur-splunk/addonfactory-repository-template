@@ -4,19 +4,6 @@ REPOORG=splunk
 
 echo "Setting branch protection rules for" "$REPOORG"/"$REPO"
 
-# temporary we need to skip some explicite given repositories and those without pre-publish job
-## SKIP START
-
-repos_to_be_ommited=(
-    "splunk-add-on-for-google-cloud-platform"
-    "splunk-add-on-for-microsoft-cloud-services"
-)
-
-[[ " ${repos_to_be_ommited[*]} " =~ " ${REPO} " ]] && echo "Setting branch protection rules for $REPOORG/$REPO is skipped: repo marked as to be ommitted" && exit
-
-##SKIP STOP
-
-
 create_pattern="mutation createBranchProtectionRule {
     createBranchProtectionRule(input: {
         repositoryId: \""%s"\"
@@ -127,3 +114,11 @@ do
 
     gh api graphql -F "query=$query"
 done
+
+configure_security_analysis () {
+    gh api -X PUT repos/$REPOORG/$REPO/vulnerability-alerts || true
+    gh api -X PUT repos/$REPOORG/$REPO/automated-security-fixes || true
+}
+
+configure_security_analysis
+

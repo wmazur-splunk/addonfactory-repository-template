@@ -105,8 +105,8 @@ jobs:
         uses: google/secrets-sync-action@v1.4.1
         with:
           SECRETS: |
-            SNYK_TOKEN
             GH_TOKEN_ADMIN
+            PAT_CLATOOL
             VT_API_KEY
             AWS_ACCESS_KEY_ID
             AWS_DEFAULT_REGION
@@ -127,6 +127,8 @@ jobs:
             splunk/addonfactory-ucc-generator
             splunk/addonfactory-ucc-library
             splunk/addonfactory-workflow-requirement-files-unit-tests
+            splunk/addonfactory-workflow-addon-release
+            splunk/addonfactory-workflow-addon-manual-release  
             splunk/appinspect-cli-action
             splunk/dropbox-add-on-for-splunk
             splunk/dropbox-app-for-splunk
@@ -143,7 +145,7 @@ jobs:
           REPOSITORIES_LIST_REGEX: true
         env:
           GH_TOKEN_ADMIN: ${{secrets.SA_GH_TOKEN_ADMIN}}
-          SNYK_TOKEN: ${{secrets.SNYK_TOKEN}}
+          PAT_CLATOOL: ${{secrets.SA_PAT_CLATOOL}}
           VT_API_KEY: ${{secrets.VT_API_KEY}}
           AWS_ACCESS_KEY_ID: ${{secrets.AWS_ACCESS_KEY_ID}}
           AWS_DEFAULT_REGION: ${{secrets.AWS_DEFAULT_REGION}}

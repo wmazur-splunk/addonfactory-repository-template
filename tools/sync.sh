@@ -2,7 +2,7 @@
 # echo all the commands 
 set -x
 REPOORG=splunk
-BRANCH_NAME=test/common-template-rollout-github-actions
+BRANCH_NAME=ci/common-template-rollout-github-actions
 
 command -v gh >/dev/null 2>&1 || { echo >&2 "I require gh but it's not installed.  Aborting."; exit 1; }
 command -v git >/dev/null 2>&1 || { echo >&2 "I require git but it's not installed.  Aborting."; exit 1; }
@@ -103,9 +103,6 @@ else
     if [ ! -d "tests/data" ]; then
         mkdir -p tests/data
     fi
-    if [ -f "tests/data/wordlist.txt" ]; then
-        git rm tests/data/wordlist.txt
-    fi
     if [ -f "package/default/eventgen.conf" ]; then
         git mv package/default/eventgen.conf tests/data/eventgen.conf
     fi
@@ -142,16 +139,9 @@ else
         mkdir -p package/lib/py3 || true
         git mv requirements.txt package/lib/py3/
     fi
-    if [[ -f "splver.py" ]]; then
-        git rm splver.py
-    fi
-    if [[ -f "packagingScript.sh" ]]; then
-        git rm packagingScript.sh          
-    fi
+
     git rm splunk_add_on_ucc_framework-* || true        
-    if [[ -f "build.sh" ]]; then
-        git rm build.sh          
-    fi
+
     if [ -d "deps/build/disable_popup" ]; then
         git rm -f deps/build/disable_popup
         git submodule update --remote --merge deps/build/addonfactory_test_matrix_splunk
@@ -162,73 +152,48 @@ else
         mkdir -p tests/knowledge || true
         git mv tests/data/* tests/knowledge
     fi
-    if [[ -f "tests/knowledge/requirements.txt" ]]; then
-        git rm tests/knowledge/requirements.txt || true
-    fi
-    if [[ -f "tests/knowledge/wordlist.txt" ]]; then
-        git rm tests/knowledge/wordlist.txt || true
-    fi
-    if [[ -f "tests/ui/requirements.txt" ]]; then
-        git rm tests/ui/requirements.txt || true
-    fi     
-    if [[ -f "tests/pytest.ini" ]]; then
-        git rm tests/pytest.ini || true
-    fi
-    if [[ -f "tests/test_addon.py" ]]; then
-        git rm tests/test_addon.py || true
-    fi
-    if [[ -f "tests/__init__.py" ]]; then
-        git rm tests/__init__.py || true
-    fi
-    if [[ -f "tests/pytest-ci.ini" ]]; then
-        git rm tests/pytest-ci.ini || true
-    fi
-    if [[ -f "tests/conftest.py" ]]; then
-        git rm tests/conftest.py || true
-    fi
-    if [[ -f "tests/requirements.txt" ]]; then
-        git rm tests/requirements.txt || true
-    fi
-    if [[ -f "requirements.txt" ]]; then
-        git rm requirements.txt || true
-    fi
-    if [[ -f ".python-version" ]]; then
-        git rm .python-version || true
-    fi
-    if [[ -f ".github/workflows/cla.yaml" ]]; then
-        git rm .github/workflows/cla.yaml || true
-    fi
-    if [[ -f "tests/backend_entrypoint.sh" ]]; then
-        git rm tests/backend_entrypoint.sh || true
-    fi        
     if [[ -d "tests/ui" ]]; then
         rsync -avh --include ".*" ../../conditional/ .
     fi
-    if [[ -f ".github/workflows/reuse.yml" ]]; then
-        git rm .github/workflows/reuse.yml || true
-    fi        
-    if [[ -f ".github/workflows/snyk.yaml" ]]; then
-        git rm .github/workflows/snyk.yaml || true
-    fi        
-    if [[ -f ".github/workflows/rebase.yml" ]]; then
-        git rm .github/workflows/rebase.yml || true
-    fi        
-    if [[ -f ".releaserc.yaml" ]]; then
-        git rm .releaserc.yaml || true
-    fi        
-    if [[ -f "NOTICE" ]]; then
-        git rm NOTICE || true
-    fi 
-    if [[ -f "package/lib/py2/requirements.txt" ]]; then
-        git rm package/lib/py2/requirements.txt || true
-    fi  
-    if [[ -f "package/lib/py2/requirements.txt" ]]; then
-        git rm package/lib/py2/requirements.txt || true
-    fi  
-    if [[ -f "requirements_py2_dev.txt" ]]; then
-        git rm requirements_py2_dev.txt || true
-    fi
-    
+
+    files_to_delete=(
+        "tests/data/wordlist.txt"
+        "splver.py"
+        "packagingScript.sh"
+        "build.sh"
+        "tests/knowledge/requirements.txt"
+        "tests/knowledge/wordlist.txt"
+        "tests/ui/requirements.txt"
+        "tests/pytest.ini"
+        "tests/test_addon.py"
+        "tests/__init__.py"
+        "tests/pytest-ci.ini"
+        "tests/conftest.py"
+        "tests/requirements.txt"
+        "requirements.txt"
+        ".python-version"
+        ".github/workflows/cla.yaml"
+        "tests/backend_entrypoint.sh"
+        ".github/workflows/reuse.yml"
+        ".github/workflows/snyk.yaml"
+        ".github/workflows/rebase.yml"
+        ".releaserc.yaml"
+        "NOTICE"
+        "package/lib/py2/requirements.txt"
+        "requirements_py2_dev.txt"
+        "LICENSES/LicenseRef-Splunk-1-2020.txt"
+        "semtag"
+        "unit_test_requirements.txt"
+        ".github/workflows/release-notes.yml"
+        ".github/workflows/requirements_unit_test.yml"
+    )
+
+    for i in ${!files_to_delete[@]}; do
+        if [[ -f "${files_to_delete[$i]}" ]]; then
+            git rm "${files_to_delete[$i]}" || true
+        fi
+    done
+
     if [[ ! -f "pyproject.toml" ]]; 
     then 
         poetry init -n --author "Splunk Inc, <sales@splunk.com>" --python "^3.7" -l "Splunk-1-2020"
@@ -306,27 +271,23 @@ else
     if [[ ! -f ".app-vetting.yaml" ]]; then
         touch .app-vetting.yaml
     fi
-
-    if [[ -f semtag ]]; then
-        git rm semtag
+    
+    if [ -f "tests/requirement_test/pytest-ci.ini" ]; then
+        echo "tests/requirement_test/pytest-ci.ini found"
+        sed -i "s/\/home\/circleci\/work\///g" tests/requirement_test/pytest-ci.ini
+        sed -i "s/-n[[:space:]]*5/-n 1/g" tests/requirement_test/pytest-ci.ini
+        sed -i '/^[[:space:]]*--splunk-data-generator=tests\/knowledge\/*[[:space:]]*$/d' tests/requirement_test/pytest-ci.ini
     fi
 
-    if [[ -f "LICENSES/LicenseRef-Splunk-1-2020.txt" ]]; then
-        git rm LICENSES/LicenseRef-Splunk-1-2020.txt
-    fi
     sed -i 's/LicenseRef-Splunk-1-2020/LicenseRef-Splunk-8-2021/g' .reuse/dep5
     python3 ../../tools/update_app_manifest_license.py
 
-    if [[ -f .github/workflows/release-notes.yml ]]; then
-        git rm .github/workflows/release-notes.yml
-    fi
-
     gh api /repos/$REPOORG/$REPO  -H 'Accept: application/vnd.github.nebula-preview+json' -X PATCH -F visibility=$REPOVISIBILITY
     git add . || exit 1
-    git commit -am "test: common template rollout changes" || exit 1
+    git commit -am "ci: common template rollout changes" || exit 1
     git push -f --set-upstream origin "$BRANCH_NAME" || exit 1
     sleep 10s
     gh pr create \
-        --title "Bump repository configuration from template${PR_SUFFIX}" --fill --head "$BRANCH_NAME" || exit 1
+        --title "ci: Bump repository configuration from template${PR_SUFFIX}" --fill --head "$BRANCH_NAME" || exit 1
 fi
 popd
