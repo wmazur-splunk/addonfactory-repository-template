@@ -140,6 +140,7 @@ jobs:
             splunk/splunk-dbx-add-on-for-*
             splunk/splunk-connect-for-syslog
             splunk/splunk-connect-for-snmp
+            splunk/splunk-stream-add-on-for-
           GITHUB_TOKEN: ${{ secrets.SA_GH_TOKEN_ADMIN }}
           CONCURRENCY: 1
           REPOSITORIES_LIST_REGEX: true
