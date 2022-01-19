@@ -54,7 +54,7 @@ main_settings="requiresApprovingReviews: true
     ]
     requiresConversationResolution: false
     requiresCommitSignatures: true
-    requiresLinearHistory: true
+    requiresLinearHistory: false
     isAdminEnforced: false
     restrictsPushes: false
     allowsForcePushes: false
