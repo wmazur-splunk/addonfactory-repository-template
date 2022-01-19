@@ -88,3 +88,4 @@ splunk-add-on-for-github-audit-log-monitoring,Splunk_TA_github_audit_log_monitor
 splunk-add-on-for-okta-identity-cloud,Splunk_TA_okta-identity-cloud,internal,"Splunk Add-on for Okta Identity Cloud",main
 splunk-add-on-for-uf-testing,Splunk_TA_uf-testing,internal,"Splunk Add-on for uf testing",main
 splunk-add-on-for-jira-data-center,Splunk_TA_jira-data-center,internal,"Splunk Add-on for Jira Data Center",main
+splunk-stream-add-on-for-netscaler,Splunk_SFA_netscaler,internal,"Splunk Stream Flow Add-on for Citrix Netscaler",main
