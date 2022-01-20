@@ -130,6 +130,7 @@ jobs:
             splunk/addonfactory-workflow-addon-release
             splunk/addonfactory-workflow-addon-manual-release  
             splunk/appinspect-cli-action
+            splunk/addonfactory-ort-action
             splunk/dropbox-add-on-for-splunk
             splunk/dropbox-app-for-splunk
             splunk/google-chrome-add-on-for-splunk
