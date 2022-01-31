@@ -128,7 +128,8 @@ jobs:
             splunk/addonfactory-ucc-library
             splunk/addonfactory-workflow-requirement-files-unit-tests
             splunk/addonfactory-workflow-addon-release
-            splunk/addonfactory-workflow-addon-manual-release  
+            splunk/addonfactory-workflow-addon-manual-release
+            splunk/addonfactory-ucc-base-ui
             splunk/appinspect-cli-action
             splunk/addonfactory-ort-action
             splunk/dropbox-add-on-for-splunk
@@ -187,6 +188,7 @@ jobs:
             splunk/pytest-splunk-addon
             splunk/addon-factory-smartx-ui-test-library
             splunk/addonfactory-cloudconnect-library
+            splunk/addonfactory-ucc-base-ui
           GITHUB_TOKEN: ${{ secrets.SA_GH_TOKEN_ADMIN }}
           CONCURRENCY: 2
           REPOSITORIES_LIST_REGEX: false
