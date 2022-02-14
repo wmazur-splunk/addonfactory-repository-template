@@ -60,15 +60,15 @@ splunk-add-on-for-tenable,TA-Tenable,internal,"Tenable Add-On for Splunk",main
 splunk-add-on-for-proofpoint-email,TA_pps,internal,"Proofpoint Email Security Add-On for Splunk",main
 splunk-add-on-for-cisco-cloudlock,cisco-cloud-security,internal,"Cisco Cloud Security",main
 google-chrome-add-on-for-splunk,TA_google_chrome,internal,"Google Chrome Add-on for Splunk",main
-splunk-dbx-add-on-for-microsoft-sql-server,Splunk_DBX_mssql,internal,"Splunk DBX Add-on for Microsoft SQL Server",main
-splunk-dbx-add-on-for-mysql,Splunk_DBX_mysql,internal,"Splunk DBX Add-on for MySQL",main
-splunk-dbx-add-on-for-postgres,Splunk_DBX_postgres,internal,"Splunk DBX Add-on for Postgres",main
-splunk-dbx-add-on-for-Redshift,Splunk_DBX_redshift,internal,"Splunk DBX Add-on for redshift",main
-splunk-dbx-add-on-for-presto,Splunk_DBX_presto,internal,"Splunk DBX Add-on for Presto",main
-splunk-dbx-add-on-for-athena,Splunk_DBX_athena,internal,"Splunk DBX Add-on for Athena",main
-splunk-dbx-add-on-for-snowflake,Splunk_DBX_snowflake,internal,"Splunk DBX Add-on for Snowflake",main
+splunk-dbx-add-on-for-microsoft-sql-server,Splunk_JDBC_mssql,internal,"Splunk DBX Add-on for Microsoft SQL Server JDBC",main
+splunk-dbx-add-on-for-mysql,Splunk_JDBC_mysql,internal,"Splunk DBX Add-on for MySQL JDBC",main
+splunk-dbx-add-on-for-postgres,Splunk_JDBC_postgres,internal,"Splunk DBX Add-on for Postgres JDBC",main
+splunk-dbx-add-on-for-Redshift,Splunk_JDBC_redshift,internal,"Splunk DBX Add-on for redshift JDBC",main
+splunk-dbx-add-on-for-presto,Splunk_JDBC_presto,internal,"Splunk DBX Add-on for Presto JDBC",main
+splunk-dbx-add-on-for-athena,Splunk_JDBC_athena,internal,"Splunk DBX Add-on for Athena JDBC",main
+splunk-dbx-add-on-for-snowflake,Splunk_JDBC_snowflake,internal,"Splunk DBX Add-on for Snowflake JDBC",main
 splunk-add-on-for-jira-cloud,Splunk_TA_jira-cloud,internal,"Splunk Add-on for Jira Cloud",main
-splunk-dbx-add-on-for-oracle,Splunk_DBX_oracle,internal,"Splunk DBX Add-on for Oracle",main
+splunk-dbx-add-on-for-oracle,Splunk_JDBC_oracle,internal,"Splunk DBX Add-on for Oracle JDBC",main
 splunk-add-on-for-bmc-remedy,Splunk_TA_remedy,internal,"Splunk Add-on for BMC Remedy",main
 splunk-add-on-for-citrix-netscaler,Splunk_TA_citrix-netscaler,internal,"Splunk Add-on for Citrix NetScaler",main
 splunk-add-on-for-cyberark-epm,Splunk_TA_cyberark_epm,internal,Splunk Add-on for CyberArk EPM,main
@@ -88,3 +88,4 @@ splunk-add-on-for-java-management-extensions,Splunk_TA_jmx,internal,"Splunk Add-
 splunk-add-on-for-jboss,Splunk_TA_jboss,internal,"Splunk Add-on for JBoss",main
 splunk-add-on-for-microsoft-cloud-services,Splunk_TA_microsoft-cloudservices,internal,"Splunk Add-on for Microsoft Cloud Services",main
 splunk-add-on-for-microsoft-office-365,splunk_ta_o365,internal,"Splunk Add-on for Microsoft Office 365",main
+splunk-dbx-add-on-for-db2,Splunk_JDBC_db2,internal,"Splunk DBX Add-on for DB2 JDBC",main
