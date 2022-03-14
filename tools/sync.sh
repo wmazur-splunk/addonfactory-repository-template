@@ -278,6 +278,13 @@ else
         sed -i "s/-n[[:space:]]*5/-n 1/g" tests/requirement_test/pytest-ci.ini
         sed -i '/^[[:space:]]*--splunk-data-generator=tests\/knowledge\/*[[:space:]]*$/d' tests/requirement_test/pytest-ci.ini
     fi
+    
+    if [ ! -d "tests/knowledge/samples" ]; then
+        echo "No samples directory, changing pytest-xdist n parameter to 1"
+        sed -i "s/-n[[:space:]]*5/-n 1/g" tests/knowledge/pytest-ci.ini
+    else
+        sed -i "s/-n[[:space:]]*1/-n 5/g" tests/knowledge/pytest-ci.ini
+    fi
 
     sed -i 's/LicenseRef-Splunk-1-2020/LicenseRef-Splunk-8-2021/g' .reuse/dep5
     python3 ../../tools/update_app_manifest_license.py
