@@ -136,6 +136,7 @@ jobs:
             splunk/dropbox-app-for-splunk
             splunk/google-chrome-add-on-for-splunk
             splunk/pytest-splunk-addon
+            splunk/helmut
             splunk/seckit_sa_geolocation
             splunk/splunk-add-on-for-*
             splunk/splunk-configurations-base-indexes
@@ -186,6 +187,7 @@ jobs:
             splunk/addonfactory-solutions-library-python
             splunk/addonfactory-splunk-conf-parser-lib
             splunk/pytest-splunk-addon
+            splunk/helmut
             splunk/addon-factory-smartx-ui-test-library
             splunk/addonfactory-cloudconnect-library
             splunk/addonfactory-ucc-base-ui
