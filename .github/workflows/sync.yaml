@@ -144,6 +144,7 @@ jobs:
             splunk/splunk-connect-for-syslog
             splunk/splunk-connect-for-snmp
             splunk/splunk-stream-add-on-for-
+            splunk/addonfactory-sync-secrets
           GITHUB_TOKEN: ${{ secrets.SA_GH_TOKEN_ADMIN }}
           CONCURRENCY: 1
           REPOSITORIES_LIST_REGEX: true
@@ -191,6 +192,7 @@ jobs:
             splunk/addon-factory-smartx-ui-test-library
             splunk/addonfactory-cloudconnect-library
             splunk/addonfactory-ucc-base-ui
+            splunk/addonfactory-sync-secrets
           GITHUB_TOKEN: ${{ secrets.SA_GH_TOKEN_ADMIN }}
           CONCURRENCY: 2
           REPOSITORIES_LIST_REGEX: false
