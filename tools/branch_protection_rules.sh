@@ -67,7 +67,7 @@ common_settings="requiresApprovingReviews: false
     requiresStatusChecks: false
     requiresConversationResolution: false
     requiresLinearHistory: false
-    isAdminEnforced: false
+    isAdminEnforced: true
     requiresCommitSignatures: true
     restrictsPushes: false
     allowsDeletions: true
