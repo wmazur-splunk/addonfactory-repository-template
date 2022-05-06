@@ -50,7 +50,8 @@ main_settings="requiresApprovingReviews: true
     requiresStatusChecks: true
     requiresStrictStatusChecks: true
     requiredStatusCheckContexts: [
-        \"call-workflow / pre-publish\"
+        \"call-workflow / pre-publish\",
+        \call-workflow / fossa-scan\"
     ]
     requiresConversationResolution: false
     requiresCommitSignatures: true
@@ -60,8 +61,26 @@ main_settings="requiresApprovingReviews: true
     allowsForcePushes: false
     allowsDeletions: false"
 
-develop_settings="${main_settings/allowsDeletions: false/allowsDeletions: true}"
-develop_settings="${develop_settings/allowsForcePushes: false/allowsForcePushes: true}"
+develop_settings="requiresApprovingReviews: true
+    requiredApprovingReviewCount: 2
+    dismissesStaleReviews: true
+    requiresCodeOwnerReviews: false
+    restrictsReviewDismissals: true
+    reviewDismissalActorIds: [
+          \""$ADMIN_TEAM_ID"\"
+    ]
+    requiresStatusChecks: true
+    requiresStrictStatusChecks: true
+    requiredStatusCheckContexts: [
+        \"call-workflow / pre-publish\"
+    ]
+    requiresConversationResolution: false
+    requiresCommitSignatures: true
+    requiresLinearHistory: false
+    isAdminEnforced: false
+    restrictsPushes: false
+    allowsForcePushes: true
+    allowsDeletions: true"
 
 common_settings="requiresApprovingReviews: false
     requiresStatusChecks: false

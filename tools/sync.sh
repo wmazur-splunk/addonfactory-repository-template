@@ -9,6 +9,7 @@ command -v git >/dev/null 2>&1 || { echo >&2 "I require git but it's not install
 command -v crudini >/dev/null 2>&1 || { echo >&2 "I require crudini but it's not installed.  Aborting."; exit 1; }
 command -v jq >/dev/null 2>&1 || { echo >&2 "I require jq but it's not installed.  Aborting."; exit 1; }
 command -v rsync >/dev/null 2>&1 || { echo >&2 "I require rsync but it's not installed.  Aborting."; exit 1; }
+command -v yq >/dev/null 2>&1 || { echo >&2 "I require rsync but it's not installed.  Aborting."; exit 1; }
 
 echo "Working on:$REPO|$TAID|$REPOVISIBILITY|$TITLE|$BRANCH|$OTHER"
 #Things we want to do no matter what
@@ -27,6 +28,7 @@ then
     crudini --set package/default/app.conf ui label "$TITLE"
     crudini --set package/default/app.conf package id $TAID
     crudini --set package/default/app.conf id name $TAID
+    yq -i e '(.project.id=env(REPO)' .fossa.yml
 
     tmpf=$(mktemp)
     jq --arg TITLE "${TITLE}" '.info.title = $TITLE' package/app.manifest >$tmpf
@@ -90,6 +92,9 @@ else
 
     rsync -avh --include ".*" --ignore-existing ../../seed/ .
     rsync -avh --include ".*" ../../enforce/ .
+
+    # Needed for intoducing FOSSA
+    yq -i e '(.project.id=env(REPO)' .fossa.yml
 
     #Cleanup of bad module
     # Remove the submodule entry from .git/config
