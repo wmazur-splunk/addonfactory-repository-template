@@ -7,7 +7,7 @@ name: sync
 
 on:
   push:
-    branches: [main]
+    branches: [chore/fossa-all-sync]
 
 jobs:
   sync:
