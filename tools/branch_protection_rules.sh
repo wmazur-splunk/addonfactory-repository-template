@@ -50,8 +50,7 @@ main_settings="requiresApprovingReviews: true
     requiresStatusChecks: true
     requiresStrictStatusChecks: true
     requiredStatusCheckContexts: [
-        \"call-workflow / pre-publish\",
-        \call-workflow / fossa-scan\"
+        \"call-workflow / pre-publish\"
     ]
     requiresConversationResolution: false
     requiresCommitSignatures: true
