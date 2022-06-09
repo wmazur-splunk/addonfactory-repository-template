@@ -22,3 +22,8 @@ products-gdi-sme:
   parent_team: products-gdi-addons
   description: ''
   repo_permission: push
+
+products-gdi-addons-documentation:
+  parent_team: products-gdi-addons
+  description: ''
+  repo_permission: push
