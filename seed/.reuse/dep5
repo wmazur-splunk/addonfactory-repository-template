@@ -21,10 +21,6 @@ Files: package/samples/*
 Copyright: $YEAR $NAME <$CONTACT>
 License: LicenseRef-Splunk-8-2021
 
-Files: package/metadata/*
-Copyright: $YEAR $NAME <$CONTACT>
-License: LicenseRef-Splunk-8-2021
-
 Files: package/app.manifest
 Copyright: $YEAR $NAME <$CONTACT>
 License: LicenseRef-Splunk-8-2021
