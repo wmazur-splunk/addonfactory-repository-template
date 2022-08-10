@@ -90,3 +90,4 @@ splunk-add-on-for-uf-testing,Splunk_TA_uf-testing,internal,"Splunk Add-on for uf
 splunk-add-on-for-jira-data-center,Splunk_TA_jira-data-center,internal,"Splunk Add-on for Jira Data Center",main
 splunk-stream-add-on-for-netscaler,Splunk_SFA_netscaler,internal,"Splunk Stream Flow Add-on for Citrix Netscaler",main
 splunk-dbx-add-on-for-db2,Splunk_JDBC_db2,internal,"Splunk DBX Add-on for DB2 JDBC",main
+splunk-add-on-for-new-relic,Splunk_TA_New_Relic,"Splunk Add-on for New Relic", main
